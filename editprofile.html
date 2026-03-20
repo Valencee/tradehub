@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile - PHINMA TradeHub</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../includes/header.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../includes/sidebar.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #f0f4f0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* container width vs sidebar */
+    .edit-container {
+      margin-left: 360px;
+      width: calc(100% - 360px);
+      padding: 2rem;
+      transition: all 0.3s ease;
+      padding-top: 90px; /* may header sa taas */
+    }
+
+    body.sidebar-hidden .edit-container,
+    body.sidebar-closed .edit-container {
+      margin-left: 0;
+      width: 100%;
+    }
+
+    /* Page Header */
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #1b4332;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+
+    .back-btn:hover {
+      background: rgba(27, 67, 50, 0.1);
+    }
+
+    .page-header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1b4332;
+    }
+
+    /* Main Card */
+    .edit-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Avatar Section */
+    .avatar-section {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 2rem;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .avatar-preview {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #1b4332;
+      display: none; /* hidden until image selected / may avatar */
+    }
+
+    .avatar-initials {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: #d4edda;
+      color: #1b4332;
+      font-size: 2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid #1b4332;
+    }
+
+    .avatar-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      pointer-events: none;
+    }
+
+    .avatar-wrapper:hover .avatar-overlay {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #avatarInput {
+      display: none;
+    }
+
+    .avatar-info h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 0.35rem;
+    }
+
+    .avatar-info p {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: 0.75rem;
+    }
+
+    .avatar-btns {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-upload {
+      padding: 0.5rem 1.1rem;
+      background: #1b4332;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-upload:hover {
+      background: #145a38;
+    }
+
+    .btn-remove {
+      padding: 0.5rem 1.1rem;
+      background: white;
+      color: #ef4444;
+      border: 1.5px solid #ef4444;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: none;
+    }
+
+    .btn-remove:hover {
+      background: #fef2f2;
+    }
+
+    /* Form */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      color: #111827;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #f9fafb;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: #1b4332;
+      box-shadow: 0 0 0 3px rgba(27, 67, 50, 0.1);
+      background: white;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    /* Form Actions */
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .btn-cancel {
+      padding: 0.75rem 1.75rem;
+      background: white;
+      color: #374151;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-cancel:hover {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+    }
+
+    .btn-save {
+      padding: 0.75rem 1.75rem;
+      background: #1b4332;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-save:hover {
+      background: #145a38;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #1b4332;
+      color: white;
+      padding: 0.85rem 1.5rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transform: translateY(120%);
+      opacity: 0;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Crop Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 9000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .crop-modal {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 480px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .crop-modal h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 1.25rem;
+    }
+
+    .crop-preview-wrap {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f3f4f6;
+      position: relative;
+      cursor: crosshair;
+      margin-bottom: 1.25rem;
+    }
+
+    #cropImage {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .crop-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+    }
+
+    .btn-crop-cancel {
+      padding: 0.65rem 1.25rem;
+      background: white;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #374151;
+    }
+
+    .btn-crop-apply {
+      padding: 0.65rem 1.25rem;
+      background: #1b4332;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .edit-container {
+        margin-left: 0;
+        width: 100%;
+        padding: 1rem;
+        padding-top: 90px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .avatar-section {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .avatar-btns {
+        justify-content: center;
+      }
+    }
+    .sidebar-label {
+  flex: 1;
+}
+
+.messages-unread-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex: 0 0 20px;
+  min-width: 20px;
+  max-width: 20px;
+}
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="mainHeader">
+  <div class="header-left">
+    <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+      <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+              clip-rule="evenodd" />
+      </svg>
+    </button>
+
+    <div class="header-brand" style="cursor: default;">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 6v6l4 2"></path>
+      </svg>
+      <span>Tradehub</span>
+    </div>
+  </div>
+
+  <div class="header-content">
+    <nav>
+      <ul class="nav-menu">
+        <li>
+          <a href="about.html" class="nav-icon-btn" title="About Us">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clip-rule="evenodd" />
+            </svg>
+          </a>
+        </li>
+        <li class="user-profile-container">
+          <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                  onclick="toggleProfileDropdown()" title="Profile">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <div class="profile-dropdown" id="profileDropdown">
+            <div class="dropdown-arrow"></div>
+            <div class="profile-dropdown-header">
+              <div class="profile-user-name" id="profileUserName">Student Name</div>
+              <div class="profile-user-email" id="profileUserEmail">student@example.com</div>
+            </div>
+
+            <div class="profile-dropdown-menu">
+              <a href="userprofile.html" class="profile-menu-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>My Profile</span>
+              </a>
+
+              <a href="bookmarks.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+                <span>Bookmarks</span>
+                </a>
+
+              <a href="selling.html" class="profile-menu-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span>My Selling</span>
+              </a>
+
+              
+
+              <div class="profile-menu-divider"></div>
+
+              <a href="javascript:void(0)" class="profile-menu-item sign-out"
+                 onclick="handleSignOut()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Sign Out</span>
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<aside class="marketplace-sidebar" id="marketplaceSidebar"
+       style="position: fixed !important;
+              top: 72px !important;
+              left: 0 !important;
+              width: 360px !important;
+              height: calc(100vh - 72px) !important;
+              background: #242526 !important;
+              color: #e4e6eb !important;
+              overflow-y: auto !important;
+              padding: 1rem !important;
+              z-index: 999 !important;
+              transition: transform 0.3s ease !important;">
+  <div class="sidebar-header">
+    <h2 class="sidebar-title">Phinma-Upang TradeHub</h2>
+    <a href="userprofile.html" class="sidebar-settings" title="My Profile"
+       style="text-decoration:none;color:inherit;">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+              clip-rule="evenodd"/>
+      </svg>
+    </a>
+  </div>
+
+
+  <nav class="sidebar-nav">
+    <a href="browse.html" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #1877f2;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path
+            d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+        </svg>
+      </div>
+      <span>Browse Items</span>
+    </a>
+
+    <a href="notification.html" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #e67e22;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path
+            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+        </svg>
+      </div>
+      <span>Notifications</span>
+    </a>
+
+    <a href="bookmarks.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #f00524;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M6 3a2 2 0 0 0-2 2v16l8-5 8 5V5a2 2 0 0 0-2-2H6z"/>
+    </svg>
+  </div>
+  <span>Bookmarks</span>
+</a>
+
+    <a href="messages.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #00b894;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/>
+    </svg>
+  </div>
+
+  <span class="sidebar-label">Messages</span>
+  <span id="messagesUnreadBadge" class="messages-unread-badge">0</span>
+</a>
+
+    <a href="userprofile.html" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #8e44ad;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <span>My Profile</span>
+    </a>
+  </nav>
+
+  <a href="posting.html" class="sidebar-create-btn">
+    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd"
+            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+            clip-rule="evenodd"/>
+    </svg>
+    Create New Listing
+  </a>
+</aside>
+
+<!-- MAIN EDIT PROFILE CONTENT -->
+<div class="edit-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <button class="back-btn" onclick="window.location.href='userprofile.html'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+           viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <h1>Edit Profile</h1>
+  </div>
+
+  <!-- Edit Card -->
+  <div class="edit-card">
+
+    <!-- Avatar Section -->
+    <div class="avatar-section">
+      <div class="avatar-wrapper" onclick="document.getElementById('avatarInput').click()">
+        <div class="avatar-initials" id="avatarInitials">ST</div>
+        <img class="avatar-preview" id="avatarPreview" src="" alt="Profile Picture">
+        <div class="avatar-overlay">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+               fill="none" stroke="white" stroke-width="2"
+               viewBox="0 0 24 24">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          Change Photo
+        </div>
+      </div>
+      <input type="file" id="avatarInput" accept="image/*">
+
+      <div class="avatar-info">
+        <h3>Profile Picture</h3>
+        <p>JPG, PNG or GIF · Max 5MB</p>
+        <div class="avatar-btns">
+          <button class="btn-upload" onclick="document.getElementById('avatarInput').click()">
+            Upload Photo
+          </button>
+          <button class="btn-remove" id="btnRemove" onclick="removePhoto()">
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Form -->
+    <form id="editProfileForm" onsubmit="saveProfile(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" required>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+          <label for="studentId">Student ID</label>
+          <input type="text" id="studentId">
+        </div>
+        <div class="form-group">
+          <label for="course">Course</label>
+          <input type="text" id="course" placeholder="e.g. BSIT">
+        </div>
+        <div class="form-group">
+          <label for="block">Block / Section</label>
+          <input type="text" id="block" placeholder="e.g. 3-02">
+        </div>
+
+        <!-- 🔗 Social Link field (para ma-edit) -->
+        <div class="form-group full-width">
+          <label for="socialLink">Social Media Link <span style="font-weight:400;color:#6b7280;"></span></label>
+          <input
+            type="text"
+            id="socialLink"
+            placeholder="Paste link to your social media profile (e.g. Facebook, Messenger, Instagram)"
+          >
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" onclick="window.location.href='userprofile.html'">
+          Cancel
+        </button>
+        <button type="submit" class="btn-save">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+               fill="none" stroke="currentColor" stroke-width="2"
+               viewBox="0 0 24 24">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Crop Modal -->
+<div class="modal-overlay" id="cropModal">
+  <div class="crop-modal">
+    <h3>✂️ Adjust your photo</h3>
+    <div class="crop-preview-wrap">
+      <img id="cropImage" src="" alt="Crop Preview">
+    </div>
+    <div class="crop-actions">
+      <button class="btn-crop-cancel" onclick="closeCropModal()">Cancel</button>
+      <button class="btn-crop-apply" onclick="applyCrop()">Use This Photo</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+       fill="none" stroke="currentColor" stroke-width="2.5"
+       viewBox="0 0 24 24">
+    <polyline points="20 6 9 17 4 12"/>
+  </svg>
+  <span id="toastMsg">Profile saved successfully!</span>
+</div>
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+  const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+  const supabaseKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const currentStudentNumber = sessionStorage.getItem('studentNumber') || '';
+  const messagesUnreadBadge = document.getElementById('messagesUnreadBadge');
+
+  //  globals for avatar 
+  let selectedFile = null;        
+  let cropPreviewUrl = null;      
+  let currentAvatarUrl = null;
+
+  // badge bilang
+  let unreadBadgeChannel = null;
+
+  function renderSidebarUnread(total) {
+    if (!messagesUnreadBadge) return;
+
+    const unreadTotal = Number(total || 0);
+
+    if (unreadTotal > 0) {
+      messagesUnreadBadge.style.display = 'inline-flex';
+      messagesUnreadBadge.textContent = unreadTotal > 99 ? '99+' : String(unreadTotal);
+    } else {
+      messagesUnreadBadge.style.display = 'none';
+      messagesUnreadBadge.textContent = '0';
+    }
+  }
+
+  async function loadUnreadBadgeCount() {
+    if (!currentStudentNumber) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: participantRows, error: participantError } = await supabase
+      .from('chat_participants')
+      .select('thread_id')
+      .eq('student_number', currentStudentNumber)
+      .is('deleted_at', null);
+
+    if (participantError) {
+      console.error('Error loading participant threads:', participantError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const threadIds = [...new Set((participantRows || []).map(row => row.thread_id))];
+
+    if (!threadIds.length) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: unreadRows, error: unreadError } = await supabase
+      .from('chat_messages')
+      .select('id, thread_id')
+      .in('thread_id', threadIds)
+      .neq('sender_student_number', currentStudentNumber)
+      .eq('is_read', false);
+
+    if (unreadError) {
+      console.error('Error loading unread messages:', unreadError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    renderSidebarUnread((unreadRows || []).length);
+  }
+
+  function subscribeToUnreadBadge() {
+    if (!currentStudentNumber) return;
+
+    if (unreadBadgeChannel) {
+      supabase.removeChannel(unreadBadgeChannel);
+      unreadBadgeChannel = null;
+    }
+
+    unreadBadgeChannel = supabase
+      .channel(`browse-unread-badge-${currentStudentNumber}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chat_participants'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .subscribe((status) => {
+        console.log('Browse unread badge realtime:', status);
+      });
+  }
+
+  window.addEventListener('load', async () => {
+    await loadUnreadBadgeCount();
+    subscribeToUnreadBadge();
+  });
+
+  // -------- Route guard --------
+  (function guardRoute() {
+    const loggedInFlag = sessionStorage.getItem('user_logged_in');
+    if (loggedInFlag !== 'true') {
+      window.location.href = '../../index.html';
+    }
+  })();
+
+  // -------- Header + sidebar init --------
+  function initHeaderAndSidebar() {
+    const sidebar   = document.getElementById('marketplaceSidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    let isOpen = true;
+
+    const nameEl  = document.getElementById('profileUserName');
+    const emailEl = document.getElementById('profileUserEmail');
+
+    const storedName  = sessionStorage.getItem('studentName');
+    const storedEmail = sessionStorage.getItem('studentEmail');
+
+    if (nameEl && storedName)  nameEl.textContent  = storedName;
+    if (emailEl && storedEmail) emailEl.textContent = storedEmail;
+
+    const savedState = localStorage.getItem('sidebarOpen');
+    if (savedState !== null) {
+      isOpen = (savedState === 'true');
+    }
+
+    function updateSidebarState() {
+      if (!sidebar || !toggleBtn) return;
+      if (isOpen) {
+        sidebar.style.transform = 'translateX(0)';
+        toggleBtn.classList.remove('active');
+        document.body.classList.remove('sidebar-hidden');
+      } else {
+        sidebar.style.transform = 'translateX(-100%)';
+        toggleBtn.classList.add('active');
+        document.body.classList.add('sidebar-hidden');
+      }
+
+      const ev = new CustomEvent('sidebarToggled', {
+        detail: { isOpen },
+        bubbles: true
+      });
+      document.dispatchEvent(ev);
+      window.dispatchEvent(ev);
+    }
+
+    updateSidebarState();
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        isOpen = !isOpen;
+        localStorage.setItem('sidebarOpen', String(isOpen));
+        updateSidebarState();
+      });
+    }
+
+    // dropdown
+    window.toggleProfileDropdown = function () {
+      const dropdown = document.getElementById('profileDropdown');
+      if (dropdown) dropdown.classList.toggle('show');
+    };
+
+    document.addEventListener('click', function (event) {
+      const container = document.querySelector('.user-profile-container');
+      const dropdown = document.getElementById('profileDropdown');
+      if (container && dropdown && !container.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    const pd = document.getElementById('profileDropdown');
+    if (pd) {
+      pd.addEventListener('click', function (event) {
+        event.stopPropagation();
+      });
+    }
+
+    // sign out
+    window.handleSignOut = function () {
+      Swal.fire({
+        title: 'Sign out?',
+        text: 'Are you sure you want to sign out of your account?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, sign out',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+        allowOutsideClick: true,
+        allowEscapeKey: true,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text',
+          confirmButton: 'logout-swal-confirm',
+          cancelButton: 'logout-swal-cancel'
+        },
+        buttonsStyling: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          sessionStorage.clear();
+
+          Swal.fire({
+            title: 'Signed out',
+            text: 'You have been successfully signed out.',
+            icon: 'success',
+            timer: 1200,
+            showConfirmButton: false,
+            backdrop: 'rgba(0,0,0,0.45)',
+            customClass: {
+              popup: 'logout-swal-popup',
+              title: 'logout-swal-title',
+              htmlContainer: 'logout-swal-text'
+            }
+          }).then(() => {
+            window.location.href = '../../index.html';
+          });
+        }
+      });
+    };
+
+    // keyboard shortcuts
+    document.addEventListener('keydown', function (event) {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'b') {
+        event.preventDefault();
+        if (toggleBtn) toggleBtn.click();
+      }
+      if (event.key === 'Escape') {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown && dropdown.classList.contains('show')) {
+          dropdown.classList.remove('show');
+        }
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initHeaderAndSidebar);
+
+  // -------- Container width vs sidebar --------
+  window.addEventListener('load', function () {
+    const container = document.querySelector('.edit-container');
+    function updateContainer() {
+      if (!container) return;
+      const sidebarOpen = localStorage.getItem('sidebarOpen');
+      if (sidebarOpen === 'false') {
+        document.body.classList.add('sidebar-closed', 'sidebar-hidden');
+        container.style.marginLeft = '0';
+        container.style.width = '100%';
+      } else {
+        document.body.classList.remove('sidebar-closed', 'sidebar-hidden');
+        container.style.marginLeft = '360px';
+        container.style.width = 'calc(100% - 360px)';
+      }
+    }
+    updateContainer();
+    document.addEventListener('sidebarToggled', () => setTimeout(updateContainer, 50));
+    const toggleBtn = document.getElementById('sidebarToggle');
+    if (toggleBtn) toggleBtn.addEventListener('click', () => setTimeout(updateContainer, 50));
+    const sidebar = document.getElementById('marketplaceSidebar');
+    if (sidebar) {
+      new MutationObserver(() => setTimeout(updateContainer, 50))
+        .observe(sidebar, { attributes: true, attributeFilter: ['style'] });
+    }
+  });
+
+  // -------- Load avatar from DB (students.avatar_url) - kept for reference (not used directly) --------
+  async function loadAvatarFromDBOnly() {
+    const preview   = document.getElementById('avatarPreview');
+    const initials  = document.getElementById('avatarInitials');
+    const removeBtn = document.getElementById('btnRemove');
+
+    if (!preview || !initials || !removeBtn) return;
+
+    const studNo = sessionStorage.getItem('studentNumber');
+    const email  = sessionStorage.getItem('studentEmail');
+
+    if (!studNo && !email) {
+      console.warn('No studentNumber/email in sessionStorage for avatar load');
+      return;
+    }
+
+    const filterColumn = studNo ? 'studentNumber' : 'email';
+    const filterValue  = studNo || email;
+
+    try {
+      const { data, error } = await supabase
+        .from('students')
+        .select('avatar_url')
+        .eq(filterColumn, filterValue)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error loading avatar from DB:', error);
+        return;
+      }
+
+      if (data && data.avatar_url) {
+        currentAvatarUrl = data.avatar_url;
+
+        sessionStorage.setItem('avatarImage', currentAvatarUrl);
+
+        preview.src = currentAvatarUrl;
+        preview.style.display = 'block';
+        initials.style.display = 'none';
+        removeBtn.style.display = 'inline-block';
+      } else {
+        preview.src = '';
+        preview.style.display = 'none';
+        initials.style.display = 'flex';
+        removeBtn.style.display = 'none';
+      }
+    } catch (err) {
+      console.error('Avatar DB load exception:', err);
+    }
+  }
+
+  // -------- Pre-fill form from sessionStorage + DB (including socialLink) --------
+  async function initFormFromSession() {
+    const fullNameSession    = sessionStorage.getItem('studentName')  || '';
+    const emailSession       = sessionStorage.getItem('studentEmail') || '';
+    const studNoSession      = sessionStorage.getItem('studentNumber') || '';
+    const courseBlockSession = sessionStorage.getItem('course_block') || '';
+    const socialSession      = sessionStorage.getItem('socialLink') || '';
+
+    const firstNameEl = document.getElementById('firstName');
+    const lastNameEl  = document.getElementById('lastName');
+    const emailEl     = document.getElementById('email');
+    const studentIdEl = document.getElementById('studentId');
+    const courseEl    = document.getElementById('course');
+    const blockEl     = document.getElementById('block');
+    const socialEl    = document.getElementById('socialLink');
+    const avatarInit  = document.getElementById('avatarInitials');
+    const avatarPrev  = document.getElementById('avatarPreview');
+    const removeBtn   = document.getElementById('btnRemove');
+
+    // split name from session
+    let first = '';
+    let last  = '';
+    if (fullNameSession) {
+      const parts = fullNameSession.split(' ').filter(Boolean);
+      if (parts.length === 1) {
+        first = parts[0];
+      } else if (parts.length > 1) {
+        first = parts[0];
+        last  = parts.slice(1).join(' ');
+      }
+    }
+
+    if (firstNameEl) firstNameEl.value = first || '';
+    if (lastNameEl)  lastNameEl.value  = last || '';
+    if (emailEl)     emailEl.value     = emailSession || '';
+    if (studentIdEl) studentIdEl.value = studNoSession || '';
+
+    if (courseEl && blockEl) {
+      if (courseBlockSession.includes('-')) {
+        const [c, b] = courseBlockSession.split('-').map(s => s.trim());
+        courseEl.value = c || '';
+        blockEl.value  = b || '';
+      } else {
+        courseEl.value = courseBlockSession || '';
+        blockEl.value  = '';
+      }
+    }
+
+    if (socialEl) {
+      socialEl.value = socialSession || '';
+    }
+
+    // initials
+    const initials = (fullNameSession || 'Student')
+      .split(' ')
+      .filter(Boolean)
+      .map(part => part[0].toUpperCase())
+      .slice(0, 2)
+      .join('') || 'ST';
+
+    if (avatarInit) {
+      avatarInit.textContent = initials;
+    }
+
+    // session avatar
+    const sessionAvatar = sessionStorage.getItem('avatarImage');
+    if (sessionAvatar && avatarPrev && avatarInit && removeBtn) {
+      currentAvatarUrl         = sessionAvatar;
+      avatarPrev.src           = sessionAvatar;
+      avatarPrev.style.display = 'block';
+      avatarInit.style.display = 'none';
+      removeBtn.style.display  = 'inline-block';
+    }
+
+    // ---- always get fresh from Supabase (studentName, email, course_block, studentNumber, avatar_url, socialLink) ----
+    const lookupStudNo = studNoSession || null;
+    const lookupEmail  = emailSession || null;
+
+    if (!lookupStudNo && !lookupEmail) {
+      // wala tayong key pang query
+      return;
+    }
+
+    const filterColumn = lookupStudNo ? 'studentNumber' : 'email';
+    const filterValue  = lookupStudNo || lookupEmail;
+
+    try {
+      const { data, error } = await supabase
+        .from('students')
+        .select('studentName, email, course_block, studentNumber, avatar_url, socialLink')
+        .eq(filterColumn, filterValue)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error loading profile from DB:', error);
+        return;
+      }
+
+      if (!data) return;
+
+      const fullNameDB   = data.studentName   || fullNameSession;
+      const emailDB      = data.email         || emailSession;
+      const studNoDB     = data.studentNumber || studNoSession;
+      const courseBlockDB = data.course_block || courseBlockSession;
+      const socialDB     = data.socialLink    || socialSession;
+
+      // split name from DB
+      let firstDB = '';
+      let lastDB  = '';
+      if (fullNameDB) {
+        const parts = fullNameDB.split(' ').filter(Boolean);
+        if (parts.length === 1) {
+          firstDB = parts[0];
+        } else if (parts.length > 1) {
+          firstDB = parts[0];
+          lastDB  = parts.slice(1).join(' ');
+        }
+      }
+
+      if (firstNameEl) firstNameEl.value = firstDB || '';
+      if (lastNameEl)  lastNameEl.value  = lastDB || '';
+      if (emailEl)     emailEl.value     = emailDB || '';
+      if (studentIdEl) studentIdEl.value = studNoDB || '';
+
+      if (courseEl && blockEl) {
+        if (courseBlockDB && courseBlockDB.includes('-')) {
+          const [c, b] = courseBlockDB.split('-').map(s => s.trim());
+          courseEl.value = c || '';
+          blockEl.value  = b || '';
+        } else {
+          courseEl.value = courseBlockDB || '';
+          blockEl.value  = '';
+        }
+      }
+
+      if (socialEl) {
+        socialEl.value = socialDB || '';
+      }
+
+      // avatar from DB
+      if (data.avatar_url && avatarPrev && avatarInit && removeBtn) {
+        currentAvatarUrl         = data.avatar_url;
+        avatarPrev.src           = currentAvatarUrl;
+        avatarPrev.style.display = 'block';
+        avatarInit.style.display = 'none';
+        removeBtn.style.display  = 'inline-block';
+        sessionStorage.setItem('avatarImage', currentAvatarUrl);
+      }
+
+      // sync to sessionStorage
+      sessionStorage.setItem('studentName', fullNameDB);
+      sessionStorage.setItem('studentEmail', emailDB || '');
+      sessionStorage.setItem('studentNumber', studNoDB || '');
+      sessionStorage.setItem('course_block', courseBlockDB || '');
+      if (socialDB) {
+        sessionStorage.setItem('socialLink', socialDB);
+      } else {
+        sessionStorage.removeItem('socialLink');
+      }
+
+    } catch (err) {
+      console.error('Unexpected error loading profile from DB:', err);
+    }
+  }
+
+  window.addEventListener('load', initFormFromSession);
+
+  // -------- Avatar / Photo Upload to Supabase Storage --------
+  const avatarInput = document.getElementById('avatarInput');
+
+  avatarInput.addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('File too large. Max size is 5MB.', true);
+      return;
+    }
+
+    selectedFile = file;
+
+    // object URL for preview sa crop modal
+    if (cropPreviewUrl) {
+      URL.revokeObjectURL(cropPreviewUrl);
+    }
+    cropPreviewUrl = URL.createObjectURL(file);
+    document.getElementById('cropImage').src = cropPreviewUrl;
+    document.getElementById('cropModal').classList.add('active');
+
+    // clear input para pwede ulit pumili ng same file kung gusto
+    avatarInput.value = '';
+  });
+
+  async function uploadAvatarToSupabase() {
+    if (!selectedFile) return;
+
+    const preview   = document.getElementById('avatarPreview');
+    const initials  = document.getElementById('avatarInitials');
+    const removeBtn = document.getElementById('btnRemove');
+
+    const studNoSession = sessionStorage.getItem('studentNumber') || 'no-id';
+    const ext = (selectedFile.name.split('.').pop() || 'jpg').toLowerCase();
+    const fileName = `avatars/${studNoSession}-${Date.now()}.${ext}`;
+
+    try {
+      const { error: uploadError } = await supabase
+        .storage
+        .from('listing-images')
+        .upload(fileName, selectedFile, {
+          cacheControl: '3600',
+          upsert: true
+        });
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        showToast('Failed to upload photo.', true);
+        return;
+      }
+
+      const { data: publicData } = supabase
+        .storage
+        .from('listing-images')
+        .getPublicUrl(fileName);
+
+      if (!publicData || !publicData.publicUrl) {
+        showToast('Cannot get photo URL.', true);
+        return;
+      }
+
+      currentAvatarUrl = publicData.publicUrl;
+
+      // 1) update preview
+      preview.src = currentAvatarUrl;
+      preview.style.display = 'block';
+      initials.style.display = 'none';
+      removeBtn.style.display = 'inline-block';
+
+      // 2) update DB avatar_url agad
+      try {
+        const studNo = sessionStorage.getItem('studentNumber') || null;
+        const email  = sessionStorage.getItem('studentEmail') || null;
+
+        if (studNo || email) {
+          const filterColumn = studNo ? 'studentNumber' : 'email';
+          const filterValue  = studNo || email;
+
+          const { error: avatarUpdateError } = await supabase
+            .from('students')
+            .update({ avatar_url: currentAvatarUrl })
+            .eq(filterColumn, filterValue);
+
+          if (avatarUpdateError) {
+            console.error('Error updating avatar_url in DB:', avatarUpdateError);
+          }
+        }
+      } catch (e) {
+        console.error('Exception while updating avatar_url in DB:', e);
+      }
+
+      // 3) save to session para sa ibang pages
+      sessionStorage.setItem('avatarImage', currentAvatarUrl);
+
+      showToast('Photo uploaded! Don’t forget to save profile.');
+    } catch (err) {
+      console.error('Avatar upload exception:', err);
+      showToast('Unexpected error uploading photo.', true);
+    }
+  }
+
+  async function applyCrop() {
+    if (!selectedFile) {
+      closeCropModal();
+      return;
+    }
+    await uploadAvatarToSupabase();
+    closeCropModal();
+  }
+
+  function closeCropModal() {
+    document.getElementById('cropModal').classList.remove('active');
+    if (cropPreviewUrl) {
+      URL.revokeObjectURL(cropPreviewUrl);
+      cropPreviewUrl = null;
+    }
+  }
+
+  function removePhoto() {
+    const preview   = document.getElementById('avatarPreview');
+    const initials  = document.getElementById('avatarInitials');
+    const removeBtn = document.getElementById('btnRemove');
+
+    preview.src = '';
+    preview.style.display = 'none';
+    initials.style.display = 'flex';
+    removeBtn.style.display = 'none';
+
+    currentAvatarUrl = null;
+    sessionStorage.removeItem('avatarImage');
+
+    showToast('Photo removed.');
+  }
+
+  window.removePhoto = removePhoto;
+  window.applyCrop = applyCrop;
+  window.closeCropModal = closeCropModal;
+
+  // -------- Save profile (update sessionStorage + Supabase students, including socialLink) --------
+  async function saveProfile(e) {
+    e.preventDefault();
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName  = document.getElementById('lastName').value.trim();
+    const email     = document.getElementById('email').value.trim();
+    const studentId = document.getElementById('studentId').value.trim();
+    const course    = document.getElementById('course').value.trim();
+    const block     = document.getElementById('block').value.trim();
+    const social    = document.getElementById('socialLink').value.trim();
+
+    const fullName = [firstName, lastName].filter(Boolean).join(' ') || 'Student Name';
+    let courseBlock = course;
+    if (block) {
+      courseBlock = courseBlock ? `${courseBlock} - ${block}` : block;
+    }
+
+    const originalStudNo = sessionStorage.getItem('studentNumber') || studentId;
+
+    // --- update sa Supabase "students" table (kasama socialLink) ---
+    try {
+      const { error } = await supabase
+        .from('students')
+        .update({
+          studentName: fullName,
+          email: email || null,
+          studentNumber: studentId || originalStudNo,
+          course_block: courseBlock || null,
+          avatar_url: currentAvatarUrl || null,
+          socialLink: social || null
+        })
+        .eq('studentNumber', originalStudNo);
+
+      if (error) {
+        console.error('Error updating student record:', error);
+        showToast('Failed to save profile to database.', true);
+        return;
+      }
+    } catch (err) {
+      console.error('DB update exception:', err);
+      showToast('Unexpected error saving profile.', true);
+      return;
+    }
+
+    // --- update local sessionStorage (para sa UI) ---
+    sessionStorage.setItem('studentName', fullName);
+    sessionStorage.setItem('studentEmail', email || 'student@example.com');
+    sessionStorage.setItem('studentNumber', studentId || originalStudNo || '—');
+    sessionStorage.setItem('course_block', courseBlock || 'Course not set');
+
+    if (currentAvatarUrl) {
+      sessionStorage.setItem('avatarImage', currentAvatarUrl);
+    } else {
+      sessionStorage.removeItem('avatarImage');
+    }
+
+    if (social) {
+      sessionStorage.setItem('socialLink', social);
+    } else {
+      sessionStorage.removeItem('socialLink');
+    }
+
+    showToast('Profile saved successfully!');
+
+    setTimeout(() => {
+      window.location.href = 'userprofile.html';
+    }, 1500);
+  }
+
+  window.saveProfile = saveProfile;
+
+  // -------- Toast helper --------
+  function showToast(msg, isError = false) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.style.background = isError ? '#dc2626' : '#1b4332';
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  window.showToast = showToast;
+</script>
+</body>
+</html>

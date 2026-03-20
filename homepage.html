@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="PHINMA TradeHub - A Buy and Sell Platform for Students" />
+  <title>PHINMA TradeHub - Homepage</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../includes/user/header.css">
+  <link rel="stylesheet" href="../includes/user/sidebar.css">
+  <link rel="stylesheet" href="../assets/style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin-left: 0 !important;
+      padding-top: 72px !important;
+      background: #f0f4f1 !important;
+      font-family: 'DM Sans', sans-serif !important;
+    }
+
+    * { box-sizing: border-box; }
+
+    .th-wrap {
+      width: 100%;
+      transition: margin-left 0.3s ease, width 0.3s ease;
+    }
+
+    .th-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    /* Hero */
+    .th-hero {
+      text-align: center;
+      margin-bottom: 52px;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .th-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 18px;
+    }
+
+    .th-badge-dot {
+      width: 6px;
+      height: 6px;
+      background: #16a34a;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .th-title h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.75rem;
+      font-weight: 700;
+      color: #14532d !important;
+      background: none !important;
+      background-color: transparent !important;
+      -webkit-text-fill-color: #14532d !important;
+      padding: 0 !important;
+      margin: 0 0 12px !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      line-height: 1.2;
+    }
+
+    .th-subtitle {
+      font-size: 1rem !important;
+      color: #4b7a5a !important;
+      font-weight: 400;
+      margin-bottom: 0 !important;
+      max-width: 400px;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    /* Action Cards */
+    .th-cards {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    .th-card {
+      background: #ffffff !important;
+      border: 1.5px solid #d1fae5 !important;
+      border-radius: 18px !important;
+      padding: 32px 28px !important;
+      width: 196px;
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      text-decoration: none !important;
+      box-shadow: 0 2px 8px rgba(20,83,45,0.07) !important;
+      color: #111827 !important;
+      transition: all 0.22s ease;
+      min-width: unset !important;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .th-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+      opacity: 0;
+      transition: opacity 0.22s ease;
+    }
+
+    .th-card:hover::before { opacity: 1; }
+
+    .th-card:hover {
+      border-color: #22c55e !important;
+      transform: translateY(-5px) !important;
+      box-shadow: 0 14px 32px rgba(20,83,45,0.14) !important;
+    }
+
+    .th-card-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .th-card-icon svg {
+      width: 30px;
+      height: 30px;
+      stroke: #15803d;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .th-card-label {
+      font-size: 0.9rem !important;
+      font-weight: 600;
+      color: #111827 !important;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Section */
+    .th-section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .th-section-title {
+      font-size: 1.15rem !important;
+      font-weight: 700;
+      color: #111827 !important;
+      margin: 0 !important;
+    }
+
+    .th-section-link {
+      font-size: 0.82rem;
+      color: #16a34a !important;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+
+    .th-section-link:hover { text-decoration: underline; }
+
+    /* Categories */
+    .th-cats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      animation: fadeUp 0.6s 0.25s ease both;
+    }
+
+    .th-cat {
+      background: #ffffff !important;
+      border: 1.5px solid #e5e7eb !important;
+      border-radius: 14px !important;
+      padding: 16px 14px !important;
+      text-decoration: none !important;
+      display: flex !important;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+      transition: all 0.2s ease;
+      min-width: unset !important;
+    }
+
+    .th-cat:hover {
+      border-color: #22c55e !important;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(20,83,45,0.1) !important;
+    }
+
+    .th-cat-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #dcfce7, #d1fae5);
+      border-radius: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .th-cat-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: #15803d;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .th-cat-name {
+      font-size: 0.83rem;
+      font-weight: 600;
+      color: #111827 !important;
+      margin-bottom: 2px;
+    }
+
+    .th-cat-desc {
+      font-size: 0.72rem;
+      color: #9ca3af !important;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    @media (max-width: 700px) {
+      .th-cats { grid-template-columns: repeat(2, 1fr); }
+      .th-title h1 { font-size: 2rem; }
+    }
+
+    @media (max-width: 420px) {
+      .th-cats { grid-template-columns: 1fr; }
+      .th-cards { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER (inline na, hindi na hiwalay na file) -->
+  <header class="header" id="mainHeader">
+    <!-- Left Section: Logo & Toggle -->
+    <div class="header-left">
+      <!-- Sidebar Toggle Button -->
+      <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+        <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <!-- Logo/Brand -->
+      <div class="header-brand" style="cursor: default;">
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+       stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="10"></circle>
+    <path d="M12 6v6l4 2"></path>
+  </svg>
+  <span>Tradehub</span>
+</div>
+    </div>
+
+    <!-- Right Section: Navigation -->
+    <div class="header-content">
+      <nav>
+        <ul class="nav-menu">
+          <li>
+            <a href="/final/user/about.php" class="nav-icon-btn" title="About Us">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clip-rule="evenodd" />
+              </svg>
+            </a>
+          </li>
+          <li class="user-profile-container">
+            <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                    onclick="toggleProfileDropdown()" title="Profile">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <!-- Profile Dropdown -->
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="dropdown-arrow"></div>
+
+              <div class="profile-dropdown-header">
+                <div class="profile-user-name" id="profileUserName">Student Name</div>
+                <div class="profile-user-email" id="profileUserEmail">student@example.com</div>
+              </div>
+
+              <div class="profile-dropdown-menu">
+                <a href="/final/user/userprofile.php" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span>My Profile</span>
+                </a>
+
+                <a href="/final/user/selling.php" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  <span>My Selling</span>
+                </a>
+
+                <a href="/final/user/settings.php" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M12 1v6m0 6v6"></path>
+                    <path d="M17.2 7.8l-4.2 4.2m-6 6l-4.2 4.2"></path>
+                    <path d="M6.8 7.8l4.2 4.2m6 6l4.2 4.2"></path>
+                  </svg>
+                  <span>Settings</span>
+                </a>
+
+                <div class="profile-menu-divider"></div>
+
+                <a href="javascript:void(0)" class="profile-menu-item sign-out"
+                   onclick="handleSignOut()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  <span>Sign Out</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MAIN HOMEPAGE CONTENT -->
+  <div class="th-wrap" id="thWrap">
+    <div class="th-container">
+
+      <div class="th-hero">
+        <div class="th-badge">
+          <span class="th-badge-dot"></span>
+          Open for Trading
+        </div>
+        <div class="th-title">
+          <h1>PHINMA TradeHub</h1>
+        </div>
+        <p class="th-subtitle">
+          Your campus marketplace — buy and sell smarter with fellow students.
+        </p>
+      </div>
+
+      <div class="th-cards">
+        <a href="../user/browse.html" class="th-card">
+          <div class="th-card-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="M21 21l-4.35-4.35"></path>
+            </svg>
+          </div>
+          <span class="th-card-label">Browse Items</span>
+        </a>
+
+        <a href="posting.html" class="th-card">
+          <div class="th-card-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+          </div>
+          <span class="th-card-label">Post a Listing</span>
+        </a>
+      </div>
+
+      <div>
+        <div class="th-section-header">
+          <h2 class="th-section-title">Popular Categories</h2>
+          <a href="browse.html" class="th-section-link">View all →</a>
+        </div>
+
+        <div class="th-cats">
+          <a href="browse.html?category=Books+%26+Supplies" class="th-cat">
+            <div class="th-cat-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="th-cat-name">Books &amp; Supplies</div>
+              <div class="th-cat-desc">Textbooks, notes, stationery</div>
+            </div>
+          </a>
+
+          <a href="browse.html?category=Electronics" class="th-cat">
+            <div class="th-cat-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <div>
+              <div class="th-cat-name">Electronics</div>
+              <div class="th-cat-desc">Laptops, calculators, gadgets</div>
+            </div>
+          </a>
+
+          <a href="browse.html?category=Pre+Loved+Clothes" class="th-cat">
+            <div class="th-cat-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.57a1 1 0 00.99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.57a2 2 0 00-1.34-2.23z"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="th-cat-name">Pre-Loved Clothes</div>
+              <div class="th-cat-desc">Uniforms, casual wear</div>
+            </div>
+          </a>
+
+          <a href="browse.html?category=Dorm+Essentials" class="th-cat">
+            <div class="th-cat-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+              </svg>
+            </div>
+            <div>
+              <div class="th-cat-name">Dorm Essentials</div>
+              <div class="th-cat-desc">Lamps, bedding, kitchenware</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JS (Supabase + header logic + guard) -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    // Supabase (same as index.html)
+    const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+    const supabaseKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+    const supabase    = createClient(supabaseUrl, supabaseKey);
+
+    const currentStudentNumber = sessionStorage.getItem('studentNumber') || '';
+    const messagesUnreadBadge = document.getElementById('messagesUnreadBadge');
+
+    let unreadBadgeChannel = null;
+
+    function renderSidebarUnread(total) {
+    if (!messagesUnreadBadge) return;
+
+    const unreadTotal = Number(total || 0);
+
+    if (unreadTotal > 0) {
+      messagesUnreadBadge.style.display = 'inline-flex';
+      messagesUnreadBadge.textContent = unreadTotal > 99 ? '99+' : String(unreadTotal);
+    } else {
+      messagesUnreadBadge.style.display = 'none';
+      messagesUnreadBadge.textContent = '0';
+    }
+  }
+
+  async function loadUnreadBadgeCount() {
+    if (!currentStudentNumber) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: participantRows, error: participantError } = await supabase
+      .from('chat_participants')
+      .select('thread_id')
+      .eq('student_number', currentStudentNumber)
+      .is('deleted_at', null);
+
+    if (participantError) {
+      console.error('Error loading participant threads:', participantError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const threadIds = [...new Set((participantRows || []).map(row => row.thread_id))];
+
+    if (!threadIds.length) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: unreadRows, error: unreadError } = await supabase
+      .from('chat_messages')
+      .select('id, thread_id')
+      .in('thread_id', threadIds)
+      .neq('sender_student_number', currentStudentNumber)
+      .eq('is_read', false);
+
+    if (unreadError) {
+      console.error('Error loading unread messages:', unreadError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    renderSidebarUnread((unreadRows || []).length);
+  }
+
+  function subscribeToUnreadBadge() {
+    if (!currentStudentNumber) return;
+
+    if (unreadBadgeChannel) {
+      supabase.removeChannel(unreadBadgeChannel);
+      unreadBadgeChannel = null;
+    }
+
+    unreadBadgeChannel = supabase
+      .channel(`browse-unread-badge-${currentStudentNumber}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chat_participants'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .subscribe((status) => {
+        console.log('Browse unread badge realtime:', status);
+      });
+  }
+
+  window.addEventListener('load', async () => {
+    await loadUnreadBadgeCount();
+    subscribeToUnreadBadge();
+  });
+
+    // 🔐 Route guard
+    function guardRoute() {
+      const loggedInFlag = sessionStorage.getItem('user_logged_in');
+      if (loggedInFlag !== 'true') {
+        window.location.href = '../../index.html';
+      }
+    }
+    guardRoute();
+
+    // HEADER + SIDEBAR + PROFILE
+    function initHeaderAndSidebar() {
+      const sidebar   = document.getElementById('marketplaceSidebar');
+      const toggleBtn = document.getElementById('sidebarToggle');
+      let isOpen = true;
+
+      // Set profile name & email from sessionStorage
+      const nameEl  = document.getElementById('profileUserName');
+      const emailEl = document.getElementById('profileUserEmail');
+
+      const storedName  = sessionStorage.getItem('studentName');
+      const storedEmail = sessionStorage.getItem('studentEmail');
+
+      if (nameEl && storedName)  nameEl.textContent  = storedName;
+      if (emailEl && storedEmail) emailEl.textContent = storedEmail;
+
+      // Sidebar state (optional, kung may sidebar ka)
+      const savedState = localStorage.getItem('sidebarOpen');
+      if (savedState !== null) {
+        isOpen = (savedState === 'true');
+      }
+
+      function updateSidebarState() {
+        if (!sidebar || !toggleBtn) return;
+
+        if (isOpen) {
+          sidebar.style.transform = 'translateX(0)';
+          toggleBtn.classList.remove('active');
+          document.body.classList.remove('sidebar-hidden');
+          document.body.style.setProperty('margin-left', '360px', 'important');
+        } else {
+          sidebar.style.transform = 'translateX(-100%)';
+          toggleBtn.classList.add('active');
+          document.body.classList.add('sidebar-hidden');
+          document.body.style.setProperty('margin-left', '0px', 'important');
+        }
+
+        const event = new CustomEvent('sidebarToggled', {
+          detail: { isOpen },
+          bubbles: true
+        });
+        document.dispatchEvent(event);
+        window.dispatchEvent(event);
+      }
+
+      updateSidebarState();
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          isOpen = !isOpen;
+          localStorage.setItem('sidebarOpen', String(isOpen));
+          updateSidebarState();
+        });
+      }
+
+      // Profile dropdown functions (global para magamit sa onclick)
+      window.toggleProfileDropdown = function () {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown) dropdown.classList.toggle('show');
+      };
+
+      document.addEventListener('click', function (event) {
+        const container = document.querySelector('.user-profile-container');
+        const dropdown = document.getElementById('profileDropdown');
+        if (container && dropdown && !container.contains(event.target)) {
+          dropdown.classList.remove('show');
+        }
+      });
+
+      const pd = document.getElementById('profileDropdown');
+      if (pd) {
+        pd.addEventListener('click', function (event) {
+          event.stopPropagation();
+        });
+      }
+
+      // Sign-out (clear sessionStorage + balik index.html)
+      window.handleSignOut = function () {
+        if (confirm('Are you sure you want to sign out?')) {
+          sessionStorage.removeItem('user_logged_in');
+          sessionStorage.removeItem('studentName');
+          sessionStorage.removeItem('studentEmail');
+          sessionStorage.removeItem('course_block');
+          sessionStorage.removeItem('studentNumber');
+          sessionStorage.removeItem('studentID');
+          window.location.href = '../../index.html';
+        }
+      };
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', function (event) {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'b') {
+          event.preventDefault();
+          if (toggleBtn) toggleBtn.click();
+        }
+        if (event.key === 'Escape') {
+          const dropdown = document.getElementById('profileDropdown');
+          if (dropdown && dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initHeaderAndSidebar);
+  </script>
+</body>
+</html>

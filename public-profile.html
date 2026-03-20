@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Public Profile - PHINMA TradeHub</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../includes/header.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../includes/sidebar.css">
+  <link rel="stylesheet" href="../assets/public-profile.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Container width vs sidebar (same idea as userprofile/item-details) -->
+  <script>
+    function openAvatarPreview(imageUrl) {
+  const modal = document.getElementById('avatarPreviewModal');
+  const previewImg = document.getElementById('avatarPreviewImage');
+
+  if (!modal || !previewImg || !imageUrl) return;
+
+  previewImg.src = imageUrl;
+  modal.style.display = 'flex';
+}
+
+function closeAvatarPreview() {
+  const modal = document.getElementById('avatarPreviewModal');
+  const previewImg = document.getElementById('avatarPreviewImage');
+
+  if (modal) modal.style.display = 'none';
+  if (previewImg) previewImg.src = '';
+}
+document.addEventListener('click', function (e) {
+  const closeBtn = document.getElementById('closeAvatarPreview');
+  const modal = document.getElementById('avatarPreviewModal');
+
+  if (e.target === closeBtn) {
+    closeAvatarPreview();
+  }
+
+  if (e.target === modal) {
+    closeAvatarPreview();
+  }
+});
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    closeAvatarPreview();
+  }
+});
+    window.addEventListener('load', function () {
+      const container = document.querySelector('.public-profile-page-container');
+      const sidebar = document.getElementById('marketplaceSidebar');
+
+      function updateContainer() {
+        if (!container) return;
+        const sidebarOpen = localStorage.getItem('sidebarOpen');
+        if (sidebarOpen === 'false') {
+          document.body.classList.add('sidebar-closed', 'sidebar-hidden');
+          container.style.marginLeft = '0';
+          container.style.width = '100%';
+        } else {
+          document.body.classList.remove('sidebar-closed', 'sidebar-hidden');
+          container.style.marginLeft = '360px';
+          container.style.width = 'calc(100% - 360px)';
+        }
+      }
+
+      updateContainer();
+      document.addEventListener('sidebarToggled', () => setTimeout(updateContainer, 50));
+      window.addEventListener('storage', updateContainer);
+
+      const toggleBtn = document.getElementById('sidebarToggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => setTimeout(updateContainer, 50));
+      }
+
+      if (sidebar) {
+        const observer = new MutationObserver(() => setTimeout(updateContainer, 50));
+        observer.observe(sidebar, { attributes: true, attributeFilter: ['style'] });
+      }
+    });
+  </script>
+
+  <style>
+    .public-back-btn {
+      border: none;
+      background: #f5f5f5;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+    }
+
+    .public-report-btn {
+      border: none;
+      background: #fff5f5;
+      color: #dc3545;
+      border-radius: 999px;
+      padding: 10px 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .public-report-btn:hover {
+      background: #ffe0e0;
+    }
+
+    /* 🔗 Social link section */
+    .public-profile-social {
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #495057;
+      flex-wrap: wrap;
+    }
+
+    .public-profile-social-label {
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .public-profile-social-link {
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid #1b4332;
+      color: #1b4332;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f0faf4;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      max-width: 260px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .public-profile-social-link:hover {
+      background: #1b4332;
+      color: #ffffff;
+      border-color: #145a38;
+    }
+
+    .public-profile-social-link svg {
+      flex-shrink: 0;
+    }
+
+    .report-btn {
+      background-color: white;
+      color: #dc3545;
+      border: 2px solid #dc3545;
+      padding: 12px 24px;
+      border-radius: 25px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .report-btn:hover {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .report-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+    .public-profile-avatar.clickable-avatar {
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.public-profile-avatar.has-photo {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+/* ===== SWEET ALERT FIX FOR USERS PAGE ===== */
+.swal2-actions {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  margin-top: 1.5rem !important;
+}
+
+.custom-swal-popup {
+  border-radius: 22px !important;
+  padding: 1.5rem 1.4rem 1.25rem !important;
+  font-family: 'Montserrat', sans-serif !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  width: 430px !important;
+}
+
+.custom-swal-title {
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+  color: #14532d !important;
+  margin-bottom: 6px !important;
+}
+
+.custom-swal-text {
+  font-size: 0.95rem !important;
+  color: #4b5563 !important;
+  line-height: 1.6 !important;
+}
+
+.custom-swal-icon {
+  border-color: rgba(220, 38, 38, 0.18) !important;
+}
+
+.custom-confirm-btn,
+.custom-danger-btn,
+.custom-cancel-btn,
+.custom-warning-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 130px !important;
+  height: 48px !important;
+  padding: 0 22px !important;
+  border: none !important;
+  border-radius: 999px !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  transition: all 0.25s ease !important;
+}
+
+.custom-confirm-btn {
+  background: linear-gradient(135deg, #14532d, #22c55e) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px rgba(34, 197, 94, 0.28) !important;
+}
+
+.custom-confirm-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 14px 28px rgba(34, 197, 94, 0.34) !important;
+}
+
+.custom-danger-btn {
+  background: linear-gradient(135deg, #b91c1c, #ef4444) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px rgba(239, 68, 68, 0.28) !important;
+}
+
+.custom-danger-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 14px 28px rgba(239, 68, 68, 0.34) !important;
+}
+
+.custom-warning-btn {
+  background: linear-gradient(135deg, #d97706, #f59e0b) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px rgba(245, 158, 11, 0.28) !important;
+}
+
+.custom-warning-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 14px 28px rgba(245, 158, 11, 0.34) !important;
+}
+
+.custom-cancel-btn {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+.custom-cancel-btn:hover {
+  background: #e5e7eb !important;
+}
+
+.custom-input {
+  border-radius: 12px !important;
+  border: 1px solid #d1d5db !important;
+  padding: 0.9rem 1rem !important;
+  font-size: 0.95rem !important;
+  box-shadow: none !important;
+}
+
+.custom-input:focus {
+  border-color: #16a34a !important;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15) !important;
+}
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" id="mainHeader">
+    <div class="header-left">
+      <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+        <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <div class="header-brand" style="cursor: default;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 6v6l4 2"></path>
+        </svg>
+        <span>Tradehub</span>
+      </div>
+    </div>
+
+    <div class="header-content">
+      <nav>
+        <ul class="nav-menu">
+          <li>
+            <a href="about.html" class="nav-icon-btn" title="About Us">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clip-rule="evenodd" />
+              </svg>
+            </a>
+          </li>
+          <li class="user-profile-container">
+            <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                    onclick="toggleProfileDropdown()" title="Profile">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="dropdown-arrow"></div>
+              <div class="profile-dropdown-header">
+                <div class="profile-user-name" id="profileUserName">Student Name</div>
+                <div class="profile-user-email" id="profileUserEmail">student@example.com</div>
+              </div>
+
+              <div class="profile-dropdown-menu">
+                <a href="userprofile.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span>My Profile</span>
+                </a>
+
+                <a href="bookmarks.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+                <span>Bookmarks</span>
+                </a>
+
+
+                <a href="selling.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  <span>My Selling</span>
+                </a>
+
+
+                <div class="profile-menu-divider"></div>
+
+                <a href="javascript:void(0)" class="profile-menu-item sign-out"
+                   onclick="handleSignOut()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  <span>Sign Out</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="marketplace-sidebar" id="marketplaceSidebar"
+         style="position: fixed !important;
+                top: 72px !important;
+                left: 0 !important;
+                width: 360px !important;
+                height: calc(100vh - 72px) !important;
+                background: #242526 !important;
+                color: #e4e6eb !important;
+                overflow-y: auto !important;
+                padding: 1rem !important;
+                z-index: 999 !important;
+                transition: transform 0.3s ease !important;">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Phinma-Upang TradeHub</h2>
+      <a href="userprofile.html" class="sidebar-settings" title="My Profile"
+         style="text-decoration:none;color:inherit;">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"/>
+        </svg>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="browse.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #1877f2;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+          </svg>
+        </div>
+        <span>Browse Items</span>
+      </a>
+
+      <a href="notification.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #e67e22;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+          </svg>
+        </div>
+        <span>Notifications</span>
+      </a>
+
+      <a href="bookmarks.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #f00524;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M6 3a2 2 0 0 0-2 2v16l8-5 8 5V5a2 2 0 0 0-2-2H6z"/>
+    </svg>
+  </div>
+  <span>Bookmarks</span>
+</a>
+
+      <a href="messages.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #00b894;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/>
+    </svg>
+  </div>
+
+  <span class="sidebar-label">Messages</span>
+  <span id="messagesUnreadBadge" class="messages-unread-badge">0</span>
+</a>
+
+      <a href="userprofile.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #8e44ad;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <span>My Profile</span>
+      </a>
+    </nav>
+
+    <a href="posting.html" class="sidebar-create-btn">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"/>
+      </svg>
+      Create New Listing
+    </a>
+  </aside>
+
+  <!-- MAIN PUBLIC PROFILE CONTENT -->
+  <div class="public-profile-page-container">
+    <div class="public-profile-container">
+      <!-- Header with Back Button -->
+      <div class="public-profile-header">
+        <button class="public-back-btn" onclick="window.history.back()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <h1 style="color: #2e7d32;">
+          <span id="publicNameTitle">Student</span>'s Profile
+        </h1>
+      </div>
+
+      <!-- Profile Card -->
+      <div class="public-profile-card">
+        <!-- Top Section: Profile Info + Report Button -->
+        <div class="public-profile-top">
+          <div class="public-profile-info">
+            <!-- 🔘 Avatar (gagawin nating clickable sa socialLink kung meron) -->
+            <div class="public-profile-avatar" id="publicAvatar" title="View social profile (if available)">ST</div>
+            <div class="public-profile-details">
+              <h2 id="publicName">Student Name</h2>
+              <div class="public-profile-badges">
+                <span class="public-badge" id="publicCourse">Course</span>
+                <span class="public-badge" id="publicBlock">Block</span>
+                <span class="public-badge" id="publicStudentId">ID: —</span>
+              </div>
+
+              <p id="publicMemberSince"
+                 style="color: #6c757d; margin-top: 12px; font-size: 14px;">
+                Member since —
+              </p>
+
+              <!-- 🔗 Social link display (for stalking / connecting) -->
+              <div class="public-profile-social" id="publicSocialWrapper" style="display:none;">
+                <span class="public-profile-social-label">Social link:</span>
+                <a id="publicSocialLink"
+                   href="#"
+                   class="public-profile-social-link"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                  <span id="publicSocialText">View social profile</span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="public-action-buttons">
+  <button class="public-message-btn" id="messageUserBtn" type="button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+    Message This User
+  </button>
+
+  <button class="public-report-btn" onclick="reportUser()" type="button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+      <line x1="12" y1="9" x2="12" y2="13"></line>
+      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+    </svg>
+    Report User
+  </button>
+</div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="public-stats-grid">
+          <div class="public-stat-item">
+            <div class="public-stat-number" id="publicTotalListings">0</div>
+            <div class="public-stat-label">Total Listings</div>
+          </div>
+          <div class="public-stat-item">
+            <div class="public-stat-number" id="publicActiveListings">0</div>
+            <div class="public-stat-label">Active</div>
+          </div>
+          <div class="public-stat-item">
+            <div class="public-stat-number public-stat-green" id="publicSoldItems">0</div>
+            <div class="public-stat-label">Sold</div>
+          </div>
+        </div>
+
+        <!-- Listings Section -->
+        <div style="margin-top: 30px;">
+          <h3 style="font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 20px;">
+            Active Listings
+          </h3>
+          <div class="public-listings-grid" id="publicListingsGrid">
+            <!-- Cards injected by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Modal -->
+  <div id="reportModal"
+       style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+              background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 16px; padding: 30px; max-width: 500px; width: 90%;">
+      <h2 style="font-size: 24px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px;">
+        Report User
+      </h2>
+      <p style="color: #666; margin-bottom: 24px;">
+        Please select a reason for reporting this user:
+      </p>
+
+      <form id="reportForm">
+        <div style="margin-bottom: 16px;">
+          <label style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; cursor: pointer; transition: background 0.3s;">
+            <input type="radio" name="reason" value="spam" required>
+            <span>Spam or fake listings</span>
+          </label>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; cursor: pointer;">
+            <input type="radio" name="reason" value="scam" required>
+            <span>Suspected scam</span>
+          </label>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <label style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; cursor: pointer;">
+            <input type="radio" name="reason" value="inappropriate" required>
+            <span>Inappropriate content</span>
+          </label>
+        </div>
+        <div style="margin-bottom: 24px;">
+          <label style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; cursor: pointer;">
+            <input type="radio" name="reason" value="other" required>
+            <span>Other</span>
+          </label>
+        </div>
+         <div id="otherReasonWrap" style="display:none; margin-bottom: 16px;">
+      <input
+      type="text"
+      id="otherReasonInput"
+      placeholder="Please specify the reason..."
+      style="
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #dee2e6;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 14px;
+        box-sizing: border-box;
+      "
+    >
+  </div>
+
+        <textarea id="reportDetails"
+                  placeholder="Additional details (optional)"
+                  style="width: 100%; min-height: 100px; padding: 12px; border: 2px solid #dee2e6;
+                         border-radius: 8px; font-family: inherit; margin-bottom: 20px; resize: vertical;"></textarea>
+
+        <div style="display: flex; gap: 12px;">
+          <button type="button" onclick="closeReportModal()" 
+                  style="flex: 1; padding: 12px 24px; border: 2px solid #dee2e6; background: white;
+                         color: #495057; border-radius: 25px; font-size: 15px; font-weight: 600; cursor: pointer;">
+            Cancel
+          </button>
+          <button type="submit"
+                  style="flex: 1; padding: 12px 24px; border: none; background: #dc3545; color: white;
+                         border-radius: 25px; font-size: 15px; font-weight: 600; cursor: pointer;">
+            Submit Report
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Avatar Preview Modal -->
+  <div id="avatarPreviewModal"
+     style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75);
+            z-index:10000; align-items:center; justify-content:center; padding:20px;">
+  <div style="position:relative; max-width:90vw; max-height:90vh;">
+    <button id="closeAvatarPreview"
+            style="position:absolute; top:-14px; right:-14px; width:40px; height:40px;
+                   border:none; border-radius:50%; background:white; color:#111;
+                   font-size:24px; cursor:pointer; font-weight:700; line-height:1;">
+      ×
+    </button>
+    <img id="avatarPreviewImage"
+     src=""
+     alt="Profile Picture"
+     style="display:block; width:320px; max-width:80vw; max-height:70vh;
+            object-fit:cover; border-radius:16px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.35); background:white;">
+  </div>
+</div>
+
+  <!-- JS: Supabase + profile data -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+    const supabasePublishableKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+    const supabase = createClient(supabaseUrl, supabasePublishableKey);
+
+    const currentStudentNumber = sessionStorage.getItem('studentNumber') || '';
+    const messagesUnreadBadge = document.getElementById('messagesUnreadBadge');
+
+    let profileStudentNo = null; 
+    let profileSocialLink = null; 
+    let unreadBadgeChannel = null;
+
+    function renderSidebarUnread(total) {
+    if (!messagesUnreadBadge) return;
+
+    const unreadTotal = Number(total || 0);
+
+    if (unreadTotal > 0) {
+      messagesUnreadBadge.style.display = 'inline-flex';
+      messagesUnreadBadge.textContent = unreadTotal > 99 ? '99+' : String(unreadTotal);
+    } else {
+      messagesUnreadBadge.style.display = 'none';
+      messagesUnreadBadge.textContent = '0';
+    }
+  }
+
+  async function loadUnreadBadgeCount() {
+    if (!currentStudentNumber) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: participantRows, error: participantError } = await supabase
+      .from('chat_participants')
+      .select('thread_id')
+      .eq('student_number', currentStudentNumber)
+      .is('deleted_at', null);
+
+    if (participantError) {
+      console.error('Error loading participant threads:', participantError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const threadIds = [...new Set((participantRows || []).map(row => row.thread_id))];
+
+    if (!threadIds.length) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: unreadRows, error: unreadError } = await supabase
+      .from('chat_messages')
+      .select('id, thread_id')
+      .in('thread_id', threadIds)
+      .neq('sender_student_number', currentStudentNumber)
+      .eq('is_read', false);
+
+    if (unreadError) {
+      console.error('Error loading unread messages:', unreadError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    renderSidebarUnread((unreadRows || []).length);
+  }
+  
+  function subscribeToUnreadBadge() {
+    if (!currentStudentNumber) return;
+
+    if (unreadBadgeChannel) {
+      supabase.removeChannel(unreadBadgeChannel);
+      unreadBadgeChannel = null;
+    }
+
+    unreadBadgeChannel = supabase
+      .channel(`browse-unread-badge-${currentStudentNumber}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chat_participants'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .subscribe((status) => {
+        console.log('Browse unread badge realtime:', status);
+      });
+  }
+
+  window.addEventListener('load', async () => {
+    await loadUnreadBadgeCount();
+    subscribeToUnreadBadge();
+  });
+  function goToMessageUser() {
+  if (!profileStudentNo) {
+    Swal.fire({
+      title: 'Profile not ready',
+      text: 'User profile is still loading. Please try again.',
+      icon: 'warning',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-warning-btn'
+      }
+    });
+    return;
+  }
+
+  if (!currentStudentNumber) {
+    window.location.href = '../../index.html';
+    return;
+  }
+
+  if (profileStudentNo === currentStudentNumber) {
+    Swal.fire({
+      title: 'Not allowed',
+      text: 'You cannot message yourself.',
+      icon: 'warning',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-warning-btn'
+      }
+    });
+    return;
+  }
+
+  window.location.href = `messages.html?seller=${encodeURIComponent(profileStudentNo)}`;
+}
+const messageUserBtn = document.getElementById('messageUserBtn');
+if (messageUserBtn) {
+  messageUserBtn.addEventListener('click', goToMessageUser);
+}
+    // -------- Route guard --------
+    (function guardRoute() {
+      const loggedInFlag = sessionStorage.getItem('user_logged_in');
+      if (loggedInFlag !== 'true') {
+        window.location.href = '../../index.html';
+      }
+    })();
+
+    // -------- Header + sidebar --------
+    function initHeaderAndSidebar() {
+      const sidebar   = document.getElementById('marketplaceSidebar');
+      const toggleBtn = document.getElementById('sidebarToggle');
+      let isOpen = true;
+
+      const nameEl  = document.getElementById('profileUserName');
+      const emailEl = document.getElementById('profileUserEmail');
+
+      const storedName  = sessionStorage.getItem('studentName');
+      const storedEmail = sessionStorage.getItem('studentEmail');
+
+      if (nameEl && storedName)  nameEl.textContent  = storedName;
+      if (emailEl && storedEmail) emailEl.textContent = storedEmail;
+
+      const savedState = localStorage.getItem('sidebarOpen');
+      if (savedState !== null) {
+        isOpen = (savedState === 'true');
+      }
+
+      function updateSidebarState() {
+        if (!sidebar || !toggleBtn) return;
+        if (isOpen) {
+          sidebar.style.transform = 'translateX(0)';
+          toggleBtn.classList.remove('active');
+          document.body.classList.remove('sidebar-hidden');
+        } else {
+          sidebar.style.transform = 'translateX(-100%)';
+          toggleBtn.classList.add('active');
+          document.body.classList.add('sidebar-hidden');
+        }
+
+        const ev = new CustomEvent('sidebarToggled', { detail: { isOpen }, bubbles: true });
+        document.dispatchEvent(ev);
+        window.dispatchEvent(ev);
+      }
+
+      updateSidebarState();
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          isOpen = !isOpen;
+          localStorage.setItem('sidebarOpen', String(isOpen));
+          updateSidebarState();
+        });
+      }
+
+      window.toggleProfileDropdown = function () {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown) dropdown.classList.toggle('show');
+      };
+
+      document.addEventListener('click', function (event) {
+        const container = document.querySelector('.user-profile-container');
+        const dropdown = document.getElementById('profileDropdown');
+        if (container && dropdown && !container.contains(event.target)) {
+          dropdown.classList.remove('show');
+        }
+      });
+
+      const pd = document.getElementById('profileDropdown');
+      if (pd) {
+        pd.addEventListener('click', function (event) {
+          event.stopPropagation();
+        });
+      }
+
+      window.handleSignOut = function () {
+  Swal.fire({
+    title: 'Sign out?',
+    text: 'Are you sure you want to sign out of your account?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, sign out',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.clear();
+
+      Swal.fire({
+        title: 'Signed out',
+        text: 'You have been successfully signed out.',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text'
+        }
+      }).then(() => {
+        window.location.href = '../../index.html';
+      });
+    }
+  });
+};
+
+      document.addEventListener('keydown', function (event) {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'b') {
+          event.preventDefault();
+          if (toggleBtn) toggleBtn.click();
+        }
+        if (event.key === 'Escape') {
+          const dropdown = document.getElementById('profileDropdown');
+          if (dropdown && dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initHeaderAndSidebar);
+
+    // -------- Helpers --------
+    function getStudentNoFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('student_no');
+    }
+
+    function formatMemberSinceFromEarliest(earliestDate) {
+      if (!earliestDate) return '—';
+      const d = new Date(earliestDate);
+      if (isNaN(d.getTime())) return '—';
+      const options = { year: 'numeric', month: 'long' };
+      return d.toLocaleDateString(undefined, options);
+    }
+
+    function truncateUrl(url, maxLen = 32) {
+      if (!url) return '';
+      if (url.length <= maxLen) return url;
+      return url.slice(0, maxLen - 3) + '...';
+    }
+
+    // -------- Load public profile data from Supabase (kasama socialLink) --------
+    async function loadPublicProfile() {
+      const studentNo = getStudentNoFromUrl();
+      if (!studentNo) {
+  await Swal.fire({
+    title: 'Missing data',
+    text: 'No student number was provided in the URL.',
+    icon: 'error',
+    confirmButtonText: 'OK',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-swal-popup',
+      title: 'custom-swal-title',
+      htmlContainer: 'custom-swal-text',
+      confirmButton: 'custom-danger-btn'
+    }
+  });
+  return;
+}
+      profileStudentNo = studentNo;
+
+      const nameTitleEl      = document.getElementById('publicNameTitle');
+      const nameEl           = document.getElementById('publicName');
+      const avatarEl         = document.getElementById('publicAvatar');
+      const courseEl         = document.getElementById('publicCourse');
+      const blockEl          = document.getElementById('publicBlock');
+      const idEl             = document.getElementById('publicStudentId');
+      const memberSinceEl    = document.getElementById('publicMemberSince');
+      const totalListingsEl  = document.getElementById('publicTotalListings');
+      const activeListingsEl = document.getElementById('publicActiveListings');
+      const soldItemsEl      = document.getElementById('publicSoldItems');
+      const listingsGridEl   = document.getElementById('publicListingsGrid');
+      const socialWrapperEl  = document.getElementById('publicSocialWrapper');
+      const socialLinkEl     = document.getElementById('publicSocialLink');
+      const socialTextEl     = document.getElementById('publicSocialText');
+
+      // 1️⃣ Kunin profile info sa `students` table (kasama avatar_url + socialLink)
+      let displayName   = 'Student Seller';
+      let displayCourse = '';
+      let displayBlock  = '';
+      let avatarUrl     = null;
+      let socialLink    = null;
+
+      try {
+        const { data: studentRow, error: studentError } = await supabase
+          .from('students')
+          .select('studentName, course_block, studentNumber, avatar_url, socialLink')
+          .eq('studentNumber', studentNo)
+          .maybeSingle();
+
+        if (studentError) {
+          console.error('Error loading student profile:', studentError);
+        } else if (studentRow) {
+          displayName = studentRow.studentName || displayName;
+
+          // parse course_block -> course + block (e.g. "BSIT - 3-02")
+          const courseBlock = studentRow.course_block || '';
+          if (courseBlock && courseBlock.includes('-')) {
+            const [c, b] = courseBlock.split('-').map(s => s.trim());
+            displayCourse = c || '';
+            displayBlock  = b || '';
+          } else {
+            displayCourse = courseBlock || '';
+          }
+
+          avatarUrl  = studentRow.avatar_url || null;
+          socialLink = studentRow.socialLink || null;
+        }
+      } catch (err) {
+        console.error('Unexpected error loading student profile:', err);
+      }
+
+      // 2️⃣ Kunin listings para sa stats + "member since"
+      const { data, error } = await supabase
+        .from('listings')
+        .select('*')
+        .eq('seller_student_no', studentNo)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+  console.error('Error loading public profile listings:', error);
+  await Swal.fire({
+    title: 'Failed',
+    text: 'Error loading profile. Please try again.',
+    icon: 'error',
+    confirmButtonText: 'OK',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-swal-popup',
+      title: 'custom-swal-title',
+      htmlContainer: 'custom-swal-text',
+      confirmButton: 'custom-danger-btn'
+    }
+  });
+  return;
+}
+
+      const listings = data || [];
+
+      const total           = listings.length;
+      const activeListings  = listings.filter(l => l.is_active !== false);
+      const soldListings    = listings.filter(l => l.is_active === false);
+
+      totalListingsEl.textContent  = total;
+      activeListingsEl.textContent = activeListings.length;
+      soldItemsEl.textContent      = soldListings.length;
+
+      // optional override info from earliest listing
+      let memberSinceValue = '—';
+      if (listings.length > 0) {
+        const first = listings[0];
+        if (!displayName || displayName === 'Student Seller') {
+          displayName = first.seller_name || first.seller_full_name || displayName;
+        }
+
+        // kung wala pa ring course / block, subukan galing listings
+        if (!displayCourse && first.seller_course_block) {
+          const cb = first.seller_course_block;
+          if (cb.includes('-')) {
+            const [c, b] = cb.split('-').map(s => s.trim());
+            displayCourse = c || '';
+            displayBlock  = b || '';
+          } else {
+            displayCourse = cb || '';
+          }
+        }
+
+        memberSinceValue = formatMemberSinceFromEarliest(first.created_at);
+      } else {
+        memberSinceValue = '—';
+      }
+
+      // 3️⃣ Apply sa UI
+      nameTitleEl.textContent   = displayName;
+      nameEl.textContent        = displayName;
+      courseEl.textContent      = displayCourse || 'Course not set';
+      blockEl.textContent       = displayBlock || '';
+      idEl.textContent          = 'ID: ' + studentNo;
+      memberSinceEl.textContent = 'Member since ' + memberSinceValue;
+
+      const initials = displayName
+        .split(' ')
+        .filter(Boolean)
+        .map(part => part[0].toUpperCase())
+        .slice(0, 2)
+        .join('') || 'ST';
+
+      // ✅ Avatar mula sa students.avatar_url
+      if (avatarUrl) {
+        avatarEl.style.backgroundImage = `url(${avatarUrl})`;
+        avatarEl.classList.add('has-photo');
+        avatarEl.textContent = '';
+      } else {
+        avatarEl.style.backgroundImage = '';
+        avatarEl.classList.remove('has-photo');
+        avatarEl.textContent = initials;
+      }
+
+      // ✅ Social link display only
+profileSocialLink = socialLink || null;
+
+if (profileSocialLink && socialWrapperEl && socialLinkEl && socialTextEl) {
+  socialWrapperEl.style.display = 'flex';
+  socialLinkEl.href = profileSocialLink;
+  socialTextEl.textContent = truncateUrl(profileSocialLink, 36);
+} else {
+  if (socialWrapperEl) socialWrapperEl.style.display = 'none';
+}
+
+// ✅ Avatar click = preview picture, not social link
+if (avatarUrl) {
+  avatarEl.classList.add('clickable-avatar');
+  avatarEl.title = 'View profile picture';
+  avatarEl.onclick = () => openAvatarPreview(avatarUrl);
+} else {
+  avatarEl.classList.remove('clickable-avatar');
+  avatarEl.title = '';
+  avatarEl.onclick = null;
+}
+
+// ✅ Name is no longer clickable
+nameEl.style.cursor = 'default';
+nameEl.title = '';
+nameEl.onclick = null;
+
+      // 4️⃣ Render active listings
+      listingsGridEl.innerHTML = '';
+      if (!activeListings.length) {
+        listingsGridEl.innerHTML =
+          '<p style="color:#6c757d;font-size:14px;">No active listings from this seller.</p>';
+      } else {
+        activeListings.forEach(listing => {
+          const imgUrl =
+            listing.cover_image_url ||
+            (Array.isArray(listing.image_urls) && listing.image_urls[0]) ||
+            'https://placehold.co/400x300?text=No+Image';
+
+          const price     = listing.price ?? 0;
+          const condition = listing.condition || '';
+
+          const card = document.createElement('div');
+          card.className = 'public-listing-card';
+          card.style.cursor = 'pointer';
+          card.addEventListener('click', () => {
+            window.location.href = 'item-details.html?id=' + encodeURIComponent(listing.id);
+          });
+
+          card.innerHTML = `
+            <img src="${imgUrl}" alt="${listing.title || 'Listing'}" class="public-listing-image">
+            <div style="padding: 16px;">
+              <h4 style="font-size: 16px; font-weight: 600; color: #1a1a1a; margin-bottom: 8px;">
+                ${listing.title || 'Untitled Item'}
+              </h4>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 18px; font-weight: 700; color: #28a745;">
+                  ₱${Number(price).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  })}
+                </span>
+                <span style="font-size: 13px; color: #6c757d;">
+                  ${condition}
+                </span>
+              </div>
+            </div>
+          `;
+
+          listingsGridEl.appendChild(card);
+        });
+      }
+    }
+
+    // -------- Notification helper (profile reported) --------
+    async function sendProfileReportNotification(reportedStudentNo, reportedName, reporterStudentNo, reporterName) {
+      if (!reportedStudentNo || !reporterStudentNo) {
+        console.warn('Missing data for profile report notification', {
+          reportedStudentNo,
+          reporterStudentNo
+        });
+        return;
+      }
+
+      const message = `${reporterName || 'Someone'} reported your profile. Our team will review this report.`;
+
+      const { error } = await supabase
+        .from('notifications')
+        .insert([{
+          type: 'profile_report',
+          recipient_student_number: reportedStudentNo,
+          actor_student_number: reporterStudentNo,
+          actor_name: reporterName || null,
+          listing_id: null,
+          listing_title: null,
+          message,
+          is_read: false,
+          created_at: new Date().toISOString()
+        }]);
+
+      if (error) {
+        console.error('Error creating profile report notification:', error);
+      } else {
+        console.log('Profile report notification created');
+      }
+    }
+
+    // -------- Report User handlers (Supabase insert) --------
+    window.reportUser = async function () {
+  if (!profileStudentNo) {
+    await Swal.fire({
+      title: 'Profile not ready',
+      text: 'User profile is still loading. Please try again.',
+      icon: 'warning',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-warning-btn'
+      }
+    });
+    return;
+  }
+
+  showReportModal();
+};
+
+   window.closeReportModal = function () {
+  document.getElementById('reportModal').style.display = 'none';
+
+  const form = document.getElementById('reportForm');
+  if (form) form.reset();
+
+  const otherReasonWrap = document.getElementById('otherReasonWrap');
+  const otherReasonInput = document.getElementById('otherReasonInput');
+
+  if (otherReasonWrap) otherReasonWrap.style.display = 'none';
+  if (otherReasonInput) otherReasonInput.value = '';
+};
+    const reportReasonRadios = document.querySelectorAll('input[name="reason"]');
+const otherReasonWrap = document.getElementById('otherReasonWrap');
+const otherReasonInput = document.getElementById('otherReasonInput');
+
+reportReasonRadios.forEach(radio => {
+  radio.addEventListener('change', function () {
+    const isOther = this.value === 'other' && this.checked;
+
+    if (otherReasonWrap) {
+      otherReasonWrap.style.display = isOther ? 'block' : 'none';
+    }
+
+    if (!isOther && otherReasonInput) {
+      otherReasonInput.value = '';
+    }
+  });
+});
+
+    // map reason key -> full text (para sa `reason` column)
+    function getReasonText(key) {
+      switch (key) {
+        case 'spam':         return 'Spam or fake listings';
+        case 'scam':         return 'Suspected scam';
+        case 'inappropriate':return 'Inappropriate content';
+        case 'other':        return 'Other';
+        default:             return key || 'No reason provided';
+      }
+    }
+
+    document.getElementById('reportForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  const reasonInput = document.querySelector('input[name="reason"]:checked');
+  const details = document.getElementById('reportDetails').value.trim();
+  const otherReasonInputEl = document.getElementById('otherReasonInput');
+
+  if (!reasonInput) {
+    window.closeReportModal();
+
+    await Swal.fire({
+      title: 'Missing reason',
+      text: 'Please select a reason for your report.',
+      icon: 'warning',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-warning-btn'
+      }
+    });
+
+    showReportModal();
+    return;
+  }
+
+  const reasonKey = reasonInput.value;
+  let reasonText = getReasonText(reasonKey);
+
+  if (reasonKey === 'other') {
+    reasonText = (otherReasonInputEl?.value || '').trim();
+
+    if (!reasonText) {
+      window.closeReportModal();
+
+      await Swal.fire({
+        title: 'Specify reason',
+        text: 'Please specify the reason.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-swal-popup',
+          title: 'custom-swal-title',
+          htmlContainer: 'custom-swal-text',
+          confirmButton: 'custom-warning-btn'
+        }
+      });
+
+      showReportModal();
+      otherReasonInputEl?.focus();
+      return;
+    }
+  }
+
+  const reportedStudentNo = profileStudentNo;
+  const reportedName = (document.getElementById('publicName').textContent || '').trim();
+
+  const reporterStudentNo = sessionStorage.getItem('studentNumber') || null;
+  const reporterName = sessionStorage.getItem('studentName') || 'Anonymous';
+  const reporterEmail = sessionStorage.getItem('studentEmail') || null;
+
+  if (reportedStudentNo && reporterStudentNo && reportedStudentNo === reporterStudentNo) {
+    window.closeReportModal();
+
+    await Swal.fire({
+      title: 'Not allowed',
+      text: 'You cannot report your own account.',
+      icon: 'warning',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-warning-btn'
+      }
+    });
+
+    showReportModal();
+    return;
+  }
+
+  if (!reportedStudentNo) {
+    window.closeReportModal();
+
+    await Swal.fire({
+      title: 'Missing data',
+      text: 'Missing reported user student number.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-danger-btn'
+      }
+    });
+
+    showReportModal();
+    return;
+  }
+
+  window.closeReportModal();
+
+  const confirmReport = await Swal.fire({
+    title: 'Submit report?',
+    text: 'Are you sure you want to submit this report?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    focusCancel: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.55)',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-swal-popup',
+      title: 'custom-swal-title',
+      htmlContainer: 'custom-swal-text',
+      icon: 'custom-swal-icon',
+      confirmButton: 'custom-danger-btn',
+      cancelButton: 'custom-cancel-btn'
+    }
+  });
+
+  if (!confirmReport.isConfirmed) {
+    showReportModal();
+    return;
+  }
+
+  try {
+    const { error } = await supabase
+      .from('user_reports')
+      .insert([{
+        reported_user_id: reportedStudentNo,
+        reported_student_no: reportedStudentNo,
+        reported_user_name: reportedName,
+        reporter_name: reporterName,
+        reporter_student_no: reporterStudentNo,
+        reporter_email: reporterEmail,
+        reason: reasonText,
+        reason_key: reasonKey,
+        additional_info: details || null,
+        status: 'pending'
+      }]);
+
+    if (error) {
+      console.error('Error inserting report:', error);
+
+      await Swal.fire({
+        title: 'Failed',
+        text: 'Error submitting report. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-swal-popup',
+          title: 'custom-swal-title',
+          htmlContainer: 'custom-swal-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+
+      showReportModal();
+      return;
+    }
+
+    try {
+      await sendProfileReportNotification(
+        reportedStudentNo,
+        reportedName,
+        reporterStudentNo,
+        reporterName
+      );
+    } catch (notifErr) {
+      console.error('Error sending profile report notification:', notifErr);
+    }
+
+    await Swal.fire({
+      title: 'Report submitted',
+      text: 'Thank you for your report. Our team will review it shortly.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-confirm-btn'
+      }
+    });
+
+    window.closeReportModal();
+  } catch (err) {
+    console.error('Unexpected error submitting report:', err);
+
+    await Swal.fire({
+      title: 'Failed',
+      text: 'Unexpected error submitting report.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-danger-btn'
+      }
+    });
+
+    showReportModal();
+  }
+});
+  
+
+    // Close modal when clicking outside
+    document.getElementById('reportModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        window.closeReportModal();
+      }
+    });
+    function showReportModal() {
+  const modal = document.getElementById('reportModal');
+  if (modal) modal.style.display = 'flex';
+}
+    // -------- Init on load --------
+    window.addEventListener('load', () => {
+      loadPublicProfile();
+    });
+  </script>
+</body>
+</html>

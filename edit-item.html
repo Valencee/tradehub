@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Item - PHINMA TradeHub</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../includes/header.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../includes/sidebar.css">
+  <link rel="stylesheet" href="../assets/edit-item.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+  <!-- HEADER (same as item-details) -->
+  <header class="header" id="mainHeader">
+    <div class="header-left">
+      <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+        <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <div class="header-brand" style="cursor: default;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 6v6l4 2"></path>
+        </svg>
+        <span>Tradehub</span>
+      </div>
+    </div>
+
+    <div class="header-content">
+      <nav>
+        <ul class="nav-menu">
+          <li>
+            <a href="about.html" class="nav-icon-btn" title="About Us">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clip-rule="evenodd" />
+              </svg>
+            </a>
+          </li>
+          <li class="user-profile-container">
+            <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                    onclick="toggleProfileDropdown()" title="Profile">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="dropdown-arrow"></div>
+              <div class="profile-dropdown-header">
+                <div class="profile-user-name" id="profileUserName">Student Name</div>
+                <div class="profile-user-email" id="profileUserEmail">student@example.com</div>
+              </div>
+
+              <div class="profile-dropdown-menu">
+                <a href="userprofile.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span>My Profile</span>
+                </a>
+                
+                <a href="bookmarks.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+                <span>Bookmarks</span>
+                </a>
+
+                <a href="selling.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  <span>My Selling</span>
+                </a>
+
+  
+
+                <div class="profile-menu-divider"></div>
+
+                <a href="javascript:void(0)" class="profile-menu-item sign-out"
+                   onclick="handleSignOut()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  <span>Sign Out</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="marketplace-sidebar" id="marketplaceSidebar"
+         style="position: fixed !important;
+                top: 72px !important;
+                left: 0 !important;
+                width: 360px !important;
+                height: calc(100vh - 72px) !important;
+                background: #242526 !important;
+                color: #e4e6eb !important;
+                overflow-y: auto !important;
+                padding: 1rem !important;
+                z-index: 999 !important;
+                transition: transform 0.3s ease !important;">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Phinma-Upang TradeHub</h2>
+      <a href="userprofile.html" class="sidebar-settings" title="My Profile"
+         style="text-decoration:none;color:inherit;">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"/>
+        </svg>
+      </a>
+    </div>
+
+
+    <nav class="sidebar-nav">
+      <a href="browse.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #1877f2;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+          </svg>
+        </div>
+        <span>Browse Items</span>
+      </a>
+
+      <a href="notification.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #e67e22;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+          </svg>
+        </div>
+        <span>Notifications</span>
+      </a>
+
+      <a href="bookmarks.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #f00524;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M6 3a2 2 0 0 0-2 2v16l8-5 8 5V5a2 2 0 0 0-2-2H6z"/>
+    </svg>
+  </div>
+  <span>Bookmarks</span>
+</a>
+
+      <a href="messages.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #00b894;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/>
+    </svg>
+  </div>
+
+  <span class="sidebar-label">Messages</span>
+  <span id="messagesUnreadBadge" class="messages-unread-badge">0</span>
+</a>
+
+      <a href="userprofile.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #8e44ad;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <span>My Profile</span>
+      </a>
+    </nav>
+
+    <a href="posting.html" class="sidebar-create-btn">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"/>
+      </svg>
+      Create New Listing
+    </a>
+  </aside>
+
+  <!-- EDIT PAGE CONTENT -->
+  <div class="test-content">
+    <div class="edit-container">
+      <div class="edit-header">
+        <a href="selling.html" class="back-link">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+          </svg>
+          Back to My Listings
+        </a>
+        <h1>Edit Item</h1>
+        <p>Update your listing details</p>
+      </div>
+
+      <form id="editForm" class="edit-form">
+        <div class="form-content">
+          <!-- Current Photo Display -->
+          <div class="form-section">
+            <label class="form-label">Current Photo</label>
+            <div class="current-photo">
+              <img id="currentPhoto" src="https://placehold.co/400x300?text=Loading" alt="Current item photo">
+            </div>
+            <label class="form-label" style="margin-top: 1rem;">Change Photo (Optional)</label>
+            <label for="photo-input" class="photo-upload">
+              <div class="photo-upload-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+              </div>
+              <span class="photo-upload-text">Upload new photo</span>
+            </label>
+            <input type="file" id="photo-input" accept="image/*">
+            <div id="photo-preview" class="photo-preview"></div>
+            <p style="font-size:0.75rem;color:#6b7280;margin-top:0.25rem;">
+              (If you choose a new photo, it will be uploaded and used as the new cover image.)
+            </p>
+          </div>
+
+          <!-- Title -->
+          <div class="form-section">
+            <label class="form-label">Title <span class="required">*</span></label>
+            <input type="text" id="titleInput" class="form-input" required>
+          </div>
+
+          <!-- Description -->
+          <div class="form-section">
+            <label class="form-label">Description</label>
+            <textarea id="descriptionInput" class="form-input form-textarea" rows="5"></textarea>
+          </div>
+
+          <!-- Category -->
+          <div class="form-section">
+            <label class="form-label">Category <span class="required">*</span></label>
+            <select id="categoryInput" class="form-input" required>
+              <option value="">Select a category</option>
+              <option value="Books & Supplies">Books & Supplies</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Bags & Accessories">Bags & Accessories</option>
+              <option value="Shoes">Shoes</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Dorm Essentials">Dorm Essentials</option>
+            </select>
+          </div>
+
+          <!-- Condition -->
+          <div class="form-section">
+            <label class="form-label">Condition <span class="required">*</span></label>
+            <input type="hidden" id="conditionInputHidden" required>
+            <div class="condition-grid">
+              <div class="condition-option" data-condition="Like New">
+                <div class="condition-title">Like New</div>
+                <div class="condition-description">Used once or twice, flawless</div>
+              </div>
+              <div class="condition-option" data-condition="Excellent">
+                <div class="condition-title">Excellent</div>
+                <div class="condition-description">Minimal signs of use</div>
+              </div>
+              <div class="condition-option" data-condition="Good">
+                <div class="condition-title">Good</div>
+                <div class="condition-description">Some wear, fully functional</div>
+              </div>
+              <div class="condition-option" data-condition="Fair">
+                <div class="condition-title">Fair</div>
+                <div class="condition-description">Visible wear, works fine</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price -->
+          <div class="form-section">
+            <label class="form-label">Price <span class="required">*</span></label>
+            <div class="price-input-wrapper">
+              <span class="price-symbol">₱</span>
+              <input type="number" id="priceInput" class="form-input price-input" step="0.01" min="0" required>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="form-section">
+            <label class="form-label">Preferred Meetup Location</label>
+            <input type="text" id="locationInput" class="form-input">
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button type="submit" class="btn btn-update">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+            Save Changes
+          </button>
+          <a href="selling.html" class="btn btn-cancel">Cancel</a>
+          <button type="button" class="btn btn-delete" onclick="confirmDelete()">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+            </svg>
+            Delete Item
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+    const supabaseKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const currentStudentNumber = sessionStorage.getItem('studentNumber') || '';
+    const messagesUnreadBadge = document.getElementById('messagesUnreadBadge');
+
+    // 🔧 PALITAN kung iba ang bucket name mo
+    const BUCKET_NAME = 'listing-images';
+
+    let currentItem = null;
+    let itemId = null;
+    let unreadBadgeChannel = null;
+
+    function renderSidebarUnread(total) {
+    if (!messagesUnreadBadge) return;
+
+    const unreadTotal = Number(total || 0);
+
+    if (unreadTotal > 0) {
+      messagesUnreadBadge.style.display = 'inline-flex';
+      messagesUnreadBadge.textContent = unreadTotal > 99 ? '99+' : String(unreadTotal);
+    } else {
+      messagesUnreadBadge.style.display = 'none';
+      messagesUnreadBadge.textContent = '0';
+    }
+  }
+
+  async function loadUnreadBadgeCount() {
+    if (!currentStudentNumber) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: participantRows, error: participantError } = await supabase
+      .from('chat_participants')
+      .select('thread_id')
+      .eq('student_number', currentStudentNumber)
+      .is('deleted_at', null);
+
+    if (participantError) {
+      console.error('Error loading participant threads:', participantError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const threadIds = [...new Set((participantRows || []).map(row => row.thread_id))];
+
+    if (!threadIds.length) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: unreadRows, error: unreadError } = await supabase
+      .from('chat_messages')
+      .select('id, thread_id')
+      .in('thread_id', threadIds)
+      .neq('sender_student_number', currentStudentNumber)
+      .eq('is_read', false);
+
+    if (unreadError) {
+      console.error('Error loading unread messages:', unreadError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    renderSidebarUnread((unreadRows || []).length);
+  }
+
+  function subscribeToUnreadBadge() {
+    if (!currentStudentNumber) return;
+
+    if (unreadBadgeChannel) {
+      supabase.removeChannel(unreadBadgeChannel);
+      unreadBadgeChannel = null;
+    }
+
+    unreadBadgeChannel = supabase
+      .channel(`browse-unread-badge-${currentStudentNumber}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chat_participants'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .subscribe((status) => {
+        console.log('Browse unread badge realtime:', status);
+      });
+  }
+
+  window.addEventListener('load', async () => {
+    await loadUnreadBadgeCount();
+    subscribeToUnreadBadge();
+  });
+  
+    // ---- route guard ----
+    (function guardRoute() {
+      const loggedInFlag = sessionStorage.getItem('user_logged_in');
+      if (loggedInFlag !== 'true') {
+        window.location.href = '../../index.html';
+      }
+    })();
+
+    function getItemIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id');
+    }
+
+    // ---- header + sidebar ----
+    function initHeaderAndSidebar() {
+      const sidebar   = document.getElementById('marketplaceSidebar');
+      const toggleBtn = document.getElementById('sidebarToggle');
+      let isOpen = true;
+
+      const nameEl  = document.getElementById('profileUserName');
+      const emailEl = document.getElementById('profileUserEmail');
+
+      const storedName  = sessionStorage.getItem('studentName');
+      const storedEmail = sessionStorage.getItem('studentEmail');
+
+      if (nameEl && storedName)  nameEl.textContent  = storedName;
+      if (emailEl && storedEmail) emailEl.textContent = storedEmail;
+
+      const savedState = localStorage.getItem('sidebarOpen');
+      if (savedState !== null) {
+        isOpen = (savedState === 'true');
+      }
+
+      function updateSidebarState() {
+        if (!sidebar || !toggleBtn) return;
+        if (isOpen) {
+          sidebar.style.transform = 'translateX(0)';
+          toggleBtn.classList.remove('active');
+          document.body.classList.remove('sidebar-hidden');
+        } else {
+          sidebar.style.transform = 'translateX(-100%)';
+          toggleBtn.classList.add('active');
+          document.body.classList.add('sidebar-hidden');
+        }
+
+        const ev = new CustomEvent('sidebarToggled', { detail: { isOpen }, bubbles: true });
+        document.dispatchEvent(ev);
+        window.dispatchEvent(ev);
+      }
+
+      updateSidebarState();
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          isOpen = !isOpen;
+          localStorage.setItem('sidebarOpen', String(isOpen));
+          updateSidebarState();
+        });
+      }
+
+      window.toggleProfileDropdown = function () {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown) dropdown.classList.toggle('show');
+      };
+
+      document.addEventListener('click', function (event) {
+        const container = document.querySelector('.user-profile-container');
+        const dropdown = document.getElementById('profileDropdown');
+        if (container && dropdown && !container.contains(event.target)) {
+          dropdown.classList.remove('show');
+        }
+      });
+
+      const pd = document.getElementById('profileDropdown');
+      if (pd) {
+        pd.addEventListener('click', function (event) {
+          event.stopPropagation();
+        });
+      }
+
+      window.handleSignOut = function () {
+  Swal.fire({
+    title: 'Sign out?',
+    text: 'Are you sure you want to sign out of your account?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, sign out',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.clear();
+
+      Swal.fire({
+        title: 'Signed out',
+        text: 'You have been successfully signed out.',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text'
+        }
+      }).then(() => {
+        window.location.href = '../../index.html';
+      });
+    }
+  });
+};
+    }
+
+    document.addEventListener('DOMContentLoaded', initHeaderAndSidebar);
+
+    // ---- load listing for edit ----
+    async function loadItemForEdit() {
+      itemId = getItemIdFromUrl();
+      if (!itemId) {
+        alert('No item id in URL.');
+        window.location.href = 'selling.html';
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('listings')
+        .select('*')
+        .eq('id', itemId)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error loading item for edit:', error);
+        alert('Error loading item.');
+        window.location.href = 'selling.html';
+        return;
+      }
+
+      if (!data) {
+        alert('Item not found.');
+        window.location.href = 'selling.html';
+        return;
+      }
+
+      const myStudNo = sessionStorage.getItem('studentNumber');
+      if (data.seller_student_no && myStudNo && data.seller_student_no !== myStudNo) {
+        alert('You are not allowed to edit this listing.');
+        window.location.href = 'browse.html';
+        return;
+      }
+
+      currentItem = data;
+
+      // fill fields
+      const imgEl = document.getElementById('currentPhoto');
+      imgEl.src =
+        (Array.isArray(data.image_urls) && data.image_urls.length)
+          ? data.image_urls[0]
+          : data.cover_image_url || 'https://placehold.co/400x300?text=No+Image';
+
+      document.getElementById('titleInput').value       = data.title || '';
+      document.getElementById('descriptionInput').value = data.description || '';
+      document.getElementById('categoryInput').value    = data.category || '';
+      document.getElementById('priceInput').value       = data.price ?? '';
+      document.getElementById('locationInput').value    = data.location || '';
+
+      const conditionHidden = document.getElementById('conditionInputHidden');
+      conditionHidden.value = data.condition || '';
+
+      document.querySelectorAll('.condition-option').forEach(opt => {
+        opt.classList.toggle('selected', opt.dataset.condition === data.condition);
+      });
+    }
+
+    // ---- condition selection ----
+    function initConditionSelection() {
+      const conditionHidden = document.getElementById('conditionInputHidden');
+      document.querySelectorAll('.condition-option').forEach(option => {
+        option.addEventListener('click', function() {
+          document.querySelectorAll('.condition-option').forEach(opt => opt.classList.remove('selected'));
+          this.classList.add('selected');
+          conditionHidden.value = this.dataset.condition;
+        });
+      });
+    }
+
+    // ---- photo preview ----
+    function initPhotoPreview() {
+      const input  = document.getElementById('photo-input');
+      const preview = document.getElementById('photo-preview');
+      const label = document.querySelector('.photo-upload-text');
+
+      input.addEventListener('change', (e) => {
+        preview.innerHTML = '';
+        if (e.target.files.length > 0) {
+          label.textContent = 'Photo selected';
+          const file = e.target.files[0];
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            const img = document.createElement('div');
+            img.className = 'photo-preview-item';
+            img.innerHTML = `<img src="${event.target.result}" alt="New photo preview">`;
+            preview.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          label.textContent = 'Upload new photo';
+        }
+      });
+    }
+
+    // ---- upload new image if any, return URL or null ----
+    async function uploadNewImageIfAny() {
+      const input = document.getElementById('photo-input');
+      if (!input.files || input.files.length === 0) return null;
+
+      const file = input.files[0];
+      const ext = file.name.split('.').pop() || 'jpg';
+      const filePath = `listing-${itemId}-${Date.now()}.${ext}`;
+
+      const { error: uploadError } = await supabase
+        .storage
+        .from(BUCKET_NAME)
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        alert('Error uploading new image. Please try again.');
+        throw uploadError;
+      }
+
+      const { data: publicUrlData } = supabase
+        .storage
+        .from(BUCKET_NAME)
+        .getPublicUrl(filePath);
+
+      return publicUrlData.publicUrl;
+    }
+
+    // ---- form submit (update listing + image) ----
+    function initFormSubmit() {
+      const form = document.getElementById('editForm');
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentItem || !itemId) return;
+
+        const title       = document.getElementById('titleInput').value.trim();
+        const description = document.getElementById('descriptionInput').value.trim();
+        const category    = document.getElementById('categoryInput').value;
+        const condition   = document.getElementById('conditionInputHidden').value;
+        const priceRaw    = document.getElementById('priceInput').value;
+        const location    = document.getElementById('locationInput').value.trim();
+
+        if (!title || !category || !condition) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+
+        const price = priceRaw === '' ? null : Number(priceRaw);
+
+        let newImageUrl = null;
+        try {
+          newImageUrl = await uploadNewImageIfAny();
+        } catch (err) {
+          // uploadNewImageIfAny already showed an alert
+          return;
+        }
+
+        const updatePayload = {
+          title,
+          description,
+          category,
+          condition,
+          price,
+          location
+        };
+
+        if (newImageUrl) {
+          updatePayload.cover_image_url = newImageUrl;
+        }
+
+        try {
+          const { error } = await supabase
+            .from('listings')
+            .update(updatePayload)
+            .eq('id', itemId);
+
+          if (error) {
+            console.error('Error updating listing:', error);
+            alert('Error updating listing. Please try again.');
+            return;
+          }
+
+          alert('Listing updated successfully!');
+          window.location.href = 'item-details.html?id=' + encodeURIComponent(itemId);
+        } catch (err) {
+          console.error('Unexpected error updating listing:', err);
+          alert('Unexpected error. Please try again.');
+        }
+      });
+    }
+
+    // ---- delete (soft delete via archive) ----
+    window.confirmDelete = async function () {
+      if (!currentItem || !itemId) return;
+      if (!confirm('Are you sure you want to delete this item?')) return;
+
+      const myName = sessionStorage.getItem('studentName') || 'Owner';
+
+      try {
+        const { error } = await supabase
+          .from('listings')
+          .update({
+            is_active: false,
+            archived_at: new Date().toISOString(),
+            archived_by: myName
+          })
+          .eq('id', itemId);
+
+        if (error) {
+          console.error('Error deleting listing:', error);
+          alert('Error deleting listing. Please try again.');
+          return;
+        }
+
+        alert('Item deleted (archived) successfully.');
+        window.location.href = 'selling.html';
+      } catch (err) {
+        console.error('Unexpected error deleting listing:', err);
+        alert('Unexpected error. Please try again.');
+      }
+    };
+
+    // ---- init all ----
+    window.addEventListener('load', async () => {
+      initConditionSelection();
+      initPhotoPreview();
+      initFormSubmit();
+      await loadItemForEdit();
+    });
+  </script>
+</body>
+</html>

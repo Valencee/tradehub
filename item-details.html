@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Item Details - PHINMA TradeHub</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="../includes/header.css" />
+  <link rel="stylesheet" href="../includes/sidebar.css" />
+  <link rel="stylesheet" href="../assets/item-details.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Container width vs sidebar (same idea as userprofile.html/browse.html) -->
+  <script>
+    window.addEventListener('load', function () {
+      const container = document.querySelector('.item-details-page-container');
+      const sidebar = document.getElementById('marketplaceSidebar');
+
+      function updateContainer() {
+        if (!container) return;
+        const sidebarOpen = localStorage.getItem('sidebarOpen');
+        if (sidebarOpen === 'false') {
+          // sidebar CLOSED - full width
+          document.body.classList.add('sidebar-closed');
+          document.body.classList.add('sidebar-hidden');
+          container.style.marginLeft = '0';
+          container.style.width = '100%';
+        } else {
+          // sidebar OPEN - leave space at left
+          document.body.classList.remove('sidebar-closed');
+          document.body.classList.remove('sidebar-hidden');
+          container.style.marginLeft = '360px';
+          container.style.width = 'calc(100% - 360px)';
+        }
+      }
+
+      updateContainer();
+      document.addEventListener('sidebarToggled', () => setTimeout(updateContainer, 50));
+      window.addEventListener('storage', updateContainer);
+
+      const toggleBtn = document.getElementById('sidebarToggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => setTimeout(updateContainer, 50));
+      }
+
+      if (sidebar) {
+        const observer = new MutationObserver(() => setTimeout(updateContainer, 50));
+        observer.observe(sidebar, { attributes: true, attributeFilter: ['style'] });
+      }
+    });
+  </script>
+
+ 
+</head>
+<body>
+
+  <!-- HEADER (same pattern as userprofile.html) -->
+  <header class="header" id="mainHeader">
+    <div class="header-left">
+      <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+        <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <div class="header-brand" style="cursor: default;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 6v6l4 2"></path>
+        </svg>
+        <span>Tradehub</span>
+      </div>
+    </div>
+
+    <div class="header-content">
+      <nav>
+        <ul class="nav-menu">
+          <li>
+            <a href="about.html" class="nav-icon-btn" title="About Us">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clip-rule="evenodd" />
+              </svg>
+            </a>
+          </li>
+          <li class="user-profile-container">
+            <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                    onclick="toggleProfileDropdown()" title="Profile">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="dropdown-arrow"></div>
+              <div class="profile-dropdown-header">
+                <div class="profile-user-name" id="profileUserName">Student Name</div>
+                <div class="profile-user-email" id="profileUserEmail">student@example.com</div>
+              </div>
+
+              <div class="profile-dropdown-menu">
+                <a href="userprofile.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span>My Profile</span>
+                </a>
+
+                <a href="bookmarks.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+                <span>Bookmarks</span>
+                </a>
+
+                <a href="selling.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  <span>My Selling</span>
+                </a>
+
+
+                <div class="profile-menu-divider"></div>
+
+                <a href="javascript:void(0)" class="profile-menu-item sign-out"
+                   onclick="handleSignOut()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  <span>Sign Out</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="marketplace-sidebar" id="marketplaceSidebar"
+         style="position: fixed !important;
+                top: 72px !important;
+                left: 0 !important;
+                width: 360px !important;
+                height: calc(100vh - 72px) !important;
+                background: #242526 !important;
+                color: #e4e6eb !important;
+                overflow-y: auto !important;
+                padding: 1rem !important;
+                z-index: 999 !important;
+                transition: transform 0.3s ease !important;">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Phinma-Upang TradeHub</h2>
+      <a href="userprofile.html" class="sidebar-settings" title="My Profile"
+         style="text-decoration:none;color:inherit;">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"/>
+        </svg>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="browse.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #1877f2;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+          </svg>
+        </div>
+        <span>Browse Items</span>
+      </a>
+
+      <a href="notification.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #e67e22;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+          </svg>
+        </div>
+        <span>Notifications</span>
+      </a>
+
+      <a href="bookmarks.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #f00524;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M6 3a2 2 0 0 0-2 2v16l8-5 8 5V5a2 2 0 0 0-2-2H6z"/>
+    </svg>
+  </div>
+  <span>Bookmarks</span>
+</a>
+
+      <a href="messages.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #00b894;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/>
+    </svg>
+  </div>
+
+  <span class="sidebar-label">Messages</span>
+  <span id="messagesUnreadBadge" class="messages-unread-badge">0</span>
+</a>
+
+      <a href="userprofile.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #8e44ad;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <span>My Profile</span>
+      </a>
+    </nav>
+
+    <a href="posting.html" class="sidebar-create-btn">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"/>
+      </svg>
+      Create New Listing
+    </a>
+  </aside>
+
+  <!-- MAIN ITEM DETAILS CONTENT -->
+  <div class="item-details-page-container">
+    <div class="item-details-container">
+      <a href="browse.html" class="back-link">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        Back to Browse
+      </a>
+
+      <div class="item-detail-grid" id="itemDetailGrid">
+        <!-- Left: Image Gallery -->
+        <div class="image-gallery">
+          <img src="https://placehold.co/800x600?text=Loading..."
+               alt="Item image"
+               class="main-image"
+               id="mainImage">
+          <div class="thumbnail-grid" id="thumbnailGrid">
+            <!-- Thumbnails will be injected here -->
+          </div>
+        </div>
+
+        <!-- Right: Item Information -->
+        <div class="item-info">
+
+          <!-- Category + EDIT BUTTON ROW -->
+          <div class="item-header-row">
+  <span class="item-category-badge" id="itemCategory">Category</span>
+
+  <div class="item-header-actions">
+    <button class="top-report-btn" id="topReportBtn" type="button">
+      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h10l-1.2 3H20l-2 5h-7.2L12 16H4z"></path>
+      </svg>
+      Report
+    </button>
+
+    <button class="edit-listing-btn hidden" id="editListingBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 20h9"></path>
+        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path>
+      </svg>
+      Edit Listing
+    </button>
+  </div>
+</div>
+
+          <h1 class="item-title" id="itemTitle">Loading item...</h1>
+          <div class="item-price" id="itemPrice">₱0.00</div>
+          <div class="item-condition-badge" id="itemConditionWrapper" style="display:none;">
+            <span class="condition-dot"></span>
+            <span id="itemCondition"></span>
+          </div>
+
+          <div class="item-description">
+            <h3>Description</h3>
+            <p id="itemDescription">Loading description...</p>
+          </div>
+
+          <div class="item-meta-info">
+            <div class="meta-item">
+              <span class="meta-label">Posted</span>
+              <span class="meta-value" id="itemPosted">—</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Location</span>
+              <span class="meta-value" id="itemLocation">—</span>
+            </div>
+          </div>
+
+          <!-- Seller Information -->
+          <div class="seller-card">
+            <div class="seller-header">
+              <div class="seller-avatar" id="sellerAvatar">ST</div>
+              <div class="seller-info">
+                <h4 id="sellerName">Seller Name</h4>
+                <p id="sellerMemberSince">Member since —</p>
+                <p id="sellerCourseBlock" style="font-size: 0.85rem; opacity: 0.8;"></p>
+                <p id="sellerStudentId" style="font-size: 0.85rem; opacity: 0.8;"></p>
+              </div>
+            </div>
+            <a href="javascript:void(0)" class="view-profile-btn" id="viewProfileLink">
+              View Seller Profile
+            </a>
+          </div>
+
+          <!-- 👉 CONTACT SELLER VIA SOCMED -->
+          <button class="contact-btn" id="contactBtn">
+  View Seller Social
+</button>
+
+<button class="message-seller-btn" id="messageSellerBtn" type="button">
+  Message Seller
+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORT MODAL -->
+  <div class="report-modal-backdrop" id="reportModalBackdrop">
+    <div class="report-modal">
+      <h3>Report Listing</h3>
+      <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 0.4rem;">
+        Tell us what's wrong with this listing.
+      </p>
+
+      <label for="reportReason">Reason</label>
+      <select id="reportReason">
+        <option value="">Select reason</option>
+        <option value="Scam/Fake">Scam / Fake item</option>
+        <option value="Wrong category">Wrong category</option>
+        <option value="Inappropriate content">Inappropriate content</option>
+        <option value="Suspicious user">Suspicious user</option>
+        <option value="Other">Other</option>
+      </select>
+      <div id="otherReasonWrap" style="display:none;">
+  <label for="otherReasonInput">Please specify</label>
+  <input
+    type="text"
+    id="otherReasonInput"
+    placeholder="Type your reason here..."
+    style="
+      width: 100%;
+      margin-top: 0.25rem;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      padding: 0.55rem 0.65rem;
+      font-size: 0.85rem;
+      font-family: inherit;
+    "
+  >
+</div>
+      <label for="reportDetails" style="margin-top: 0.5rem;">
+        Details (optional)
+      </label>
+      <textarea id="reportDetails" rows="3" placeholder="Add more details..."></textarea>
+
+      <div class="report-modal-actions">
+        <button type="button" id="cancelReportBtn">Cancel</button>
+        <button type="button" id="submitReportBtn">Submit Report</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS: Guard, header/sidebar logic, Supabase + load item + contact + report -->
+ <script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+  const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+  const supabasePublishableKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+  const supabase = createClient(supabaseUrl, supabasePublishableKey);
+
+  const currentStudentNumber = sessionStorage.getItem('studentNumber') || '';
+  const messagesUnreadBadge = document.getElementById('messagesUnreadBadge');
+
+  let currentItem = null;
+  let listingImages = [];
+  let sellerSocialLink = null;
+  let unreadBadgeChannel = null;
+
+   function renderSidebarUnread(total) {
+    if (!messagesUnreadBadge) return;
+
+    const unreadTotal = Number(total || 0);
+
+    if (unreadTotal > 0) {
+      messagesUnreadBadge.style.display = 'inline-flex';
+      messagesUnreadBadge.textContent = unreadTotal > 99 ? '99+' : String(unreadTotal);
+    } else {
+      messagesUnreadBadge.style.display = 'none';
+      messagesUnreadBadge.textContent = '0';
+    }
+  }
+
+  async function loadUnreadBadgeCount() {
+    if (!currentStudentNumber) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: participantRows, error: participantError } = await supabase
+      .from('chat_participants')
+      .select('thread_id')
+      .eq('student_number', currentStudentNumber)
+      .is('deleted_at', null);
+
+    if (participantError) {
+      console.error('Error loading participant threads:', participantError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const threadIds = [...new Set((participantRows || []).map(row => row.thread_id))];
+
+    if (!threadIds.length) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: unreadRows, error: unreadError } = await supabase
+      .from('chat_messages')
+      .select('id, thread_id')
+      .in('thread_id', threadIds)
+      .neq('sender_student_number', currentStudentNumber)
+      .eq('is_read', false);
+
+    if (unreadError) {
+      console.error('Error loading unread messages:', unreadError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    renderSidebarUnread((unreadRows || []).length);
+  }
+
+  function subscribeToUnreadBadge() {
+    if (!currentStudentNumber) return;
+
+    if (unreadBadgeChannel) {
+      supabase.removeChannel(unreadBadgeChannel);
+      unreadBadgeChannel = null;
+    }
+
+    unreadBadgeChannel = supabase
+      .channel(`browse-unread-badge-${currentStudentNumber}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chat_participants'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .subscribe((status) => {
+        console.log('Browse unread badge realtime:', status);
+      });
+  }
+
+  window.addEventListener('load', async () => {
+    await loadUnreadBadgeCount();
+    subscribeToUnreadBadge();
+  });
+
+  (function guardRoute() {
+    const loggedInFlag = sessionStorage.getItem('user_logged_in');
+    if (loggedInFlag !== 'true') {
+      window.location.href = '../../index.html';
+    }
+  })();
+
+  function initHeaderAndSidebar() {
+    const sidebar = document.getElementById('marketplaceSidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    let isOpen = true;
+
+    const nameEl = document.getElementById('profileUserName');
+    const emailEl = document.getElementById('profileUserEmail');
+
+    const storedName = sessionStorage.getItem('studentName');
+    const storedEmail = sessionStorage.getItem('studentEmail');
+
+    if (nameEl && storedName) nameEl.textContent = storedName;
+    if (emailEl && storedEmail) emailEl.textContent = storedEmail;
+
+    const savedState = localStorage.getItem('sidebarOpen');
+    if (savedState !== null) {
+      isOpen = (savedState === 'true');
+    }
+
+    function updateSidebarState() {
+      if (!sidebar || !toggleBtn) return;
+
+      if (isOpen) {
+        sidebar.style.transform = 'translateX(0)';
+        toggleBtn.classList.remove('active');
+        document.body.classList.remove('sidebar-hidden');
+      } else {
+        sidebar.style.transform = 'translateX(-100%)';
+        toggleBtn.classList.add('active');
+        document.body.classList.add('sidebar-hidden');
+      }
+
+      const ev = new CustomEvent('sidebarToggled', {
+        detail: { isOpen },
+        bubbles: true
+      });
+      document.dispatchEvent(ev);
+      window.dispatchEvent(ev);
+    }
+
+    updateSidebarState();
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        isOpen = !isOpen;
+        localStorage.setItem('sidebarOpen', String(isOpen));
+        updateSidebarState();
+      });
+    }
+
+    window.toggleProfileDropdown = function () {
+      const dropdown = document.getElementById('profileDropdown');
+      if (dropdown) dropdown.classList.toggle('show');
+    };
+
+    document.addEventListener('click', function (event) {
+      const container = document.querySelector('.user-profile-container');
+      const dropdown = document.getElementById('profileDropdown');
+      if (container && dropdown && !container.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    const pd = document.getElementById('profileDropdown');
+    if (pd) {
+      pd.addEventListener('click', function (event) {
+        event.stopPropagation();
+      });
+    }
+
+    window.handleSignOut = function () {
+      Swal.fire({
+        title: 'Sign out?',
+        text: 'Are you sure you want to sign out of your account?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, sign out',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+        allowOutsideClick: true,
+        allowEscapeKey: true,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text',
+          confirmButton: 'logout-swal-confirm',
+          cancelButton: 'logout-swal-cancel'
+        },
+        buttonsStyling: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          sessionStorage.clear();
+
+          Swal.fire({
+            title: 'Signed out',
+            text: 'You have been successfully signed out.',
+            icon: 'success',
+            timer: 1200,
+            showConfirmButton: false,
+            backdrop: 'rgba(0,0,0,0.45)',
+            customClass: {
+              popup: 'logout-swal-popup',
+              title: 'logout-swal-title',
+              htmlContainer: 'logout-swal-text'
+            }
+          }).then(() => {
+            window.location.href = '../../index.html';
+          });
+        }
+      });
+    };
+
+    document.addEventListener('keydown', function (event) {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'b') {
+        event.preventDefault();
+        if (toggleBtn) toggleBtn.click();
+      }
+
+      if (event.key === 'Escape') {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown && dropdown.classList.contains('show')) {
+          dropdown.classList.remove('show');
+        }
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initHeaderAndSidebar);
+
+  function getItemIdFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id');
+  }
+
+  function formatPostedTime(createdAt) {
+    if (!createdAt) return '—';
+
+    const created = new Date(createdAt);
+    if (isNaN(created.getTime())) return '—';
+
+    const now = new Date();
+    const diffMs = now - created;
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+    if (diffDays > 30) {
+      return created.toLocaleDateString();
+    } else if (diffDays >= 1) {
+      return diffDays === 1 ? '1 day ago' : diffDays + ' days ago';
+    } else if (diffHours >= 1) {
+      return diffHours === 1 ? '1 hour ago' : diffHours + ' hours ago';
+    } else {
+      return 'Just now';
+    }
+  }
+
+  async function sendListingReportNotification(
+    listingId,
+    listingTitle,
+    sellerStudentNo,
+    reporterStudentNo,
+    reporterName
+  ) {
+    if (!sellerStudentNo || !reporterStudentNo) {
+      console.warn('Missing data for listing report notification', {
+        sellerStudentNo,
+        reporterStudentNo
+      });
+      return;
+    }
+
+    const safeTitle = listingTitle || 'Untitled Item';
+    const message = `${reporterName || 'Someone'} reported your listing "${safeTitle}". Our team will review this report.`;
+
+    const { error } = await supabase
+      .from('notifications')
+      .insert([{
+        type: 'listing_report',
+        recipient_student_number: sellerStudentNo,
+        actor_student_number: reporterStudentNo,
+        actor_name: reporterName || null,
+        listing_id: listingId,
+        listing_title: safeTitle,
+        message,
+        is_read: false,
+        created_at: new Date().toISOString()
+      }]);
+
+    if (error) {
+      console.error('Error creating listing report notification:', error);
+    }
+  }
+
+  function setupReportUI(sellerStudentNo) {
+    const reportBtn = document.getElementById('topReportBtn');
+    const modalBackdrop = document.getElementById('reportModalBackdrop');
+    const cancelReportBtn = document.getElementById('cancelReportBtn');
+    const submitReportBtn = document.getElementById('submitReportBtn');
+    const reasonSelect = document.getElementById('reportReason');
+    const otherReasonWrap = document.getElementById('otherReasonWrap');
+    const otherReasonInput = document.getElementById('otherReasonInput');
+    const detailsTextarea = document.getElementById('reportDetails');
+
+    if (reasonSelect) {
+      reasonSelect.addEventListener('change', () => {
+        const isOther = reasonSelect.value === 'Other';
+
+        if (otherReasonWrap) {
+          otherReasonWrap.style.display = isOther ? 'block' : 'none';
+        }
+
+        if (!isOther && otherReasonInput) {
+          otherReasonInput.value = '';
+        }
+      });
+    }
+
+    if (!reportBtn || !modalBackdrop || !cancelReportBtn || !submitReportBtn) return;
+
+    const myStudNo = sessionStorage.getItem('studentNumber');
+    const myName = sessionStorage.getItem('studentName');
+    const myEmail = sessionStorage.getItem('studentEmail');
+
+    if (!myStudNo || (sellerStudentNo && sellerStudentNo === myStudNo)) {
+      reportBtn.classList.add('hidden');
+      return;
+    } else {
+      reportBtn.classList.remove('hidden');
+    }
+
+    const openModal = () => {
+      modalBackdrop.classList.add('show');
+    };
+
+    const closeModal = () => {
+      modalBackdrop.classList.remove('show');
+
+      if (reasonSelect) reasonSelect.value = '';
+      if (detailsTextarea) detailsTextarea.value = '';
+      if (otherReasonWrap) otherReasonWrap.style.display = 'none';
+      if (otherReasonInput) otherReasonInput.value = '';
+    };
+
+    reportBtn.addEventListener('click', openModal);
+    cancelReportBtn.addEventListener('click', closeModal);
+
+    modalBackdrop.addEventListener('click', (e) => {
+      if (e.target === modalBackdrop) {
+        closeModal();
+      }
+    });
+
+    submitReportBtn.addEventListener('click', async () => {
+      if (!reasonSelect) return;
+
+      let reason = reasonSelect.value.trim();
+      const details = (detailsTextarea?.value || '').trim();
+
+      if (!reason) {
+        await Swal.fire({
+          title: 'Missing reason',
+          text: 'Please select a reason.',
+          icon: 'warning',
+          backdrop: 'rgba(0,0,0,0.45)',
+          customClass: {
+            popup: 'logout-swal-popup',
+            title: 'logout-swal-title',
+            htmlContainer: 'logout-swal-text',
+            confirmButton: 'logout-swal-confirm'
+          },
+          buttonsStyling: false
+        });
+        return;
+      }
+
+      if (reason === 'Other') {
+        reason = (otherReasonInput?.value || '').trim();
+
+        if (!reason) {
+          await Swal.fire({
+            title: 'Missing details',
+            text: 'Please specify the reason.',
+            icon: 'warning',
+            backdrop: 'rgba(0,0,0,0.45)',
+            customClass: {
+              popup: 'logout-swal-popup',
+              title: 'logout-swal-title',
+              htmlContainer: 'logout-swal-text',
+              confirmButton: 'logout-swal-confirm'
+            },
+            buttonsStyling: false
+          });
+          otherReasonInput?.focus();
+          return;
+        }
+      }
+
+      if (!currentItem) {
+        await Swal.fire({
+          title: 'Listing not ready',
+          text: 'Listing data is not loaded yet.',
+          icon: 'warning',
+          backdrop: 'rgba(0,0,0,0.45)',
+          customClass: {
+            popup: 'logout-swal-popup',
+            title: 'logout-swal-title',
+            htmlContainer: 'logout-swal-text',
+            confirmButton: 'logout-swal-confirm'
+          },
+          buttonsStyling: false
+        });
+        return;
+      }
+
+      try {
+        const { error } = await supabase
+          .from('listing_reports')
+          .insert({
+            listing_id: currentItem.id,
+            listing_title: currentItem.title,
+            listing_image: Array.isArray(listingImages) && listingImages.length
+              ? listingImages[0]
+              : currentItem.cover_image_url || null,
+            seller_student_no: currentItem.seller_student_no || null,
+            reporter_student_no: myStudNo,
+            reporter_name: myName || null,
+            reporter_email: myEmail || null,
+            reason,
+            details,
+            status: 'pending',
+            reported_at: new Date().toISOString()
+          });
+
+        if (error) {
+          console.error('Error submitting report:', error);
+          await Swal.fire({
+            title: 'Report failed',
+            text: 'Error submitting report. Please try again.',
+            icon: 'error',
+            backdrop: 'rgba(0,0,0,0.45)',
+            customClass: {
+              popup: 'logout-swal-popup',
+              title: 'logout-swal-title',
+              htmlContainer: 'logout-swal-text',
+              confirmButton: 'danger-swal-confirm'
+            },
+            buttonsStyling: false
+          });
+          return;
+        }
+
+        try {
+          await sendListingReportNotification(
+            currentItem.id,
+            currentItem.title,
+            currentItem.seller_student_no || currentItem.student_no || null,
+            myStudNo,
+            myName
+          );
+        } catch (notifErr) {
+          console.error('Error sending listing report notification:', notifErr);
+        }
+
+        closeModal();
+
+        await Swal.fire({
+          title: 'Report submitted',
+          text: 'Thank you. Your report has been submitted.',
+          icon: 'success',
+          timer: 1400,
+          showConfirmButton: false,
+          backdrop: 'rgba(0,0,0,0.45)',
+          customClass: {
+            popup: 'logout-swal-popup',
+            title: 'logout-swal-title',
+            htmlContainer: 'logout-swal-text'
+          }
+        });
+      } catch (err) {
+        console.error('Unexpected error submitting report:', err);
+        await Swal.fire({
+          title: 'Unexpected error',
+          text: 'Unexpected error submitting report. Please try again.',
+          icon: 'error',
+          backdrop: 'rgba(0,0,0,0.45)',
+          customClass: {
+            popup: 'logout-swal-popup',
+            title: 'logout-swal-title',
+            htmlContainer: 'logout-swal-text',
+            confirmButton: 'danger-swal-confirm'
+          },
+          buttonsStyling: false
+        });
+      }
+    });
+  }
+
+  async function fetchSellerSocialLink(studentNo) {
+    sellerSocialLink = null;
+
+    if (!studentNo) return null;
+
+    try {
+      const { data, error } = await supabase
+        .from('students')
+        .select('socialLink')
+        .eq('studentNumber', studentNo)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error fetching seller socialLink:', error);
+        return null;
+      }
+
+      if (data && data.socialLink) {
+        sellerSocialLink = data.socialLink;
+
+        const contactBtn = document.getElementById('contactBtn');
+        if (contactBtn) {
+          contactBtn.textContent = 'View Seller Social';
+        }
+
+        return sellerSocialLink;
+      }
+
+      return null;
+    } catch (err) {
+      console.error('Unexpected error fetching seller socialLink:', err);
+      return null;
+    }
+  }
+
+  async function loadItemDetails() {
+    const itemId = getItemIdFromUrl();
+    if (!itemId) {
+      alert('No item id provided in URL.');
+      return;
+    }
+
+    const mainImageEl = document.getElementById('mainImage');
+    const thumbGridEl = document.getElementById('thumbnailGrid');
+    const titleEl = document.getElementById('itemTitle');
+    const priceEl = document.getElementById('itemPrice');
+    const categoryEl = document.getElementById('itemCategory');
+    const descEl = document.getElementById('itemDescription');
+    const postedEl = document.getElementById('itemPosted');
+    const locationEl = document.getElementById('itemLocation');
+    const conditionWrapper = document.getElementById('itemConditionWrapper');
+    const conditionEl = document.getElementById('itemCondition');
+
+    const sellerAvatarEl = document.getElementById('sellerAvatar');
+    const sellerNameEl = document.getElementById('sellerName');
+    const sellerMemberEl = document.getElementById('sellerMemberSince');
+    const sellerCourseEl = document.getElementById('sellerCourseBlock');
+    const sellerIdEl = document.getElementById('sellerStudentId');
+    const viewProfileLink = document.getElementById('viewProfileLink');
+    const editListingBtn = document.getElementById('editListingBtn');
+    const contactBtn = document.getElementById('contactBtn');
+    const messageSellerBtn = document.getElementById('messageSellerBtn');
+
+    const { data, error } = await supabase
+      .from('listings')
+      .select('*')
+      .eq('id', itemId)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error loading item:', error);
+      alert('Error loading item details. Please try again.');
+      return;
+    }
+
+    if (!data) {
+      alert('Item not found.');
+      titleEl.textContent = 'Item not found';
+      return;
+    }
+
+    currentItem = data;
+
+    const title = data.title || 'Untitled Item';
+    const category = data.category || 'Other';
+    const price = data.price ?? 0;
+    const description = data.description || 'No description provided.';
+    const condition = data.condition || null;
+    const location = data.location || data.campus_location || 'Phinma-Upang';
+    const createdAt = data.created_at || null;
+
+    titleEl.textContent = title;
+    categoryEl.textContent = category;
+    priceEl.textContent = '₱' + Number(price).toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    descEl.textContent = description;
+    locationEl.textContent = location;
+    postedEl.textContent = formatPostedTime(createdAt);
+
+    if (condition) {
+      conditionEl.textContent = condition;
+      conditionWrapper.style.display = 'inline-flex';
+    } else {
+      conditionWrapper.style.display = 'none';
+    }
+
+    let images = [];
+
+    if (Array.isArray(data.image_urls)) {
+      images = data.image_urls;
+    } else if (Array.isArray(data.images)) {
+      images = data.images;
+    } else if (typeof data.images_json === 'string') {
+      try {
+        const parsed = JSON.parse(data.images_json);
+        if (Array.isArray(parsed)) images = parsed;
+      } catch (e) {
+        console.warn('Cannot parse images_json:', e);
+      }
+    }
+
+    if (!images.length && data.cover_image_url) {
+      images = [data.cover_image_url];
+    }
+
+    if (!images.length) {
+      images = ['https://placehold.co/800x600?text=No+Image'];
+    }
+
+    listingImages = images.slice();
+
+    mainImageEl.src = images[0];
+    mainImageEl.alt = title;
+
+    thumbGridEl.innerHTML = '';
+    images.forEach((url, index) => {
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = title;
+      img.className = 'thumbnail' + (index === 0 ? ' active' : '');
+
+      img.addEventListener('click', () => {
+        mainImageEl.src = url;
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        img.classList.add('active');
+      });
+
+      thumbGridEl.appendChild(img);
+    });
+
+    const sellerName = data.seller_name || data.seller_full_name || 'Seller';
+    const sellerStudentNo = data.seller_student_no || data.student_no || '';
+    const sellerCourseBlk = data.seller_course_block || data.course_block || '';
+    const sellerMemberDate = data.seller_member_since || '';
+
+    const myStudNo = sessionStorage.getItem('studentNumber');
+
+    if (!data.seller_name && sellerStudentNo && myStudNo && sellerStudentNo === myStudNo) {
+      const myName = sessionStorage.getItem('studentName') || sellerName;
+      const myCourse = sessionStorage.getItem('course_block') || sellerCourseBlk;
+      sellerNameEl.textContent = myName;
+      sellerCourseEl.textContent = myCourse ? myCourse : '';
+    } else {
+      sellerNameEl.textContent = sellerName;
+      sellerCourseEl.textContent = sellerCourseBlk ? sellerCourseBlk : '';
+    }
+
+    sellerIdEl.textContent = sellerStudentNo ? ('ID: ' + sellerStudentNo) : '';
+    sellerMemberEl.textContent = sellerMemberDate ? ('Member since ' + sellerMemberDate) : '';
+
+    const initials = (sellerName || 'Seller')
+      .split(' ')
+      .filter(Boolean)
+      .map(part => part[0].toUpperCase())
+      .slice(0, 2)
+      .join('') || 'ST';
+
+    sellerAvatarEl.textContent = initials;
+
+    if (sellerStudentNo) {
+      viewProfileLink.href = 'public-profile.html?student_no=' + encodeURIComponent(sellerStudentNo);
+    } else {
+      viewProfileLink.href = 'javascript:void(0)';
+    }
+
+    await fetchSellerSocialLink(sellerStudentNo);
+
+    if (contactBtn) {
+      contactBtn.textContent = sellerSocialLink ? 'View Seller Social' : 'View Seller Social';
+
+      contactBtn.addEventListener('click', () => {
+        handleContactSeller(sellerStudentNo);
+      });
+    }
+
+    if (messageSellerBtn) {
+      if (myStudNo && sellerStudentNo && myStudNo === sellerStudentNo) {
+        messageSellerBtn.style.display = 'none';
+      } else {
+        messageSellerBtn.style.display = 'flex';
+
+        messageSellerBtn.addEventListener('click', () => {
+          if (!sellerStudentNo) {
+            Swal.fire({
+              title: 'Seller unavailable',
+              text: 'Seller information is not available.',
+              icon: 'warning',
+              backdrop: 'rgba(0,0,0,0.45)',
+              customClass: {
+                popup: 'logout-swal-popup',
+                title: 'logout-swal-title',
+                htmlContainer: 'logout-swal-text',
+                confirmButton: 'logout-swal-confirm'
+              },
+              buttonsStyling: false
+            });
+            return;
+          }
+
+          window.location.href =
+            'messages.html?seller=' + encodeURIComponent(sellerStudentNo) +
+            '&listing=' + encodeURIComponent(currentItem.id);
+        });
+      }
+    }
+
+    if (editListingBtn) {
+      if (myStudNo && sellerStudentNo && myStudNo === sellerStudentNo) {
+        editListingBtn.classList.remove('hidden');
+        editListingBtn.addEventListener('click', () => {
+          window.location.href = 'edit-item.html?id=' + encodeURIComponent(currentItem.id);
+        });
+      } else {
+        editListingBtn.classList.add('hidden');
+      }
+    }
+
+    setupReportUI(sellerStudentNo);
+  }
+
+  async function handleContactSeller(sellerStudentNo) {
+  if (!currentItem) return;
+
+  if (sellerSocialLink) {
+    window.open(sellerSocialLink, '_blank', 'noopener,noreferrer');
+    return;
+  }
+
+  if (sellerStudentNo) {
+    const result = await Swal.fire({
+      title: 'No social media link',
+      html: `
+        <div style="line-height:1.6; color:#4b5563; font-size:15px;">
+          <p style="margin:0 0 10px 0;">This seller did not provide a social media link.</p>
+          <p style="margin:0;">Do you want to view their public profile instead?</p>
+        </div>
+      `,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'View Profile',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+      backdrop: 'rgba(0,0,0,0.45)',
+      customClass: {
+        popup: 'logout-swal-popup',
+        title: 'logout-swal-title',
+        htmlContainer: 'logout-swal-text',
+        confirmButton: 'logout-swal-confirm',
+        cancelButton: 'logout-swal-cancel'
+      },
+      buttonsStyling: false
+    });
+
+    if (result.isConfirmed) {
+      window.location.href = 'public-profile.html?student_no=' + encodeURIComponent(sellerStudentNo);
+    }
+  } else {
+    await Swal.fire({
+      title: 'Unavailable',
+      text: 'Seller contact information is not available.',
+      icon: 'warning',
+      backdrop: 'rgba(0,0,0,0.45)',
+      customClass: {
+        popup: 'logout-swal-popup',
+        title: 'logout-swal-title',
+        htmlContainer: 'logout-swal-text',
+        confirmButton: 'logout-swal-confirm'
+      },
+      buttonsStyling: false
+    });
+  }
+}
+
+  window.addEventListener('load', () => {
+    loadItemDetails();
+  });
+</script>
+</body>
+</html>

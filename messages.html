@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages - PHINMA TradeHub</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../includes/header.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../includes/sidebar.css">
+  <link rel="stylesheet" href="../assets/messages.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+  <header class="header" id="mainHeader">
+    <div class="header-left">
+      <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+        <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <div class="header-brand" style="cursor: default;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 6v6l4 2"></path>
+        </svg>
+        <span>Tradehub</span>
+      </div>
+    </div>
+
+    <div class="header-content">
+      <nav>
+        <ul class="nav-menu">
+          <li>
+            <a href="about.html" class="nav-icon-btn" title="About Us">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clip-rule="evenodd" />
+              </svg>
+            </a>
+          </li>
+
+          <li class="user-profile-container">
+            <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                    onclick="toggleProfileDropdown()" title="Profile">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="dropdown-arrow"></div>
+              <div class="profile-dropdown-header">
+                <div class="profile-user-name" id="profileUserName">Student Name</div>
+                <div class="profile-user-email" id="profileUserEmail">student@example.com</div>
+              </div>
+
+              <div class="profile-dropdown-menu">
+                <a href="userprofile.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span>My Profile</span>
+                </a>
+
+                <a href="bookmarks.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+                <span>Bookmarks</span>
+                </a>
+
+                <a href="selling.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  <span>My Selling</span>
+                </a>
+
+          
+                <div class="profile-menu-divider"></div>
+
+                <a href="javascript:void(0)" class="profile-menu-item sign-out"
+                   onclick="handleSignOut()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  <span>Sign Out</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <aside class="marketplace-sidebar" id="marketplaceSidebar"
+         style="position: fixed !important;
+                top: 72px !important;
+                left: 0 !important;
+                width: 360px !important;
+                height: calc(100vh - 72px) !important;
+                background: #242526 !important;
+                color: #e4e6eb !important;
+                overflow-y: auto !important;
+                padding: 1rem !important;
+                z-index: 999 !important;
+                transition: transform 0.3s ease !important;">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Phinma-Upang TradeHub</h2>
+      <a href="userprofile.html" class="sidebar-settings" title="My Profile"
+         style="text-decoration:none;color:inherit;">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"/>
+        </svg>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="browse.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #1877f2;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+          </svg>
+        </div>
+        <span>Browse Items</span>
+      </a>
+
+      <a href="notification.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #e67e22;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+          </svg>
+        </div>
+        <span>Notifications</span>
+      </a>
+
+      <a href="bookmarks.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #f00524;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M6 3a2 2 0 0 0-2 2v16l8-5 8 5V5a2 2 0 0 0-2-2H6z"/>
+    </svg>
+  </div>
+  <span>Bookmarks</span>
+</a>
+
+      <a href="messages.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #00b894;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/>
+    </svg>
+  </div>
+
+  <span class="sidebar-label">Messages</span>
+  <span id="messagesUnreadBadge" class="messages-unread-badge">0</span>
+</a>
+
+      <a href="userprofile.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #8e44ad;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <span>My Profile</span>
+      </a>
+    </nav>
+
+    <a href="posting.html" class="sidebar-create-btn">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"/>
+      </svg>
+      Create New Listing
+    </a>
+  </aside>
+
+  <div class="container">
+  <div class="page-header">
+    <h1>Messages</h1>
+  </div>
+
+  <div class="messages-layout">
+    <div class="messages-sidebar">
+      <div class="messages-sidebar-header">
+        <div class="messages-sidebar-topbar">
+          <h2 id="conversationFolderTitle">Inbox</h2>
+
+          <div class="conversation-folder-switcher">
+            <button class="folder-btn active" id="inboxTabBtn" type="button">Inbox</button>
+            <button class="folder-btn" id="archivedTabBtn" type="button">Archived</button>
+          </div>
+        </div>
+
+        <div class="messages-search">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text" id="threadSearchInput" placeholder="Search conversations...">
+        </div>
+      </div>
+
+      <div class="conversation-list" id="threadList">
+        <div class="empty-thread-state">
+          <div class="inner">
+            <svg width="54" height="54" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                    d="M8 10h8M8 14h5M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4-.8L3 20l1.2-3.2A7.67 7.67 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <h3>No messages yet</h3>
+            <p>Your conversations will appear here.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="messages-chat">
+      <div class="chat-header">
+        <div class="chat-user">
+          <div class="chat-user-avatar" id="chatUserAvatar">--</div>
+          <div class="chat-user-info">
+            <a id="chatUserNameLink" href="javascript:void(0)" class="chat-user-name-link" style="text-decoration:none; color:inherit; pointer-events:none;">
+            <h3 id="chatUserName">Select a conversation</h3>
+            </a>
+            <p id="chatListingInfo">Choose a thread from the inbox.</p>
+          </div>
+        </div>
+
+        <div class="chat-actions">
+          <button class="chat-icon-btn" id="blockToggleBtn" title="Block User" disabled>
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M18.364 5.636a9 9 0 11-12.728 0m12.728 0L5.636 18.364"/>
+            </svg>
+          </button>
+
+          <div class="chat-menu-wrap">
+            <button class="chat-icon-btn" id="chatMoreBtn" title="More Actions" disabled>
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <circle cx="5" cy="12" r="2"></circle>
+                <circle cx="12" cy="12" r="2"></circle>
+                <circle cx="19" cy="12" r="2"></circle>
+              </svg>
+            </button>
+
+            <div class="chat-more-menu" id="chatMoreMenu">
+              <button class="chat-more-item" id="viewListingBtn" disabled>View Listing</button>
+              <button class="chat-more-item" id="archiveConversationBtn" disabled>Archive</button>
+              <button class="chat-more-item" id="reportUserBtn" disabled>Report</button>
+              <button class="chat-more-item danger" id="deleteConversationBtn" disabled>Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-body" id="chatBody">
+        <div class="empty-chat-state">
+          <div class="inner">
+            <svg width="54" height="54" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                    d="M8 10h8M8 14h5M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4-.8L3 20l1.2-3.2A7.67 7.67 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <h3>No conversation selected</h3>
+            <p>Pick a conversation from the left to start chatting.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-wrap">
+        <div class="chat-input-box">
+          <input type="text" id="messageInput" placeholder="Type your message..." disabled>
+          <button class="send-btn" id="sendBtn" title="Send" disabled>
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M3.4 20.4l17.45-7.48c.77-.33.77-1.42 0-1.75L3.4 3.7c-.66-.28-1.34.32-1.13 1l1.7 5.6c.1.34.39.57.74.6l8.73.7-8.73.7a.92.92 0 0 0-.74.6l-1.7 5.6c-.21.68.47 1.28 1.13 1z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+const supabaseKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const currentStudentNumber = sessionStorage.getItem('studentNumber') || '';
+const currentStudentName = sessionStorage.getItem('studentName') || 'Student';
+
+const threadListEl = document.getElementById('threadList');
+const threadSearchInput = document.getElementById('threadSearchInput');
+const chatBody = document.getElementById('chatBody');
+const chatUserNameLink = document.getElementById('chatUserNameLink');
+const chatUserAvatar = document.getElementById('chatUserAvatar');
+const chatUserName = document.getElementById('chatUserName');
+const chatListingInfo = document.getElementById('chatListingInfo');
+const messageInput = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
+const viewListingBtn = document.getElementById('viewListingBtn');
+const reportUserBtn = document.getElementById('reportUserBtn');
+const blockToggleBtn = document.getElementById('blockToggleBtn');
+const deleteConversationBtn = document.getElementById('deleteConversationBtn');
+const messagesUnreadBadge = document.getElementById('messagesUnreadBadge');
+
+const chatMoreBtn = document.getElementById('chatMoreBtn');
+const chatMoreMenu = document.getElementById('chatMoreMenu');
+const archiveConversationBtn = document.getElementById('archiveConversationBtn');
+const inboxTabBtn = document.getElementById('inboxTabBtn');
+const archivedTabBtn = document.getElementById('archivedTabBtn');
+const conversationFolderTitle = document.getElementById('conversationFolderTitle');
+
+let currentThreadId = null;
+let currentThreadData = null;
+let realtimeChannel = null;
+let inboxRealtimeChannel = null;
+let threadCache = [];
+let unreadTotal = 0;
+
+let currentBlockedState = false;
+let currentBlockedByOther = false;
+let currentChatLocked = false;
+let currentFolder = 'inbox';
+
+function ensureLoggedIn() {
+  const loggedInFlag = sessionStorage.getItem('user_logged_in');
+  if (loggedInFlag !== 'true' || !currentStudentNumber) {
+    window.location.href = '../../index.html';
+  }
+}
+
+function updateContainerSpacing() {
+  const container = document.querySelector('.container');
+  const sidebar = document.getElementById('marketplaceSidebar');
+
+  function apply() {
+    if (!container) return;
+    const sidebarOpen = localStorage.getItem('sidebarOpen');
+    if (sidebarOpen === 'false') {
+      document.body.classList.add('sidebar-closed');
+      document.body.classList.add('sidebar-hidden');
+      container.style.marginLeft = '0';
+      container.style.width = '100%';
+    } else {
+      document.body.classList.remove('sidebar-closed');
+      document.body.classList.remove('sidebar-hidden');
+      container.style.marginLeft = '360px';
+      container.style.width = 'calc(100% - 360px)';
+    }
+  }
+
+  apply();
+  document.addEventListener('sidebarToggled', () => setTimeout(apply, 50));
+  window.addEventListener('storage', apply);
+
+  const toggleBtn = document.getElementById('sidebarToggle');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => setTimeout(apply, 50));
+  }
+
+  if (sidebar) {
+    const observer = new MutationObserver(() => setTimeout(apply, 50));
+    observer.observe(sidebar, { attributes: true, attributeFilter: ['style'] });
+  }
+}
+
+function initHeaderAndSidebar() {
+  const sidebar = document.getElementById('marketplaceSidebar');
+  const toggleBtn = document.getElementById('sidebarToggle');
+  let isOpen = true;
+
+  const nameEl = document.getElementById('profileUserName');
+  const emailEl = document.getElementById('profileUserEmail');
+
+  const storedName = sessionStorage.getItem('studentName');
+  const storedEmail = sessionStorage.getItem('studentEmail');
+
+  if (nameEl && storedName) nameEl.textContent = storedName;
+  if (emailEl && storedEmail) emailEl.textContent = storedEmail;
+
+  const savedState = localStorage.getItem('sidebarOpen');
+  if (savedState !== null) isOpen = (savedState === 'true');
+
+  function updateSidebarState() {
+    if (!sidebar || !toggleBtn) return;
+
+    if (isOpen) {
+      sidebar.style.transform = 'translateX(0)';
+      toggleBtn.classList.remove('active');
+      document.body.classList.remove('sidebar-hidden');
+    } else {
+      sidebar.style.transform = 'translateX(-100%)';
+      toggleBtn.classList.add('active');
+      document.body.classList.add('sidebar-hidden');
+    }
+
+    const event = new CustomEvent('sidebarToggled', {
+      detail: { isOpen },
+      bubbles: true
+    });
+    document.dispatchEvent(event);
+    window.dispatchEvent(event);
+  }
+
+  updateSidebarState();
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      isOpen = !isOpen;
+      localStorage.setItem('sidebarOpen', String(isOpen));
+      updateSidebarState();
+    });
+  }
+
+  window.toggleProfileDropdown = function () {
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown) dropdown.classList.toggle('show');
+  };
+
+  document.addEventListener('click', function (event) {
+    const container = document.querySelector('.user-profile-container');
+    const dropdown = document.getElementById('profileDropdown');
+    if (container && dropdown && !container.contains(event.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+
+  window.handleSignOut = function () {
+    Swal.fire({
+      title: 'Sign out?',
+      text: 'Are you sure you want to sign out of your account?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, sign out',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sessionStorage.clear();
+        window.location.href = '../../index.html';
+      }
+    });
+  };
+}
+
+function escapeHtml(text) {
+  return String(text || '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+}
+
+function stripHtml(text) {
+  return String(text || '').replace(/<[^>]*>/g, '').trim();
+}
+
+function getPreviewText(text) {
+  return stripHtml(text || '') || 'No messages yet';
+}
+
+function getInitials(name) {
+  return (name || 'U')
+    .split(' ')
+    .filter(Boolean)
+    .map(part => part[0].toUpperCase())
+    .slice(0, 2)
+    .join('') || 'U';
+}
+
+function formatThreadTime(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return '';
+
+  const now = new Date();
+  const sameDay = date.toDateString() === now.toDateString();
+
+  if (sameDay) {
+    return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  }
+
+  return date.toLocaleDateString();
+}
+
+function formatMessageTime(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return '';
+  return date.toLocaleString([], {
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit'
+  });
+}
+
+function getUrlParams() {
+  return new URLSearchParams(window.location.search);
+}
+
+function closeChatMoreMenu() {
+  if (chatMoreMenu) chatMoreMenu.classList.remove('show');
+}
+
+function toggleChatMoreMenu() {
+  if (!chatMoreBtn || chatMoreBtn.disabled) return;
+  chatMoreMenu.classList.toggle('show');
+}
+
+function updateFolderTabs() {
+  if (conversationFolderTitle) {
+    conversationFolderTitle.textContent =
+      currentFolder === 'archived' ? 'Archived Messages' : 'Inbox';
+  }
+
+  if (inboxTabBtn) inboxTabBtn.classList.toggle('active', currentFolder === 'inbox');
+  if (archivedTabBtn) archivedTabBtn.classList.toggle('active', currentFolder === 'archived');
+}
+
+async function getMyParticipant(threadId) {
+  if (!threadId || !currentStudentNumber) return null;
+
+  try {
+    const { data, error } = await supabase
+      .from('chat_participants')
+      .select('thread_id, student_number, deleted_at, archived_at, cleared_at, created_at')
+      .eq('thread_id', threadId)
+      .eq('student_number', currentStudentNumber)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Get participant error:', error);
+      return null;
+    }
+
+    return data || null;
+  } catch (err) {
+    console.error('Get participant exception:', err);
+    return null;
+  }
+}
+
+async function canAccessThread(threadId) {
+  const participant = await getMyParticipant(threadId);
+  if (!participant) return false;
+  if (participant.deleted_at) return false;
+  return true;
+}
+
+async function unarchiveMyParticipantInThread(threadId) {
+  if (!threadId || !currentStudentNumber) return false;
+
+  try {
+    const { error } = await supabase
+      .from('chat_participants')
+      .update({ archived_at: null })
+      .eq('thread_id', threadId)
+      .eq('student_number', currentStudentNumber);
+
+    if (error) {
+      console.error('Unarchive participant error:', error);
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    console.error('Unarchive participant exception:', err);
+    return false;
+  }
+}
+
+async function loadUnreadCounts() {
+  const { data: participantRows, error: pErr } = await supabase
+    .from('chat_participants')
+    .select('thread_id, cleared_at')
+    .eq('student_number', currentStudentNumber)
+    .is('deleted_at', null)
+    .is('archived_at', null);
+
+  if (pErr) {
+    console.error('Unread participant load error:', pErr);
+    return { total: 0, byThread: {} };
+  }
+
+  const rows = participantRows || [];
+  const threadIds = [...new Set(rows.map(row => row.thread_id))];
+
+  if (!threadIds.length) {
+    return { total: 0, byThread: {} };
+  }
+
+  const clearedAtMap = new Map();
+  rows.forEach(row => {
+    clearedAtMap.set(row.thread_id, row.cleared_at || null);
+  });
+
+  const { data: unreadRows, error: unreadErr } = await supabase
+    .from('chat_messages')
+    .select('thread_id, created_at')
+    .in('thread_id', threadIds)
+    .neq('sender_student_number', currentStudentNumber)
+    .eq('is_read', false);
+
+  if (unreadErr) {
+    console.error('Unread message load error:', unreadErr);
+    return { total: 0, byThread: {} };
+  }
+
+  const byThread = {};
+  let total = 0;
+
+  (unreadRows || []).forEach(row => {
+    const clearedAt = clearedAtMap.get(row.thread_id);
+    if (clearedAt && new Date(row.created_at) <= new Date(clearedAt)) {
+      return;
+    }
+
+    byThread[row.thread_id] = (byThread[row.thread_id] || 0) + 1;
+    total++;
+  });
+
+  return { total, byThread };
+}
+
+function renderSidebarUnread(total) {
+  unreadTotal = total || 0;
+
+  if (!messagesUnreadBadge) return;
+
+  if (unreadTotal > 0) {
+    messagesUnreadBadge.style.display = 'inline-flex';
+    messagesUnreadBadge.textContent = unreadTotal > 99 ? '99+' : String(unreadTotal);
+  } else {
+    messagesUnreadBadge.style.display = 'none';
+    messagesUnreadBadge.textContent = '0';
+  }
+}
+
+async function findOrCreateThread(myStudentNo, sellerStudentNo, listingId) {
+  if (!myStudentNo || !sellerStudentNo) return null;
+  if (myStudentNo === sellerStudentNo) return null;
+
+  const { data: myParticipants, error: myErr } = await supabase
+    .from('chat_participants')
+    .select('thread_id')
+    .eq('student_number', myStudentNo)
+    .is('deleted_at', null);
+
+  if (myErr) throw myErr;
+
+  const myThreadIds = (myParticipants || []).map(row => row.thread_id);
+
+  if (myThreadIds.length) {
+    const { data: allParticipants, error: partErr } = await supabase
+      .from('chat_participants')
+      .select('id, thread_id, student_number, deleted_at, archived_at')
+      .in('thread_id', myThreadIds);
+
+    if (partErr) throw partErr;
+
+    const grouped = {};
+    (allParticipants || []).forEach(row => {
+      if (!grouped[row.thread_id]) grouped[row.thread_id] = [];
+      grouped[row.thread_id].push(row);
+    });
+
+    for (const threadId of myThreadIds) {
+      const participants = grouped[threadId] || [];
+      const activeParticipants = participants.filter(p => !p.deleted_at);
+      const nums = activeParticipants.map(p => p.student_number).slice().sort();
+      const expected = [myStudentNo, sellerStudentNo].slice().sort();
+
+      if (
+        nums.length === 2 &&
+        nums[0] === expected[0] &&
+        nums[1] === expected[1]
+      ) {
+        await supabase
+          .from('chat_participants')
+          .update({ archived_at: null, deleted_at: null })
+          .eq('thread_id', threadId)
+          .eq('student_number', myStudentNo);
+
+        return threadId;
+      }
+    }
+  }
+
+  const { data: newThread, error: threadErr } = await supabase
+    .from('chat_threads')
+    .insert([{
+      listing_id: listingId || null,
+      created_at: new Date().toISOString()
+    }])
+    .select()
+    .single();
+
+  if (threadErr) throw threadErr;
+
+  const threadId = newThread.id;
+
+  const { error: participantErr } = await supabase
+    .from('chat_participants')
+    .insert([
+      {
+        thread_id: threadId,
+        student_number: myStudentNo,
+        created_at: new Date().toISOString(),
+        deleted_at: null,
+        archived_at: null,
+        cleared_at: null
+      },
+      {
+        thread_id: threadId,
+        student_number: sellerStudentNo,
+        created_at: new Date().toISOString(),
+        deleted_at: null,
+        archived_at: null,
+        cleared_at: null
+      }
+    ]);
+
+  if (participantErr) throw participantErr;
+
+  return threadId;
+}
+
+async function ensureThreadFromUrl() {
+  const params = getUrlParams();
+  const seller = params.get('seller');
+  const listing = params.get('listing');
+  const thread = params.get('thread');
+
+  if (thread) {
+    const accessible = await canAccessThread(thread);
+    return accessible ? thread : null;
+  }
+
+  if (!seller) return null;
+
+  if (seller === currentStudentNumber) {
+    await Swal.fire({
+      title: 'Cannot open chat',
+      text: 'You cannot message yourself.',
+      icon: 'warning'
+    });
+    return null;
+  }
+
+  try {
+    const threadId = await findOrCreateThread(currentStudentNumber, seller, listing);
+    if (threadId) {
+      const next = new URL(window.location.href);
+      next.searchParams.set('thread', threadId);
+      next.searchParams.delete('seller');
+      next.searchParams.delete('listing');
+      history.replaceState({}, '', next.toString());
+      return threadId;
+    }
+  } catch (err) {
+    console.error('Error creating/finding thread:', err);
+    await Swal.fire({
+      title: 'Chat unavailable',
+      text: 'Unable to open this conversation right now.',
+      icon: 'error'
+    });
+  }
+
+  return null;
+}
+
+async function loadThreads() {
+  let participantQuery = supabase
+    .from('chat_participants')
+    .select('thread_id, cleared_at, archived_at, deleted_at')
+    .eq('student_number', currentStudentNumber)
+    .is('deleted_at', null);
+
+  if (currentFolder === 'archived') {
+    participantQuery = participantQuery.not('archived_at', 'is', null);
+  } else {
+    participantQuery = participantQuery.is('archived_at', null);
+  }
+
+  const { data: participantRows, error: partErr } = await participantQuery;
+
+  if (partErr) {
+    console.error('Error loading participants:', partErr);
+    renderEmptyThreads();
+    return;
+  }
+
+  const myParticipantRows = participantRows || [];
+  const threadIds = [...new Set(myParticipantRows.map(row => row.thread_id))];
+
+  if (!threadIds.length) {
+    threadCache = [];
+    if (currentFolder === 'inbox') renderSidebarUnread(0);
+    renderEmptyThreads();
+    return;
+  }
+
+  const [
+    threadsRes,
+    participantsRes,
+    messagesRes,
+    unreadInfo
+  ] = await Promise.all([
+    supabase
+      .from('chat_threads')
+      .select('id, listing_id, created_at')
+      .in('id', threadIds),
+
+    supabase
+      .from('chat_participants')
+      .select('thread_id, student_number, deleted_at, archived_at, cleared_at')
+      .in('thread_id', threadIds)
+      .is('deleted_at', null),
+
+    supabase
+      .from('chat_messages')
+      .select('id, thread_id, sender_student_number, sender_name, message, is_read, created_at')
+      .in('thread_id', threadIds)
+      .order('created_at', { ascending: false }),
+
+    loadUnreadCounts()
+  ]);
+
+  if (threadsRes.error || participantsRes.error || messagesRes.error) {
+    console.error('Error loading threads:', threadsRes.error || participantsRes.error || messagesRes.error);
+    renderEmptyThreads();
+    return;
+  }
+
+  if (currentFolder === 'inbox') {
+    renderSidebarUnread(unreadInfo.total);
+  }
+
+  const threads = threadsRes.data || [];
+  const participants = participantsRes.data || [];
+  const messages = messagesRes.data || [];
+
+  const myParticipantMap = new Map();
+  myParticipantRows.forEach(row => {
+    myParticipantMap.set(row.thread_id, row);
+  });
+
+  const clearedAtMap = new Map();
+  myParticipantRows.forEach(row => {
+    clearedAtMap.set(row.thread_id, row.cleared_at || null);
+  });
+
+  const latestMap = new Map();
+  messages.forEach(msg => {
+    const clearedAt = clearedAtMap.get(msg.thread_id);
+
+    if (clearedAt && new Date(msg.created_at) <= new Date(clearedAt)) {
+      return;
+    }
+
+    if (!latestMap.has(msg.thread_id)) {
+      latestMap.set(msg.thread_id, msg);
+    }
+  });
+
+  const otherNumbers = [...new Set(
+    participants
+      .filter(p => p.student_number !== currentStudentNumber)
+      .map(p => p.student_number)
+  )];
+
+  const listingIds = [...new Set(
+    threads.map(t => t.listing_id).filter(Boolean)
+  )];
+
+  const [studentsRes, listingsRes] = await Promise.all([
+    otherNumbers.length
+      ? supabase
+          .from('students')
+          .select('studentNumber, studentName, avatar_url')
+          .in('studentNumber', otherNumbers)
+      : Promise.resolve({ data: [], error: null }),
+
+    listingIds.length
+      ? supabase
+          .from('listings')
+          .select('id, title')
+          .in('id', listingIds)
+      : Promise.resolve({ data: [], error: null })
+  ]);
+
+  if (studentsRes.error) console.error('Error loading student names:', studentsRes.error);
+  if (listingsRes.error) console.error('Error loading listing titles:', listingsRes.error);
+
+  const studentMetaMap = new Map();
+  (studentsRes.data || []).forEach(student => {
+    studentMetaMap.set(student.studentNumber, {
+      name: student.studentName || student.studentNumber,
+      avatar_url: student.avatar_url || null
+    });
+  });
+
+  const listingMap = new Map();
+  (listingsRes.data || []).forEach(listing => {
+    listingMap.set(listing.id, listing.title || 'Listing');
+  });
+
+  const groupedParticipants = new Map();
+  participants.forEach(row => {
+    if (!groupedParticipants.has(row.thread_id)) groupedParticipants.set(row.thread_id, []);
+    groupedParticipants.get(row.thread_id).push(row);
+  });
+
+  threadCache = threads.map(thread => {
+    const members = groupedParticipants.get(thread.id) || [];
+    const otherParticipant = members.find(p => p.student_number !== currentStudentNumber);
+    const myParticipant = myParticipantMap.get(thread.id) || null;
+
+    const otherStudentNo = otherParticipant?.student_number || '';
+    const otherStudentMeta = studentMetaMap.get(otherStudentNo) || null;
+    const otherName = otherStudentMeta?.name || otherStudentNo || 'Conversation';
+    const otherAvatarUrl = otherStudentMeta?.avatar_url || null;
+    const latestMessage = latestMap.get(thread.id) || null;
+    const listingTitle = thread.listing_id ? (listingMap.get(thread.listing_id) || 'Listing') : '';
+    const updatedAt = latestMessage?.created_at || thread.created_at;
+
+    return {
+      id: thread.id,
+      listing_id: thread.listing_id || null,
+      listing_title: listingTitle,
+      other_student_number: otherStudentNo,
+      other_name: otherName,
+      other_avatar_url: otherAvatarUrl,
+      initials: getInitials(otherName),
+      last_message: latestMessage?.message || '',
+      updated_at: updatedAt,
+      unread_count: unreadInfo.byThread[thread.id] || 0,
+      is_archived: !!myParticipant?.archived_at,
+      cleared_at: myParticipant?.cleared_at || null
+    };
+  }).sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+
+  renderThreadList();
+}
+
+function renderEmptyThreads() {
+  threadListEl.innerHTML = `
+    <div class="empty-thread-state">
+      <div class="inner">
+        <svg width="54" height="54" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                d="M8 10h8M8 14h5M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4-.8L3 20l1.2-3.2A7.67 7.67 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        </svg>
+        <h3>No messages yet</h3>
+        <p>Your conversations will appear here.</p>
+      </div>
+    </div>
+  `;
+}
+
+function renderThreadList() {
+  const query = (threadSearchInput.value || '').trim().toLowerCase();
+
+  const filtered = threadCache.filter(thread => {
+    const haystack = [
+      thread.other_name,
+      getPreviewText(thread.last_message),
+      thread.listing_title
+    ].join(' ').toLowerCase();
+
+    return haystack.includes(query);
+  });
+
+  if (!filtered.length) {
+    threadListEl.innerHTML = `
+      <div class="empty-thread-state">
+        <div class="inner">
+          <svg width="54" height="54" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <h3>No results</h3>
+          <p>No conversations matched your search.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  threadListEl.innerHTML = filtered.map(thread => `
+    <div class="conversation-item ${thread.id === currentThreadId ? 'active' : ''} ${thread.unread_count > 0 ? 'has-unread' : ''} ${thread.is_archived ? 'archived-thread' : ''}" data-thread-id="${thread.id}">
+      <div class="conversation-avatar ${thread.other_avatar_url ? 'has-photo' : ''}"
+        ${thread.other_avatar_url ? `style="background-image:url('${escapeHtml(thread.other_avatar_url)}')"` : ''}>
+        ${thread.other_avatar_url ? '' : escapeHtml(thread.initials)}
+      </div>
+      <div class="conversation-content">
+        <div class="conversation-top">
+          <div class="conversation-name-row">
+            <div class="conversation-name">${escapeHtml(thread.other_name)}</div>
+            ${thread.unread_count > 0 && currentFolder === 'inbox'
+              ? `<span class="conversation-unread-badge">${thread.unread_count > 99 ? '99+' : thread.unread_count}</span>`
+              : ''}
+          </div>
+          <div class="conversation-time">${escapeHtml(formatThreadTime(thread.updated_at))}</div>
+        </div>
+        <div class="conversation-preview">${escapeHtml(getPreviewText(thread.last_message))}</div>
+        ${thread.listing_title ? `<div class="conversation-listing">About: ${escapeHtml(thread.listing_title)}</div>` : ''}
+      </div>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.conversation-item').forEach(item => {
+    item.addEventListener('click', () => {
+      openThread(item.dataset.threadId);
+    });
+  });
+}
+
+async function markThreadAsRead(threadId) {
+  try {
+    const thread = threadCache.find(t => t.id === threadId);
+    const clearedAt = thread?.cleared_at || null;
+
+    let query = supabase
+      .from('chat_messages')
+      .update({ is_read: true })
+      .eq('thread_id', threadId)
+      .neq('sender_student_number', currentStudentNumber)
+      .eq('is_read', false);
+
+    if (clearedAt) {
+      query = query.gt('created_at', clearedAt);
+    }
+
+    await query;
+  } catch (err) {
+    console.error('Error marking thread as read:', err);
+  }
+}
+
+function renderMessages(messages) {
+  if (!messages.length) {
+    chatBody.innerHTML = `
+      <div class="empty-chat-state">
+        <div class="inner">
+          <svg width="54" height="54" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                  d="M8 10h8M8 14h5M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4-.8L3 20l1.2-3.2A7.67 7.67 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+          </svg>
+          <h3>No messages yet</h3>
+          <p>Start the conversation below.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  chatBody.innerHTML = messages.map(msg => {
+    const mine = msg.sender_student_number === currentStudentNumber;
+    return `
+      <div class="message-row ${mine ? 'sent' : 'received'}">
+        <div class="message-bubble">
+          <div>${escapeHtml(msg.message)}</div>
+          <div class="message-time">${escapeHtml(formatMessageTime(msg.created_at))}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function resetChatPanel() {
+  currentThreadId = null;
+  currentThreadData = null;
+  currentBlockedState = false;
+  currentBlockedByOther = false;
+  currentChatLocked = false;
+
+  if (realtimeChannel) {
+    supabase.removeChannel(realtimeChannel);
+    realtimeChannel = null;
+  }
+
+  chatUserAvatar.textContent = '--';
+  chatUserAvatar.style.backgroundImage = '';
+  chatUserAvatar.classList.remove('has-photo');
+
+  chatUserName.textContent = 'Select a conversation';
+
+  if (chatUserNameLink) {
+    chatUserNameLink.href = 'javascript:void(0)';
+    chatUserNameLink.style.pointerEvents = 'none';
+    chatUserNameLink.style.cursor = 'default';
+  }
+
+  chatListingInfo.textContent = currentFolder === 'archived'
+    ? 'Choose a thread from archived conversations.'
+    : 'Choose a thread from the inbox.';
+
+  chatBody.innerHTML = `
+    <div class="empty-chat-state">
+      <div class="inner">
+        <svg width="54" height="54" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                d="M8 10h8M8 14h5M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4-.8L3 20l1.2-3.2A7.67 7.67 0 013 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+        </svg>
+        <h3>No conversation selected</h3>
+        <p>Pick a conversation from the left to start chatting.</p>
+      </div>
+    </div>
+  `;
+
+  messageInput.value = '';
+  messageInput.disabled = true;
+  sendBtn.disabled = true;
+  reportUserBtn.disabled = true;
+  blockToggleBtn.disabled = true;
+  deleteConversationBtn.disabled = true;
+  viewListingBtn.disabled = true;
+
+  if (chatMoreBtn) chatMoreBtn.disabled = true;
+  if (archiveConversationBtn) archiveConversationBtn.disabled = true;
+  closeChatMoreMenu();
+}
+
+async function deleteCurrentConversation() {
+  if (!currentThreadId || !currentThreadData) return;
+
+  closeChatMoreMenu();
+
+  const result = await Swal.fire({
+    title: 'Delete conversation?',
+    text: 'Old messages will be removed from your view. New messages from this user will still appear.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Delete',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#dc2626'
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const clearTime = new Date().toISOString();
+
+    const { error } = await supabase
+      .from('chat_participants')
+      .update({
+        cleared_at: clearTime
+      })
+      .eq('thread_id', currentThreadId)
+      .eq('student_number', currentStudentNumber);
+
+    if (error) throw error;
+
+    currentThreadData.cleared_at = clearTime;
+
+    resetChatPanel();
+    await loadThreads();
+
+    if (threadCache.length) {
+      await openThread(threadCache[0].id);
+    }
+
+    await Swal.fire({
+      title: 'Deleted',
+      text: 'Old messages were removed from your view.',
+      icon: 'success'
+    });
+  } catch (err) {
+    console.error('Delete conversation error:', err);
+    await Swal.fire({
+      title: 'Delete failed',
+      text: 'Unable to delete this conversation right now.',
+      icon: 'error'
+    });
+  }
+}
+
+async function getBlockRelationship(otherStudentNumber) {
+  if (!otherStudentNumber || !currentStudentNumber) {
+    return {
+      iBlockedThem: false,
+      theyBlockedMe: false,
+      locked: false
+    };
+  }
+
+  const { data, error } = await supabase
+    .from('blocklist')
+    .select('studentNumber, blockedBy')
+    .or(
+      `and(studentNumber.eq.${otherStudentNumber},blockedBy.eq.${currentStudentNumber}),and(studentNumber.eq.${currentStudentNumber},blockedBy.eq.${otherStudentNumber})`
+    );
+
+  if (error) {
+    console.error('Block relationship error:', error);
+    return {
+      iBlockedThem: false,
+      theyBlockedMe: false,
+      locked: false
+    };
+  }
+
+  const rows = data || [];
+
+  const iBlockedThem = rows.some(row =>
+    row.studentNumber === otherStudentNumber &&
+    row.blockedBy === currentStudentNumber
+  );
+
+  const theyBlockedMe = rows.some(row =>
+    row.studentNumber === currentStudentNumber &&
+    row.blockedBy === otherStudentNumber
+  );
+
+  return {
+    iBlockedThem,
+    theyBlockedMe,
+    locked: iBlockedThem || theyBlockedMe
+  };
+}
+
+function applyChatLockUI() {
+  const hasUser = !!currentThreadData?.other_student_number;
+
+  if (!hasUser) {
+    messageInput.disabled = true;
+    sendBtn.disabled = true;
+    messageInput.placeholder = 'Type your message...';
+    return;
+  }
+
+  if (currentChatLocked) {
+    messageInput.disabled = true;
+    sendBtn.disabled = true;
+
+    if (currentBlockedState) {
+      messageInput.placeholder = 'You blocked this user. Messaging is disabled.';
+    } else if (currentBlockedByOther) {
+      messageInput.placeholder = 'You cannot reply in this conversation.';
+    } else {
+      messageInput.placeholder = 'Messaging is disabled.';
+    }
+  } else {
+    messageInput.disabled = false;
+    sendBtn.disabled = false;
+    messageInput.placeholder = 'Type your message...';
+  }
+}
+
+async function checkBlockState() {
+  if (!currentThreadData?.other_student_number) {
+    currentBlockedState = false;
+    currentBlockedByOther = false;
+    currentChatLocked = false;
+    updateBlockButton();
+    applyChatLockUI();
+    return;
+  }
+
+  const relation = await getBlockRelationship(currentThreadData.other_student_number);
+
+  currentBlockedState = relation.iBlockedThem;
+  currentBlockedByOther = relation.theyBlockedMe;
+  currentChatLocked = relation.locked;
+
+  updateBlockButton();
+  applyChatLockUI();
+}
+
+function updateBlockButton() {
+  if (!blockToggleBtn) return;
+
+  blockToggleBtn.disabled = !currentThreadData?.other_student_number;
+  blockToggleBtn.title = currentBlockedState ? 'Unblock User' : 'Block User';
+
+  if (currentBlockedState) {
+    blockToggleBtn.style.background = '#fee2e2';
+    blockToggleBtn.style.color = '#b91c1c';
+  } else {
+    blockToggleBtn.style.background = '#f3f4f6';
+    blockToggleBtn.style.color = '#374151';
+  }
+}
+
+async function reportCurrentUser() {
+  if (!currentThreadData?.other_student_number) return;
+
+  closeChatMoreMenu();
+
+  const { value: formValues } = await Swal.fire({
+    title: 'Report user',
+    html: `
+      <div style="display:flex; flex-direction:column; gap:12px; text-align:left;">
+        <label for="swalReportReason" style="font-size:14px; font-weight:600; color:#374151;">
+          Select reason for reporting this user
+        </label>
+
+        <select id="swalReportReason" class="report-select" style="
+          width:100%;
+          padding:12px 14px;
+          border:1px solid #d1d5db;
+          border-radius:10px;
+          font-size:14px;
+          outline:none;
+        ">
+          <option value="">Select reason</option>
+          <option value="Spam">Spam</option>
+          <option value="Harassment">Harassment</option>
+          <option value="Scam/Fake">Scam / Fake</option>
+          <option value="Inappropriate behavior">Inappropriate behavior</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <div id="swalOtherReasonWrap" style="display:none;">
+          <label for="swalOtherReason" style="font-size:14px; font-weight:600; color:#374151;">
+            Please specify the reason
+          </label>
+          <input
+            id="swalOtherReason"
+            type="text"
+            placeholder="Type the reason here..."
+            style="
+              width:100%;
+              margin-top:6px;
+              padding:12px 14px;
+              border:1px solid #d1d5db;
+              border-radius:10px;
+              font-size:14px;
+              outline:none;
+              box-sizing:border-box;
+            "
+          >
+        </div>
+
+        <div>
+          <label for="swalReportDetails" style="font-size:14px; font-weight:600; color:#374151;">
+            Additional details (optional)
+          </label>
+          <textarea
+            id="swalReportDetails"
+            class="report-textarea"
+            placeholder="Add more details here..."
+            style="
+              width:100%;
+              min-height:110px;
+              margin-top:6px;
+              padding:12px 14px;
+              border:1px solid #d1d5db;
+              border-radius:10px;
+              font-size:14px;
+              outline:none;
+              resize:vertical;
+              box-sizing:border-box;
+            "
+          ></textarea>
+        </div>
+      </div>
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: 'Submit',
+    cancelButtonText: 'Cancel',
+    customClass: {
+      popup: 'report-popup',
+      title: 'report-title',
+      htmlContainer: 'report-html',
+      confirmButton: 'report-confirm-btn',
+      cancelButton: 'report-cancel-btn'
+    },
+    buttonsStyling: false,
+
+    didOpen: () => {
+      const reasonSelect = document.getElementById('swalReportReason');
+      const otherWrap = document.getElementById('swalOtherReasonWrap');
+      const otherInput = document.getElementById('swalOtherReason');
+
+      function toggleOtherField() {
+        if (reasonSelect.value === 'Other') {
+          otherWrap.style.display = 'block';
+          otherInput.focus();
+        } else {
+          otherWrap.style.display = 'none';
+          otherInput.value = '';
+        }
+      }
+
+      reasonSelect.addEventListener('change', toggleOtherField);
+      toggleOtherField();
+    },
+
+    preConfirm: () => {
+      const selectedReason = document.getElementById('swalReportReason').value.trim();
+      const otherReason = document.getElementById('swalOtherReason').value.trim();
+      const details = document.getElementById('swalReportDetails').value.trim();
+
+      if (!selectedReason) {
+        Swal.showValidationMessage('Please select a reason.');
+        return false;
+      }
+
+      let finalReason = selectedReason;
+
+      if (selectedReason === 'Other') {
+        if (!otherReason) {
+          Swal.showValidationMessage('Please type the other reason.');
+          return false;
+        }
+        finalReason = otherReason;
+      }
+
+      return {
+        reason: finalReason,
+        details
+      };
+    }
+  });
+
+  if (!formValues) return;
+
+  const { reason, details } = formValues;
+
+  const { error } = await supabase
+    .from('user_reports')
+    .insert([{
+      reported_user_id: currentThreadData.other_student_number,
+      reported_student_no: currentThreadData.other_student_number,
+      reported_user_name: currentThreadData.other_name,
+      reporter_name: currentStudentName,
+      reporter_student_no: currentStudentNumber,
+      reporter_email: sessionStorage.getItem('studentEmail') || null,
+      reason,
+      additional_info: details || null,
+      status: 'pending',
+      reported_at: new Date().toISOString()
+    }]);
+
+  if (error) {
+    console.error('Report user error:', error);
+    await Swal.fire('Failed', 'Could not submit report.', 'error');
+    return;
+  }
+
+  await Swal.fire('Reported', 'User report submitted.', 'success');
+}
+
+async function toggleBlockUser() {
+  if (!currentThreadData?.other_student_number) return;
+
+  const targetStudentNo = currentThreadData.other_student_number;
+
+  if (!currentBlockedState) {
+    const result = await Swal.fire({
+      title: 'Block user?',
+      text: `Both of you will no longer be able to chat once ${currentThreadData.other_name} is blocked.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Block'
+    });
+
+    if (!result.isConfirmed) return;
+
+    const { error } = await supabase
+      .from('blocklist')
+      .insert([{
+        studentNumber: targetStudentNo,
+        studentName: currentThreadData.other_name,
+        blockedAt: new Date().toISOString(),
+        blockedBy: currentStudentNumber,
+        blockReason: 'Blocked from messages'
+      }]);
+
+    if (error) {
+      console.error('Block error:', error);
+      await Swal.fire('Failed', 'Could not block user.', 'error');
+      return;
+    }
+
+    await checkBlockState();
+    await Swal.fire('Blocked', 'Both users can no longer send messages in this conversation.', 'success');
+  } else {
+    const result = await Swal.fire({
+      title: 'Unblock user?',
+      text: `Allow messaging with ${currentThreadData.other_name} again?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Unblock'
+    });
+
+    if (!result.isConfirmed) return;
+
+    const { error } = await supabase
+      .from('blocklist')
+      .delete()
+      .eq('studentNumber', targetStudentNo)
+      .eq('blockedBy', currentStudentNumber);
+
+    if (error) {
+      console.error('Unblock error:', error);
+      await Swal.fire('Failed', 'Could not unblock user.', 'error');
+      return;
+    }
+
+    await checkBlockState();
+    await Swal.fire('Unblocked', 'Messaging is enabled again unless the other user still blocked you.', 'success');
+  }
+}
+
+async function switchFolder(folder) {
+  if (folder !== 'inbox' && folder !== 'archived') return;
+  if (currentFolder === folder) return;
+
+  currentFolder = folder;
+  updateFolderTabs();
+  resetChatPanel();
+  await loadThreads();
+
+  if (threadCache.length) {
+    await openThread(threadCache[0].id);
+  }
+}
+
+async function archiveCurrentConversation() {
+  if (!currentThreadId || !currentThreadData) return;
+
+  const isCurrentlyArchived = !!currentThreadData.is_archived;
+  closeChatMoreMenu();
+
+  const result = await Swal.fire({
+    title: isCurrentlyArchived ? 'Unarchive conversation?' : 'Archive conversation?',
+    text: isCurrentlyArchived
+      ? 'This conversation will return to your inbox.'
+      : 'This conversation will move to Archived.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: isCurrentlyArchived ? 'Unarchive' : 'Archive',
+    cancelButtonText: 'Cancel'
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const { error } = await supabase
+      .from('chat_participants')
+      .update({
+        archived_at: isCurrentlyArchived ? null : new Date().toISOString()
+      })
+      .eq('thread_id', currentThreadId)
+      .eq('student_number', currentStudentNumber);
+
+    if (error) throw error;
+
+    const movedThreadId = currentThreadId;
+
+    if (isCurrentlyArchived) {
+      currentFolder = 'inbox';
+      updateFolderTabs();
+    }
+
+    resetChatPanel();
+    await loadThreads();
+
+    const stillExists = threadCache.find(t => t.id === movedThreadId);
+    if (stillExists) {
+      await openThread(stillExists.id);
+    } else if (threadCache.length) {
+      await openThread(threadCache[0].id);
+    }
+
+    await Swal.fire(
+      isCurrentlyArchived ? 'Unarchived' : 'Archived',
+      isCurrentlyArchived ? 'Conversation returned to inbox.' : 'Conversation moved to archived.',
+      'success'
+    );
+  } catch (err) {
+    console.error('Archive conversation error:', err);
+    await Swal.fire('Failed', 'Unable to update conversation archive status.', 'error');
+  }
+}
+
+async function openThread(threadId) {
+  const accessible = await canAccessThread(threadId);
+  if (!accessible) {
+    await loadThreads();
+    return;
+  }
+
+  currentThreadId = threadId;
+  currentThreadData = threadCache.find(thread => thread.id === threadId) || null;
+
+  renderThreadList();
+
+  if (currentThreadData) {
+    if (currentThreadData.other_avatar_url) {
+      chatUserAvatar.textContent = '';
+      chatUserAvatar.style.backgroundImage = `url('${currentThreadData.other_avatar_url}')`;
+      chatUserAvatar.classList.add('has-photo');
+    } else {
+      chatUserAvatar.textContent = currentThreadData.initials;
+      chatUserAvatar.style.backgroundImage = '';
+      chatUserAvatar.classList.remove('has-photo');
+    }
+
+    chatUserName.textContent = currentThreadData.other_name;
+
+    if (chatUserNameLink && currentThreadData.other_student_number) {
+      chatUserNameLink.href = `public-profile.html?student_no=${encodeURIComponent(currentThreadData.other_student_number)}`;
+      chatUserNameLink.style.pointerEvents = 'auto';
+      chatUserNameLink.style.cursor = 'pointer';
+    }
+
+    chatListingInfo.textContent = currentThreadData.listing_title
+      ? `About: ${currentThreadData.listing_title}`
+      : 'Conversation';
+  } else {
+    chatUserAvatar.textContent = '--';
+    chatUserAvatar.style.backgroundImage = '';
+    chatUserAvatar.classList.remove('has-photo');
+    chatUserName.textContent = 'Conversation';
+
+    if (chatUserNameLink) {
+      chatUserNameLink.href = 'javascript:void(0)';
+      chatUserNameLink.style.pointerEvents = 'none';
+      chatUserNameLink.style.cursor = 'default';
+    }
+
+    chatListingInfo.textContent = '';
+  }
+
+  reportUserBtn.disabled = !currentThreadData?.other_student_number;
+  deleteConversationBtn.disabled = !currentThreadData?.id;
+  viewListingBtn.disabled = !currentThreadData?.listing_id;
+
+  if (chatMoreBtn) chatMoreBtn.disabled = !currentThreadData?.id;
+  if (archiveConversationBtn) {
+    archiveConversationBtn.disabled = !currentThreadData?.id;
+    archiveConversationBtn.textContent = currentThreadData?.is_archived ? 'Unarchive' : 'Archive';
+  }
+
+  closeChatMoreMenu();
+
+  let messagesQuery = supabase
+    .from('chat_messages')
+    .select('id, thread_id, sender_student_number, sender_name, message, is_read, created_at')
+    .eq('thread_id', threadId)
+    .order('created_at', { ascending: true });
+
+  if (currentThreadData?.cleared_at) {
+    messagesQuery = messagesQuery.gt('created_at', currentThreadData.cleared_at);
+  }
+
+  const { data, error } = await messagesQuery;
+
+  if (error) {
+    console.error('Error loading messages:', error);
+    return;
+  }
+
+  renderMessages(data || []);
+  await markThreadAsRead(threadId);
+  await loadThreads();
+  currentThreadData = threadCache.find(thread => thread.id === threadId) || currentThreadData;
+  renderThreadList();
+
+  await checkBlockState();
+  subscribeToThread(threadId);
+}
+
+async function refreshCurrentThread() {
+  if (!currentThreadId) return;
+
+  let messagesQuery = supabase
+    .from('chat_messages')
+    .select('id, thread_id, sender_student_number, sender_name, message, is_read, created_at')
+    .eq('thread_id', currentThreadId)
+    .order('created_at', { ascending: true });
+
+  if (currentThreadData?.cleared_at) {
+    messagesQuery = messagesQuery.gt('created_at', currentThreadData.cleared_at);
+  }
+
+  const { data, error } = await messagesQuery;
+
+  if (error) {
+    console.error('Error refreshing current thread:', error);
+    return;
+  }
+
+  renderMessages(data || []);
+  await markThreadAsRead(currentThreadId);
+  await checkBlockState();
+}
+
+function subscribeToInboxRealtime() {
+  if (inboxRealtimeChannel) {
+    supabase.removeChannel(inboxRealtimeChannel);
+    inboxRealtimeChannel = null;
+  }
+
+  inboxRealtimeChannel = supabase
+    .channel(`messages-inbox-${currentStudentNumber}`)
+    .on(
+      'postgres_changes',
+      {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'chat_messages'
+      },
+      async () => {
+        await loadThreads();
+        if (currentThreadId) await refreshCurrentThread();
+      }
+    )
+    .on(
+      'postgres_changes',
+      {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'chat_messages'
+      },
+      async () => {
+        await loadThreads();
+        if (currentThreadId) await refreshCurrentThread();
+      }
+    )
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'chat_participants'
+      },
+      async () => {
+        await loadThreads();
+
+        if (currentThreadId) {
+          const updated = threadCache.find(thread => thread.id === currentThreadId);
+          if (!updated) {
+            resetChatPanel();
+            if (threadCache.length) await openThread(threadCache[0].id);
+          } else {
+            currentThreadData = updated;
+            renderThreadList();
+          }
+        }
+      }
+    )
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'blocklist'
+      },
+      async () => {
+        if (currentThreadId) await checkBlockState();
+      }
+    )
+    .subscribe((status) => {
+      console.log('Inbox realtime status:', status);
+    });
+}
+
+function subscribeToThread(threadId) {
+  if (realtimeChannel) {
+    supabase.removeChannel(realtimeChannel);
+  }
+
+  realtimeChannel = supabase
+    .channel(`chat-thread-${threadId}`)
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'chat_messages',
+        filter: `thread_id=eq.${threadId}`
+      },
+      async () => {
+        await loadThreads();
+        await refreshCurrentThread();
+      }
+    )
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'blocklist'
+      },
+      async () => {
+        await checkBlockState();
+      }
+    )
+    .subscribe((status) => {
+      console.log('Realtime status:', status);
+    });
+}
+
+async function sendMessage() {
+  const text = (messageInput.value || '').trim();
+
+  if (!currentThreadId || !text) return;
+  if (!currentThreadData?.other_student_number) return;
+
+  const latestRelation = await getBlockRelationship(currentThreadData.other_student_number);
+  currentBlockedState = latestRelation.iBlockedThem;
+  currentBlockedByOther = latestRelation.theyBlockedMe;
+  currentChatLocked = latestRelation.locked;
+  updateBlockButton();
+  applyChatLockUI();
+
+  if (currentChatLocked) {
+    if (currentBlockedState) {
+      await Swal.fire('Blocked', 'You blocked this user. Messaging is disabled.', 'warning');
+    } else if (currentBlockedByOther) {
+      await Swal.fire('Blocked', 'You cannot send a message because this conversation is blocked.', 'warning');
+    } else {
+      await Swal.fire('Blocked', 'Messaging is disabled for this conversation.', 'warning');
+    }
+    return;
+  }
+
+  const accessible = await canAccessThread(currentThreadId);
+  if (!accessible) {
+    await Swal.fire({
+      title: 'Conversation unavailable',
+      text: 'This conversation is no longer available in your inbox.',
+      icon: 'warning'
+    });
+    await loadThreads();
+    resetChatPanel();
+    return;
+  }
+
+  if (currentThreadData?.is_archived) {
+    const unarchived = await unarchiveMyParticipantInThread(currentThreadId);
+    if (!unarchived) {
+      await Swal.fire({
+        title: 'Message failed',
+        text: 'Unable to unarchive this conversation.',
+        icon: 'error'
+      });
+      return;
+    }
+    currentThreadData.is_archived = false;
+  }
+
+  const { error } = await supabase
+    .from('chat_messages')
+    .insert([{
+      thread_id: currentThreadId,
+      sender_student_number: currentStudentNumber,
+      sender_name: currentStudentName,
+      message: text,
+      is_read: false,
+      created_at: new Date().toISOString()
+    }]);
+
+  if (error) {
+    console.error('Error sending message:', error);
+    await Swal.fire({
+      title: 'Message failed',
+      text: 'Unable to send message right now.',
+      icon: 'error'
+    });
+    return;
+  }
+
+  messageInput.value = '';
+
+  if (currentFolder === 'archived') {
+    currentFolder = 'inbox';
+    updateFolderTabs();
+  }
+
+  await loadThreads();
+
+  const reopenedThread = threadCache.find(t => t.id === currentThreadId);
+  if (reopenedThread) {
+    currentThreadData = reopenedThread;
+    await openThread(reopenedThread.id);
+  } else {
+    await refreshCurrentThread();
+  }
+}
+
+async function initMessagesPage() {
+  ensureLoggedIn();
+  initHeaderAndSidebar();
+  updateContainerSpacing();
+  updateFolderTabs();
+
+  const requestedThreadId = await ensureThreadFromUrl();
+
+  await loadThreads();
+  subscribeToInboxRealtime();
+
+  if (requestedThreadId) {
+    await openThread(requestedThreadId);
+  } else if (threadCache.length) {
+    const params = getUrlParams();
+    const threadFromQuery = params.get('thread');
+
+    if (threadFromQuery && threadCache.some(t => t.id === threadFromQuery)) {
+      await openThread(threadFromQuery);
+    } else {
+      await openThread(threadCache[0].id);
+    }
+  } else {
+    reportUserBtn.disabled = true;
+    blockToggleBtn.disabled = true;
+    deleteConversationBtn.disabled = true;
+    viewListingBtn.disabled = true;
+    messageInput.disabled = true;
+    sendBtn.disabled = true;
+    if (chatMoreBtn) chatMoreBtn.disabled = true;
+    if (archiveConversationBtn) archiveConversationBtn.disabled = true;
+  }
+}
+
+threadSearchInput.addEventListener('input', renderThreadList);
+sendBtn.addEventListener('click', sendMessage);
+
+messageInput.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
+});
+
+viewListingBtn.addEventListener('click', () => {
+  if (!currentThreadData?.listing_id) return;
+  closeChatMoreMenu();
+  window.location.href = `item-details.html?id=${encodeURIComponent(currentThreadData.listing_id)}`;
+});
+
+reportUserBtn.addEventListener('click', reportCurrentUser);
+blockToggleBtn.addEventListener('click', toggleBlockUser);
+deleteConversationBtn.addEventListener('click', deleteCurrentConversation);
+
+if (chatMoreBtn) {
+  chatMoreBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleChatMoreMenu();
+  });
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.chat-menu-wrap')) {
+    closeChatMoreMenu();
+  }
+});
+
+if (archiveConversationBtn) {
+  archiveConversationBtn.addEventListener('click', archiveCurrentConversation);
+}
+
+if (inboxTabBtn) {
+  inboxTabBtn.addEventListener('click', () => switchFolder('inbox'));
+}
+
+if (archivedTabBtn) {
+  archivedTabBtn.addEventListener('click', () => switchFolder('archived'));
+}
+
+window.addEventListener('load', initMessagesPage);
+</script>
+</body>
+</html>

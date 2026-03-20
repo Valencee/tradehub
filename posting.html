@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a Listing - PHINMA TradeHub</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../includes/header.css">
+  <link rel="stylesheet" href="../includes/sidebar.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/posting.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    .photo-upload{
+      width:100%;
+      border:2px dashed #d1d5db;
+      border-radius:12px;
+      padding:40px 16px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      cursor:pointer;
+      background:#f9fafb
+    }
+    .photo-upload-icon{
+      width:48px;height:48px;border-radius:999px;background:#22c55e;
+      display:flex;align-items:center;justify-content:center;color:#fff
+    }
+    .photo-upload-text{font-size:.95rem;font-weight:500;color:#111827}
+    .photo-hint{margin-top:8px;font-size:.8rem;color:#6b7280}
+    .photo-preview{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+    .photo-preview-item{
+      position:relative;width:110px;height:110px;border-radius:12px;overflow:hidden;
+      border:2px solid #e5e7eb;background:#f3f4f6
+    }
+    .photo-preview-item img{width:100%;height:100%;object-fit:cover;display:block}
+    .cover-badge{
+      position:absolute;top:6px;left:6px;padding:2px 8px;border-radius:999px;
+      background:#16a34a;color:#fff;font-size:11px;font-weight:600
+    }
+    .photo-remove-btn{
+      position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:999px;
+      border:none;background:rgba(239,68,68,.95);color:#fff;font-size:14px;line-height:1;
+      display:flex;align-items:center;justify-content:center;cursor:pointer
+    }
+    .photo-remove-btn:hover{background:#b91c1c}
+    #photo-input{display:none}
+  </style>
+</head>
+<body>
+
+<!-- ROUTE GUARD -->
+<script>
+  (function guardRoute() {
+    const loggedInFlag = sessionStorage.getItem('user_logged_in');
+    if (loggedInFlag !== 'true') window.location.href = '../../index.html';
+  })();
+</script>
+
+<!-- =========================
+     HEADER
+========================= -->
+<header class="header" id="mainHeader">
+  <div class="header-left">
+    <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+      <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+              clip-rule="evenodd"/>
+      </svg>
+    </button>
+
+    <div class="header-brand" style="cursor: default;">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 6v6l4 2"></path>
+      </svg>
+      <span>Tradehub</span>
+    </div>
+  </div>
+
+  <div class="header-content">
+    <nav>
+      <ul class="nav-menu">
+        <li>
+          <a href="about.html" class="nav-icon-btn" title="About Us">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clip-rule="evenodd"/>
+            </svg>
+          </a>
+        </li>
+
+        <li class="user-profile-container">
+          <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                  onclick="toggleProfileDropdown()" title="Profile">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clip-rule="evenodd"/>
+            </svg>
+          </button>
+
+          <div class="profile-dropdown" id="profileDropdown">
+            <div class="dropdown-arrow"></div>
+            <div class="profile-dropdown-header">
+              <div class="profile-user-name" id="profileUserName">Student Name</div>
+              <div class="profile-user-email" id="profileUserEmail">student@example.com</div>
+            </div>
+
+            <div class="profile-dropdown-menu">
+              <a href="userprofile.html" class="profile-menu-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>My Profile</span>
+              </a>
+
+              <a href="bookmarks.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+                <span>Bookmarks</span>
+                </a>
+
+              <a href="selling.html" class="profile-menu-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span>My Selling</span>
+              </a>
+
+
+              <div class="profile-menu-divider"></div>
+
+              <a href="javascript:void(0)" class="profile-menu-item sign-out" onclick="handleSignOut()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Sign Out</span>
+              </a>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+<aside class="marketplace-sidebar" id="marketplaceSidebar"
+       style="position: fixed !important;
+              top: 72px !important;
+              left: 0 !important;
+              width: 360px !important;
+              height: calc(100vh - 72px) !important;
+              background: #242526 !important;
+              color: #e4e6eb !important;
+              overflow-y: auto !important;
+              padding: 1rem !important;
+              z-index: 999 !important;
+              transition: transform 0.3s ease !important;">
+
+  <div class="sidebar-header">
+    <h2 class="sidebar-title">Phinma-Upang TradeHub</h2>
+    <a href="userprofile.html" class="sidebar-settings" title="My Profile" style="text-decoration:none;color:inherit;">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+              clip-rule="evenodd"/>
+      </svg>
+    </a>
+  </div>
+
+
+  <nav class="sidebar-nav">
+    <a href="browse.html" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #1877f2;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+        </svg>
+      </div>
+      <span>Browse Items</span>
+    </a>
+
+    <a href="notification.html" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #e67e22;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+        </svg>
+      </div>
+      <span>Notifications</span>
+    </a>
+
+    <a href="bookmarks.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #f00524;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M6 3a2 2 0 0 0-2 2v16l8-5 8 5V5a2 2 0 0 0-2-2H6z"/>
+    </svg>
+  </div>
+  <span>Bookmarks</span>
+</a>
+
+    <a href="messages.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #00b894;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/>
+    </svg>
+  </div>
+
+  <span class="sidebar-label">Messages</span>
+  <span id="messagesUnreadBadge" class="messages-unread-badge">0</span>
+</a>
+
+    <a href="userprofile.html" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #8e44ad;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <span>My Profile</span>
+    </a>
+  </nav>
+
+  <a href="posting.html" class="sidebar-create-btn">
+    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd"
+            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+            clip-rule="evenodd"/>
+    </svg>
+    Create New Listing
+  </a>
+</aside>
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+<div class="container">
+  <div class="page-header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 16H4V9h16v11z"/>
+        <circle cx="12" cy="15" r="1.5"/>
+      </svg>
+    </div>
+    <h1>Post a Listing</h1>
+    <p>Share what you're selling with fellow PHINMA students</p>
+  </div>
+
+  <form id="listingForm" class="listing-form" enctype="multipart/form-data">
+    <div class="form-content">
+      <div class="form-section">
+        <label class="form-label">Photos</label>
+        <label for="photo-input" class="photo-upload">
+          <div class="photo-upload-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
+          <span class="photo-upload-text">Add photos</span>
+        </label>
+
+        <input type="file" id="photo-input" accept="image/*" multiple>
+        <p class="photo-hint">Upload up to <strong>5 photos</strong>. First photo will be the cover.</p>
+        <div id="photo-preview" class="photo-preview"></div>
+      </div>
+
+      <div class="form-section">
+        <label class="form-label">Title <span class="required">*</span></label>
+        <input type="text" name="title" class="form-input" placeholder="What are you selling?" required>
+      </div>
+
+      <div class="form-section">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-input form-textarea" rows="5"
+                  placeholder="Describe your item — brand, model, size, color, condition details..."></textarea>
+      </div>
+
+      <div class="form-section">
+        <label class="form-label">Category <span class="required">*</span></label>
+        <select name="category" class="form-input" required>
+          <option value="">Select a category</option>
+          <option value="Books & Supplies">Books & Supplies</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Pre Loved Clothes">Pre Loved Clothes</option>
+          <option value="Dorm Essentials">Dorm Essentials</option>
+        </select>
+      </div>
+
+      <div class="form-section">
+        <label class="form-label">Condition <span class="required">*</span></label>
+        <input type="hidden" name="condition" id="condition-input" required>
+        <div class="condition-grid">
+          <div class="condition-option" data-condition="Like New">
+            <div class="condition-title">Like New</div>
+            <div class="condition-description">Used once or twice, flawless</div>
+          </div>
+          <div class="condition-option" data-condition="Excellent">
+            <div class="condition-title">Excellent</div>
+            <div class="condition-description">Minimal signs of use</div>
+          </div>
+          <div class="condition-option" data-condition="Good">
+            <div class="condition-title">Good</div>
+            <div class="condition-description">Some wear, fully functional</div>
+          </div>
+          <div class="condition-option" data-condition="Fair">
+            <div class="condition-title">Fair</div>
+            <div class="condition-description">Visible wear, works fine</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <label class="form-label">Price <span class="required">*</span></label>
+        <div class="price-input-wrapper">
+          <span class="price-symbol">₱</span>
+          <input type="number" name="price" class="form-input price-input" placeholder="0.00" step="0.01" min="0" required>
+        </div>
+      </div>
+
+      <div class="form-section">
+  <label class="form-label">Preferred Meetup Location <span class="required">*</span></label>
+  <select name="location" class="form-input" required>
+    <option value="">Select meetup location</option>
+    <option value="Gym">Gym</option>
+    <option value="Library">Library</option>
+    <option value="Student Plaza">Student Plaza</option>
+  </select>
+</div>
+
+    <div class="submit-section">
+      <button type="submit" class="btn btn-submit" id="submitBtn">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"/>
+        </svg>
+        List Item
+      </button>
+      <a href="browse.html" class="btn btn-cancel">Cancel</a>
+    </div>
+
+    <p style="margin-top:.5rem;font-size:.9rem;color:#6b7280;">
+      Note: Your listing will be visible to others after an admin approves it.
+    </p>
+  </form>
+
+  <div id="formMessage" style="margin-top:1rem;font-weight:600;"></div>
+</div>
+
+<!-- =========================
+     HEADER / SIDEBAR JS
+========================= -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggleBtn = document.getElementById('sidebarToggle');
+    const sidebar   = document.getElementById('marketplaceSidebar');
+    const container = document.querySelector('.container');
+    let isOpen = true;
+
+    const nameEl  = document.getElementById('profileUserName');
+    const emailEl = document.getElementById('profileUserEmail');
+    const storedName  = sessionStorage.getItem('studentName');
+    const storedEmail = sessionStorage.getItem('studentEmail');
+    if (nameEl && storedName)  nameEl.textContent  = storedName;
+    if (emailEl && storedEmail) emailEl.textContent = storedEmail;
+
+    const savedState = localStorage.getItem('sidebarOpen');
+    if (savedState !== null) isOpen = (savedState === 'true');
+
+ function applySidebarState() {
+  if (!sidebar || !container) return;
+
+  if (isOpen) {
+    sidebar.style.transform = 'translateX(0)';
+    document.body.classList.remove('sidebar-hidden');
+
+    container.style.marginLeft = '360px';
+    container.style.marginRight = 'auto';
+    container.style.width = 'calc(100% - 360px)';
+  } else {
+    sidebar.style.transform = 'translateX(-100%)';
+    document.body.classList.add('sidebar-hidden');
+
+    container.style.marginLeft = 'auto';
+    container.style.marginRight = 'auto';
+    container.style.width = 'min(100%, 1200px)';
+  }
+}
+
+    applySidebarState();
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', function () {
+        isOpen = !isOpen;
+        localStorage.setItem('sidebarOpen', String(isOpen));
+        applySidebarState();
+
+        const ev = new CustomEvent('sidebarToggled', { detail: { isOpen }, bubbles: true });
+        document.dispatchEvent(ev);
+        window.dispatchEvent(ev);
+      });
+    }
+
+    document.addEventListener('click', function (event) {
+      const container2 = document.querySelector('.user-profile-container');
+      const dropdown  = document.getElementById('profileDropdown');
+      if (container2 && dropdown && !container2.contains(event.target)) dropdown.classList.remove('show');
+    });
+
+    const pd = document.getElementById('profileDropdown');
+    if (pd) pd.addEventListener('click', (e) => e.stopPropagation());
+  });
+
+  function toggleProfileDropdown() {
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown) dropdown.classList.toggle('show');
+  }
+
+  window.handleSignOut = function () {
+  Swal.fire({
+    title: 'Sign out?',
+    text: 'Are you sure you want to sign out of your account?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, sign out',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.clear();
+
+      Swal.fire({
+        title: 'Signed out',
+        text: 'You have been successfully signed out.',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text'
+        }
+      }).then(() => {
+        window.location.href = '../../index.html';
+      });
+    }
+  });
+};
+</script>
+
+<!-- =========================
+     SUPABASE POSTING LOGIC
+========================= -->
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+  const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+  const supabaseKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const form       = document.getElementById('listingForm');
+  const submitBtn  = document.getElementById('submitBtn');
+  const messageEl  = document.getElementById('formMessage');
+  const photoInput = document.getElementById('photo-input');
+  const photoPreview = document.getElementById('photo-preview');
+  const photoUploadText = document.querySelector('.photo-upload-text');
+
+  const currentStudentNumber = sessionStorage.getItem('studentNumber') || '';
+  const messagesUnreadBadge = document.getElementById('messagesUnreadBadge');
+
+  let unreadBadgeChannel = null;
+
+  const MAX_PHOTOS = 5;
+  let selectedPhotos = [];
+
+  document.querySelectorAll('.condition-option').forEach(option => {
+    option.addEventListener('click', function () {
+      document.querySelectorAll('.condition-option').forEach(opt => opt.classList.remove('selected'));
+      this.classList.add('selected');
+      document.getElementById('condition-input').value = this.dataset.condition;
+    });
+  });
+
+  function renderSidebarUnread(total) {
+    if (!messagesUnreadBadge) return;
+
+    const unreadTotal = Number(total || 0);
+
+    if (unreadTotal > 0) {
+      messagesUnreadBadge.style.display = 'inline-flex';
+      messagesUnreadBadge.textContent = unreadTotal > 99 ? '99+' : String(unreadTotal);
+    } else {
+      messagesUnreadBadge.style.display = 'none';
+      messagesUnreadBadge.textContent = '0';
+    }
+  }
+
+  async function loadUnreadBadgeCount() {
+    if (!currentStudentNumber) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: participantRows, error: participantError } = await supabase
+      .from('chat_participants')
+      .select('thread_id')
+      .eq('student_number', currentStudentNumber)
+      .is('deleted_at', null);
+
+    if (participantError) {
+      console.error('Error loading participant threads:', participantError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const threadIds = [...new Set((participantRows || []).map(row => row.thread_id))];
+
+    if (!threadIds.length) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: unreadRows, error: unreadError } = await supabase
+      .from('chat_messages')
+      .select('id, thread_id')
+      .in('thread_id', threadIds)
+      .neq('sender_student_number', currentStudentNumber)
+      .eq('is_read', false);
+
+    if (unreadError) {
+      console.error('Error loading unread messages:', unreadError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    renderSidebarUnread((unreadRows || []).length);
+  }
+
+  function subscribeToUnreadBadge() {
+    if (!currentStudentNumber) return;
+
+    if (unreadBadgeChannel) {
+      supabase.removeChannel(unreadBadgeChannel);
+      unreadBadgeChannel = null;
+    }
+
+    unreadBadgeChannel = supabase
+      .channel(`browse-unread-badge-${currentStudentNumber}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chat_participants'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .subscribe((status) => {
+        console.log('Browse unread badge realtime:', status);
+      });
+  }
+
+  window.addEventListener('load', async () => {
+    await loadUnreadBadgeCount();
+    subscribeToUnreadBadge();
+  });
+  
+  function updatePhotoLabel() {
+    if (!photoUploadText) return;
+    photoUploadText.textContent =
+      selectedPhotos.length === 0 ? 'Add photos' : `${selectedPhotos.length} / ${MAX_PHOTOS} photo(s) selected`;
+  }
+
+  function renderPhotoPreview() {
+    photoPreview.innerHTML = '';
+
+    selectedPhotos.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const item = document.createElement('div');
+        item.className = 'photo-preview-item';
+
+        const img = document.createElement('img');
+        img.src = ev.target.result;
+        img.alt = `Photo ${index + 1}`;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'photo-remove-btn';
+        removeBtn.innerHTML = '&times;';
+        removeBtn.addEventListener('click', () => {
+          selectedPhotos.splice(index, 1);
+          renderPhotoPreview();
+          updatePhotoLabel();
+        });
+
+        if (index === 0) {
+          const badge = document.createElement('span');
+          badge.className = 'cover-badge';
+          badge.textContent = 'Cover';
+          item.appendChild(badge);
+        }
+
+        item.appendChild(removeBtn);
+        item.appendChild(img);
+        photoPreview.appendChild(item);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    updatePhotoLabel();
+  }
+
+  photoInput.addEventListener('change', (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    const remainingSlots = MAX_PHOTOS - selectedPhotos.length;
+    if (remainingSlots <= 0) {
+      alert(`You can upload up to ${MAX_PHOTOS} photos only.`);
+      photoInput.value = '';
+      return;
+    }
+
+    const filesToAdd = files.slice(0, remainingSlots);
+    if (files.length > remainingSlots) {
+      alert(`Only the first ${remainingSlots} photo(s) were added (max ${MAX_PHOTOS}).`);
+    }
+
+    selectedPhotos = selectedPhotos.concat(filesToAdd);
+    renderPhotoPreview();
+    updatePhotoLabel();
+    photoInput.value = '';
+  });
+
+  function showMessage(msg, ok = true) {
+    messageEl.textContent = msg;
+    messageEl.style.color = ok ? '#15803d' : '#b91c1c';
+  }
+
+  function getUUID() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxx'.replace(/x/g, () => (Math.random() * 16 | 0).toString(16)) + Date.now();
+  }
+
+  async function uploadImages(files) {
+    if (!files.length) return { coverUrl: null, allUrls: [] };
+
+    const bucket = 'listing-images';
+    const urls = [];
+    let coverUrl = null;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const ext = file.name.split('.').pop() || 'jpg';
+      const path = `${getUUID()}-${Date.now()}-${i}.${ext}`;
+
+      const { error } = await supabase.storage.from(bucket).upload(path, file);
+      if (error) throw new Error('Failed to upload images: ' + error.message);
+
+      const { data: publicData } = supabase.storage.from(bucket).getPublicUrl(path);
+      urls.push(publicData.publicUrl);
+      if (!coverUrl) coverUrl = publicData.publicUrl;
+    }
+
+    return { coverUrl, allUrls: urls };
+  }
+
+ async function createListingPendingNotification({ recipientStudentNo, listingId, listingTitle }) {
+  const actorStudentNo = sessionStorage.getItem('studentNumber');
+  const actorName      = sessionStorage.getItem('studentName') || 'System';
+
+  if (!actorStudentNo || !recipientStudentNo || !listingId) {
+    console.warn('[LISTING NOTIF] Missing data', { actorStudentNo, recipientStudentNo, listingId });
+    return;
+  }
+
+  const payload = {
+    type: 'listing_status',
+    recipient_student_number: String(recipientStudentNo),
+    actor_student_number: String(actorStudentNo),
+    actor_name: actorName,
+    listing_id: listingId,
+    listing_title: listingTitle || null,
+    message: `Your request listing "${listingTitle || 'your listing'}" has been sent to admin for approval.`,
+    is_read: false,
+    created_at: new Date().toISOString()
+  };
+
+  // ✅ same as browse.html: INSERT ARRAY
+  const { data, error } = await supabase
+    .from('notifications')
+    .insert([payload])
+    .select();
+
+  console.log('[LISTING NOTIF] insert data:', data);
+  console.log('[LISTING NOTIF] insert error:', error);
+
+  if (error) console.error('[LISTING NOTIF] insert error:', error);
+}
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const condition = document.getElementById('condition-input').value;
+    if (!condition) {
+      alert('Please select a condition for your item.');
+      return;
+    }
+
+    const seller_student_no = sessionStorage.getItem('studentNumber') || null;
+    const seller_name       = sessionStorage.getItem('studentName') || null;
+    const seller_email      = sessionStorage.getItem('studentEmail') || null;
+    const seller_course_block = sessionStorage.getItem('course_block') || null;
+
+    if (!seller_student_no) {
+      alert('Missing student number. Please login again.');
+      return;
+    }
+
+    const files = selectedPhotos.slice(0, MAX_PHOTOS);
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Posting...';
+    showMessage('');
+
+    try {
+      const { coverUrl, allUrls } = await uploadImages(files);
+
+      const formData    = new FormData(form);
+      const title       = (formData.get('title') || '').trim();
+      const description = (formData.get('description') || '').trim();
+      const category    = formData.get('category');
+      const price       = parseFloat(formData.get('price') || '0') || 0;
+      const location    = (formData.get('location') || '').trim();
+
+      const { data: insertedListing, error: insertError } = await supabase
+        .from('listings')
+        .insert({
+          title,
+          description,
+          category,
+          condition,
+          price,
+          location,
+          cover_image_url: coverUrl,
+          image_urls: allUrls && allUrls.length ? allUrls : null,
+          seller_student_no,
+          seller_name,
+          seller_email,
+          seller_course_block,
+          approval_status: 'pending',
+          is_active: false,
+          archived_at: null,
+          archived_by: null
+        })
+        .select('id,title')
+        .single();
+
+      if (insertError) throw new Error(insertError.message);
+
+      // ✅ Now will insert successfully in notifications table
+     try {
+  await createListingPendingNotification({
+    recipientStudentNo: seller_student_no,
+    listingId: insertedListing?.id || null,
+    listingTitle: insertedListing?.title || title
+  });
+} catch (e) {
+  console.error('[LISTING NOTIF] unexpected:', e);
+}
+
+      showMessage('Listing submitted for approval. An admin will review it shortly.', true);
+      setTimeout(() => window.location.href = 'selling.html', 1200);
+
+    } catch (err) {
+      console.error(err);
+      showMessage(err.message || 'Something went wrong while posting.', false);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"/>
+        </svg>
+        List Item
+      `;
+    }
+  });
+</script>
+
+</body>
+</html>

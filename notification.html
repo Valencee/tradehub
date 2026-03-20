@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications - PHINMA TradeHub</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../includes/header.css?v=2">
+  <link rel="stylesheet" href="../assets/notification.css?v=2">
+  <link rel="stylesheet" href="../assets/notification-selling.css?v=2">
+  <link rel="stylesheet" href="../includes/sidebar.css?v=2">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script>
+    window.addEventListener('load', function () {
+      const container = document.querySelector('.notifications-container');
+      const sidebar   = document.getElementById('marketplaceSidebar');
+
+      function updateContainer() {
+        if (!container) return;
+        const sidebarOpen = localStorage.getItem('sidebarOpen');
+        if (sidebarOpen === 'false') {
+          document.body.classList.add('sidebar-closed', 'sidebar-hidden');
+          container.style.marginLeft = '0';
+          container.style.width = '100%';
+        } else {
+          document.body.classList.remove('sidebar-closed', 'sidebar-hidden');
+          container.style.marginLeft = '360px';
+          container.style.width = 'calc(100% - 360px)';
+        }
+      }
+
+      updateContainer();
+      document.addEventListener('sidebarToggled', () => setTimeout(updateContainer, 50));
+      window.addEventListener('storage', updateContainer);
+
+      const toggleBtn = document.getElementById('sidebarToggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => setTimeout(updateContainer, 50));
+      }
+
+      if (sidebar) {
+        const observer = new MutationObserver(() => setTimeout(updateContainer, 50));
+        observer.observe(sidebar, { attributes: true, attributeFilter: ['style'] });
+      }
+    });
+  </script>
+
+  <style>
+    .page-header-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom: 24px;
+    }
+
+    .page-header-left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .back-btn{
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      width: auto !important;
+      height: auto !important;
+      border-radius: 0 !important;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-btn:hover{
+      background: transparent;
+      transform: translateY(-1px);
+    }
+
+    .back-btn:active{
+      transform: translateY(0px);
+    }
+
+    .notif-header-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .header-action-btn{
+      border:none;
+      border-radius:9999px;
+      padding:10px 16px;
+      font-size:.92rem;
+      font-weight:600;
+      cursor:pointer;
+      background:#ffffff;
+      color:#111827;
+      box-shadow:0 4px 14px rgba(0,0,0,.08);
+      transition:all .2s ease;
+    }
+
+    .header-action-btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 6px 18px rgba(0,0,0,.12);
+    }
+
+    .notification-item{
+      position:relative;
+      cursor:pointer;
+      transition:all .2s ease;
+    }
+
+    .notification-item:hover{
+      transform:translateY(-1px);
+    }
+
+    .notification-item.read{
+      opacity:.92;
+    }
+
+    .notification-item.read .unread-dot{
+      display:none !important;
+    }
+
+    .notification-item.read .notification-title{
+      opacity:.9;
+    }
+
+    .notification-item.read .notification-text{
+      opacity:.8;
+    }
+
+    .notif-menu-wrap{
+      position:absolute;
+      top:14px;
+      right:14px;
+      z-index:5;
+    }
+
+    .notif-menu-btn{
+      width:36px;
+      height:36px;
+      border:none;
+      border-radius:9999px;
+      background:#f3f4f6;
+      color:#374151;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      font-size:20px;
+      line-height:1;
+      transition:all .2s ease;
+    }
+
+    .notif-menu-btn:hover{
+      background:#e5e7eb;
+    }
+
+    .notif-menu{
+      position:absolute;
+      top:42px;
+      right:0;
+      min-width:190px;
+      background:#ffffff;
+      border-radius:14px;
+      box-shadow:0 10px 30px rgba(0,0,0,.15);
+      padding:8px;
+      display:none;
+    }
+
+    .notif-menu.show{
+      display:block;
+    }
+
+    .notif-menu-item{
+      width:100%;
+      border:none;
+      background:transparent;
+      text-align:left;
+      padding:10px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      font-size:.92rem;
+      color:#111827;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .notif-menu-item:hover{
+      background:#f3f4f6;
+    }
+
+    .notif-menu-item.danger{
+      color:#b91c1c;
+    }
+
+    .notification-content{
+      padding-right:72px;
+    }
+
+    @media (max-width: 768px) {
+      .page-header-row{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .notif-header-actions{
+        width:100%;
+        flex-wrap:wrap;
+      }
+
+      .header-action-btn{
+        width:auto;
+      }
+
+      .notification-content{
+        padding-right:56px;
+      }
+    }
+    .sidebar-label {
+  flex: 1;
+}
+.danger-swal-confirm {
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0.75rem 1.25rem !important;
+  font-size: 0.92rem !important;
+  font-weight: 600 !important;
+  min-width: 130px;
+  transition: all 0.25s ease !important;
+  background: linear-gradient(135deg, #b91c1c, #ef4444) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 18px rgba(239, 68, 68, 0.25) !important;
+}
+
+.danger-swal-confirm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(239, 68, 68, 0.32) !important;
+}
+
+.messages-unread-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex: 0 0 20px;
+  min-width: 20px;
+  max-width: 20px;
+}
+  </style>
+</head>
+<body>
+  <script>
+    (function guardRoute() {
+      const loggedInFlag = sessionStorage.getItem('user_logged_in');
+      if (loggedInFlag !== 'true') {
+        window.location.href = '../../index.html';
+      }
+    })();
+  </script>
+
+  <header class="header" id="mainHeader">
+    <div class="header-left">
+      <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+        <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <div class="header-brand" style="cursor: default;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 6v6l4 2"></path>
+        </svg>
+        <span>Tradehub</span>
+      </div>
+    </div>
+
+    <div class="header-content">
+      <nav>
+        <ul class="nav-menu">
+          <li>
+            <a href="about.html" class="nav-icon-btn" title="About Us">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clip-rule="evenodd" />
+              </svg>
+            </a>
+          </li>
+          <li class="user-profile-container">
+            <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                    onclick="toggleProfileDropdown()" title="Profile">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="dropdown-arrow"></div>
+              <div class="profile-dropdown-header">
+                <div class="profile-user-name" id="profileUserName">Student Name</div>
+                <div class="profile-user-email" id="profileUserEmail">student@example.com</div>
+              </div>
+
+              <div class="profile-dropdown-menu">
+                <a href="userprofile.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span>My Profile</span>
+                </a>
+
+                <a href="bookmarks.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+                <span>Bookmarks</span>
+                </a>
+
+                <a href="selling.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  <span>My Selling</span>
+                </a>
+
+
+                <div class="profile-menu-divider"></div>
+
+                <a href="javascript:void(0)" class="profile-menu-item sign-out"
+                   onclick="handleSignOut()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  <span>Sign Out</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <aside class="marketplace-sidebar" id="marketplaceSidebar"
+         style="position: fixed !important;
+                top: 72px !important;
+                left: 0 !important;
+                width: 360px !important;
+                height: calc(100vh - 72px) !important;
+                background: #242526 !important;
+                color: #e4e6eb !important;
+                overflow-y: auto !important;
+                padding: 1rem !important;
+                z-index: 999 !important;
+                transition: transform 0.3s ease !important;">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Phinma-Upang TradeHub</h2>
+      <a href="userprofile.html" class="sidebar-settings" title="My Profile"
+         style="text-decoration:none;color:inherit;">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"/>
+        </svg>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="browse.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #1877f2;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+          </svg>
+        </div>
+        <span>Browse Items</span>
+      </a>
+
+      <a href="notification.html" class="sidebar-nav-item" style="background:#3a3b3c;">
+        <div class="sidebar-nav-icon" style="background: #e67e22;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+          </svg>
+        </div>
+        <span>Notifications</span>
+      </a>
+
+      <a href="bookmarks.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #f00524;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M6 3a2 2 0 0 0-2 2v16l8-5 8 5V5a2 2 0 0 0-2-2H6z"/>
+    </svg>
+  </div>
+  <span>Bookmarks</span>
+</a>
+
+      <a href="messages.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #00b894;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/>
+    </svg>
+  </div>
+
+  <span class="sidebar-label">Messages</span>
+  <span id="messagesUnreadBadge" class="messages-unread-badge">0</span>
+</a>
+
+      <a href="userprofile.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #8e44ad;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <span>My Profile</span>
+      </a>
+    </nav>
+
+    <a href="posting.html" class="sidebar-create-btn">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"/>
+      </svg>
+      Create New Listing
+    </a>
+  </aside>
+
+  <div class="notif-wrapper"
+     style="max-width: 1000px; margin: 0 auto; padding-top: 100px;">
+
+    <div class="page-header-row">
+      <div class="page-header-left">
+        <button class="back-btn" type="button" onclick="window.history.back()" aria-label="Go back">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+               viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5"></path>
+            <path d="M12 19l-7-7 7-7"></path> 
+          </svg>
+        </button>
+        <h1 class="notifications-title">Notifications</h1>
+      </div>
+
+      <div class="notif-header-actions">
+        <button class="header-action-btn" id="markAllReadBtn">Mark all as read</button>
+        <button class="header-action-btn" id="deleteAllBtn">Delete all</button>
+      </div>
+    </div>
+
+    <div class="filters" style="margin-bottom: 24px;">
+      <button class="filter-btn active" onclick="filterNotifications('all', this)"> All</button>
+      <button class="filter-btn" onclick="filterNotifications('listing_status', this)"> Listing Status</button>
+      <button class="filter-btn" onclick="filterNotifications('listing_reports', this)"> Listing Reports</button>
+      <button class="filter-btn" onclick="filterNotifications('bookmarks', this)"> Bookmarks</button>
+      <button class="filter-btn" onclick="filterNotifications('profile_reports', this)"> Profile Reports</button>
+    </div>
+
+    <div class="notifications-list" id="notificationsList"></div>
+
+    <p id="noNotificationsText"
+       style="display:none;margin-top:24px;font-size:0.95rem;color:#6b7280;">
+      No notifications yet.
+    </p>
+  </div>
+
+  <script>
+    function initHeaderAndSidebar() {
+      const sidebar   = document.getElementById('marketplaceSidebar');
+      const toggleBtn = document.getElementById('sidebarToggle');
+      let isOpen = true;
+
+      const nameEl  = document.getElementById('profileUserName');
+      const emailEl = document.getElementById('profileUserEmail');
+
+      const storedName  = sessionStorage.getItem('studentName');
+      const storedEmail = sessionStorage.getItem('studentEmail');
+
+      if (nameEl && storedName)  nameEl.textContent  = storedName;
+      if (emailEl && storedEmail) emailEl.textContent = storedEmail;
+
+      const savedState = localStorage.getItem('sidebarOpen');
+      if (savedState !== null) {
+        isOpen = (savedState === 'true');
+      }
+
+      function updateSidebarState() {
+        if (!sidebar || !toggleBtn) return;
+        if (isOpen) {
+          sidebar.style.transform = 'translateX(0)';
+          toggleBtn.classList.remove('active');
+          document.body.classList.remove('sidebar-hidden');
+        } else {
+          sidebar.style.transform = 'translateX(-100%)';
+          toggleBtn.classList.add('active');
+          document.body.classList.add('sidebar-hidden');
+        }
+
+        const event = new CustomEvent('sidebarToggled', {
+          detail: { isOpen },
+          bubbles: true
+        });
+        document.dispatchEvent(event);
+        window.dispatchEvent(event);
+      }
+
+      updateSidebarState();
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          isOpen = !isOpen;
+          localStorage.setItem('sidebarOpen', String(isOpen));
+          updateSidebarState();
+        });
+      }
+
+      window.toggleProfileDropdown = function () {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown) dropdown.classList.toggle('show');
+      };
+
+      document.addEventListener('click', function (event) {
+        const container = document.querySelector('.user-profile-container');
+        const dropdown = document.getElementById('profileDropdown');
+        if (container && dropdown && !container.contains(event.target)) {
+          dropdown.classList.remove('show');
+        }
+
+        document.querySelectorAll('.notif-menu.show').forEach(menu => {
+  if (!menu.parentElement.contains(event.target)) {
+    menu.classList.remove('show');
+  }
+});
+
+document.querySelectorAll('.notification-item.menu-open').forEach(card => {
+  const wrap = card.querySelector('.notif-menu-wrap');
+  if (wrap && !wrap.contains(event.target)) {
+    card.classList.remove('menu-open');
+  }
+});
+      });
+
+      const pd = document.getElementById('profileDropdown');
+      if (pd) {
+        pd.addEventListener('click', function (event) {
+          event.stopPropagation();
+        });
+      }
+
+      window.handleSignOut = function () {
+  Swal.fire({
+    title: 'Sign out?',
+    text: 'Are you sure you want to sign out of your account?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, sign out',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.clear();
+
+      Swal.fire({
+        title: 'Signed out',
+        text: 'You have been successfully signed out.',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text'
+        }
+      }).then(() => {
+        window.location.href = '../../index.html';
+      });
+    }
+  });
+};
+
+      document.addEventListener('keydown', function (event) {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'b') {
+          event.preventDefault();
+          if (toggleBtn) toggleBtn.click();
+        }
+        if (event.key === 'Escape') {
+          const dropdown = document.getElementById('profileDropdown');
+          if (dropdown && dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+          }
+          document.querySelectorAll('.notif-menu.show').forEach(menu => menu.classList.remove('show'));
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initHeaderAndSidebar);
+  </script>
+
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+    const supabaseKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+    const supabase    = createClient(supabaseUrl, supabaseKey);
+
+     const currentStudentNumber = sessionStorage.getItem('studentNumber') || '';
+    const messagesUnreadBadge = document.getElementById('messagesUnreadBadge');
+
+    let currentNotifications = [];
+    let unreadBadgeChannel = null;
+
+    function renderSidebarUnread(total) {
+    if (!messagesUnreadBadge) return;
+
+    const unreadTotal = Number(total || 0);
+
+    if (unreadTotal > 0) {
+      messagesUnreadBadge.style.display = 'inline-flex';
+      messagesUnreadBadge.textContent = unreadTotal > 99 ? '99+' : String(unreadTotal);
+    } else {
+      messagesUnreadBadge.style.display = 'none';
+      messagesUnreadBadge.textContent = '0';
+    }
+  }
+
+  async function loadUnreadBadgeCount() {
+    if (!currentStudentNumber) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: participantRows, error: participantError } = await supabase
+      .from('chat_participants')
+      .select('thread_id')
+      .eq('student_number', currentStudentNumber)
+      .is('deleted_at', null);
+
+    if (participantError) {
+      console.error('Error loading participant threads:', participantError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const threadIds = [...new Set((participantRows || []).map(row => row.thread_id))];
+
+    if (!threadIds.length) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: unreadRows, error: unreadError } = await supabase
+      .from('chat_messages')
+      .select('id, thread_id')
+      .in('thread_id', threadIds)
+      .neq('sender_student_number', currentStudentNumber)
+      .eq('is_read', false);
+
+    if (unreadError) {
+      console.error('Error loading unread messages:', unreadError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    renderSidebarUnread((unreadRows || []).length);
+  }
+
+  function subscribeToUnreadBadge() {
+    if (!currentStudentNumber) return;
+
+    if (unreadBadgeChannel) {
+      supabase.removeChannel(unreadBadgeChannel);
+      unreadBadgeChannel = null;
+    }
+
+    unreadBadgeChannel = supabase
+      .channel(`browse-unread-badge-${currentStudentNumber}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chat_participants'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .subscribe((status) => {
+        console.log('Browse unread badge realtime:', status);
+      });
+  }
+
+  window.addEventListener('load', async () => {
+    await loadUnreadBadgeCount();
+    subscribeToUnreadBadge();
+  });
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatTimeAgo(dateInput) {
+      if (!dateInput) return '';
+      const d = new Date(dateInput);
+      if (isNaN(d.getTime())) return '';
+      const now = new Date();
+      const diffMs = now - d;
+      const diffMin = Math.floor(diffMs / (1000 * 60));
+      const diffHr  = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffDay = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      if (diffMin < 1) return 'Just now';
+      if (diffMin < 60) return diffMin + (diffMin === 1 ? ' min ago' : ' mins ago');
+      if (diffHr  < 24) return diffHr  + (diffHr  === 1 ? ' hr ago'  : ' hrs ago');
+      if (diffDay < 30) return diffDay + (diffDay === 1 ? ' day ago' : ' days ago');
+      return d.toLocaleDateString();
+    }
+
+    function isMine(row, myStudNo) {
+      return String(row.recipient_student_number ?? '') === String(myStudNo ?? '');
+    }
+
+    async function loadNotifications() {
+      const myStudNo = sessionStorage.getItem('studentNumber');
+
+      if (!myStudNo) {
+        console.warn('[NOTIF] Walang studentNumber sa sessionStorage.');
+        return [];
+      }
+
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('recipient_student_number', myStudNo)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('[NOTIF] Error loading notifications:', error);
+        alert('Error loading notifications. Check console for details.');
+        return [];
+      }
+
+      const myRows = (data || []).filter(row => isMine(row, myStudNo));
+
+      return myRows.map(row => {
+        let filterType = 'other';
+        let title      = 'Notification';
+        let text       = row.message || '';
+        let iconEmoji  = '';
+        let iconClass  = '';
+
+        if (row.type === 'listing_status') {
+          filterType = 'listing_status';
+
+          const listingTitle = row.listing_title || 'your listing';
+          const msgLower = String(row.message || '').toLowerCase();
+
+          const finalStatus =
+            (msgLower.includes('approved') ? 'approved' :
+            (msgLower.includes('rejected') ? 'rejected' : 'pending'));
+
+          if (finalStatus === 'approved') {
+            title = 'Listing approved';
+            text  = row.message || `Your listing "${listingTitle}" has been approved by the admin.`;
+            iconEmoji = '';
+            iconClass = '';
+          } else if (finalStatus === 'rejected') {
+            title = 'Listing rejected';
+            text  = row.message || `Your listing "${listingTitle}" has been rejected by the admin.`;
+            iconEmoji = '';
+            iconClass = '';
+          } else {
+            title = 'Listing sent for approval';
+            text  = row.message || `Your request listing "${listingTitle}" has been sent to admin for approval.`;
+            iconEmoji = '';
+            iconClass = '';
+          }
+        }
+        else if (row.type === 'bookmark') {
+          filterType = 'bookmarks';
+          title      = 'Item bookmarked';
+          const who  = row.actor_name || 'Someone';
+          const listingTitle = row.listing_title || 'your listing';
+          text = row.message || `${who} bookmarked your listing "${listingTitle}".`;
+          iconEmoji = '';
+          iconClass = '';
+        }
+        else if (row.type === 'listing_report') {
+          filterType = 'listing_reports';
+          title      = 'Listing reported';
+          const listingTitle = row.listing_title || 'one of your listings';
+          text = row.message || `A report was submitted for your listing "${listingTitle}".`;
+          iconEmoji = '';
+          iconClass = '';
+        }
+        else if (row.type === 'profile_report') {
+          filterType = 'profile_reports';
+          title      = 'Profile reported';
+          text = row.message || 'A report was submitted about your profile.';
+          iconEmoji = '';
+          iconClass = '';
+        }
+
+        return {
+          id: String(row.id),
+          type: row.type,
+          filterType,
+          title,
+          text,
+          iconEmoji,
+          iconClass,
+          isRead: !!row.is_read,
+          timeLabel: formatTimeAgo(row.created_at),
+          rawDate: row.created_at ? new Date(row.created_at) : new Date(0)
+        };
+      });
+    }
+
+    function createNotificationItem(n) {
+      const item = document.createElement('div');
+      item.className = `notification-item ${n.isRead ? 'read' : 'unread'}`;
+      item.dataset.type = n.filterType;
+      item.dataset.id   = n.id;
+      item.dataset.read = n.isRead ? 'true' : 'false';
+
+      item.innerHTML = `
+        <div class="notification-icon ${n.iconClass}">${n.iconEmoji}</div>
+
+        <div class="notification-content">
+          <div class="notification-title">${escapeHtml(n.title)}</div>
+          <div class="notification-text">${escapeHtml(n.text)}</div>
+          <div class="notification-time">${escapeHtml(n.timeLabel || '')}</div>
+        </div>
+
+        <div class="notif-menu-wrap">
+          <button class="notif-menu-btn" type="button" title="More options">⋯</button>
+          <div class="notif-menu">
+            <button class="notif-menu-item" data-menu-action="mark-all-read"> Mark all as read</button>
+            <button class="notif-menu-item danger" data-menu-action="delete-one"> Delete</button>
+          </div>
+        </div>
+
+        <div class="unread-dot"></div>
+      `;
+
+      const menuBtn = item.querySelector('.notif-menu-btn');
+      const menu = item.querySelector('.notif-menu');
+
+      menuBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+
+  document.querySelectorAll('.notif-menu.show').forEach(m => {
+    if (m !== menu) m.classList.remove('show');
+  });
+
+  document.querySelectorAll('.notification-item.menu-open').forEach(card => {
+    if (card !== item) card.classList.remove('menu-open');
+  });
+
+  const willOpen = !menu.classList.contains('show');
+  menu.classList.toggle('show', willOpen);
+  item.classList.toggle('menu-open', willOpen);
+});
+
+      menu.querySelector('[data-menu-action="mark-all-read"]').addEventListener('click', async (e) => {
+        e.stopPropagation();
+        menu.classList.remove('show');
+        await markAllAsRead();
+      });
+
+      menu.querySelector('[data-menu-action="delete-one"]').addEventListener('click', async (e) => {
+        e.stopPropagation();
+        menu.classList.remove('show');
+        await deleteSingleNotification(n.id);
+      });
+
+      item.addEventListener('click', async () => {
+        if (item.dataset.read === 'false') {
+          await markNotificationAsRead(n.id, item);
+        }
+      });
+
+      return item;
+    }
+
+    function renderNotifications(list) {
+      const container = document.getElementById('notificationsList');
+      const emptyText = document.getElementById('noNotificationsText');
+      container.innerHTML = '';
+
+      if (!list.length) {
+        emptyText.style.display = 'block';
+        return;
+      }
+      emptyText.style.display = 'none';
+
+      list.forEach(n => container.appendChild(createNotificationItem(n)));
+    }
+
+    async function markNotificationAsRead(id, itemEl = null) {
+      try {
+        const { error } = await supabase
+          .from('notifications')
+          .update({ is_read: true })
+          .eq('id', id);
+
+        if (error) {
+          console.error('[NOTIF] Error marking as read:', error);
+          return;
+        }
+
+        if (itemEl) {
+          itemEl.dataset.read = 'true';
+          itemEl.classList.remove('unread');
+          itemEl.classList.add('read');
+        }
+
+        currentNotifications = currentNotifications.map(n =>
+          n.id === String(id) ? { ...n, isRead: true } : n
+        );
+      } catch (err) {
+        console.error('[NOTIF] Unexpected error marking as read:', err);
+      }
+    }
+
+    async function markAllAsRead() {
+      const myStudNo = sessionStorage.getItem('studentNumber');
+      if (!myStudNo) return;
+
+      const unreadIds = currentNotifications
+        .filter(n => !n.isRead)
+        .map(n => n.id);
+
+      if (!unreadIds.length) return;
+
+      try {
+        const { error } = await supabase
+          .from('notifications')
+          .update({ is_read: true })
+          .eq('recipient_student_number', myStudNo)
+          .eq('is_read', false);
+
+        if (error) {
+          console.error('[NOTIF] Error marking all as read:', error);
+          return;
+        }
+
+        currentNotifications = currentNotifications.map(n => ({ ...n, isRead: true }));
+
+        document.querySelectorAll('.notification-item').forEach(item => {
+          item.dataset.read = 'true';
+          item.classList.remove('unread');
+          item.classList.add('read');
+        });
+      } catch (err) {
+        console.error('[NOTIF] Unexpected error marking all as read:', err);
+      }
+    }
+
+    async function deleteSingleNotification(id) {
+      const item = document.querySelector(`.notification-item[data-id="${CSS.escape(String(id))}"]`);
+      if (!item) return;
+
+      try {
+        const { error } = await supabase
+          .from('notifications')
+          .delete()
+          .eq('id', id);
+
+        if (error) {
+          console.error('[NOTIF] Error deleting notification:', error);
+          return;
+        }
+      } catch (err) {
+        console.error('[NOTIF] Unexpected error deleting notification:', err);
+        return;
+      }
+
+      item.style.opacity = '0';
+      item.style.transform = 'translateX(100px)';
+      item.style.transition = 'all 0.3s';
+
+      setTimeout(() => {
+        item.remove();
+        currentNotifications = currentNotifications.filter(n => n.id !== String(id));
+        refreshEmptyState();
+      }, 300);
+    }
+
+   async function deleteAllNotifications() {
+  const myStudNo = sessionStorage.getItem('studentNumber');
+  if (!myStudNo) return;
+
+  const hasAny = currentNotifications.length > 0;
+  if (!hasAny) {
+    await Swal.fire({
+      title: 'No notifications',
+      text: 'There are no notifications to delete.',
+      icon: 'info',
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+      backdrop: 'rgba(0,0,0,0.45)',
+      customClass: {
+        popup: 'logout-swal-popup',
+        title: 'logout-swal-title',
+        htmlContainer: 'logout-swal-text',
+        confirmButton: 'logout-swal-confirm'
+      },
+      buttonsStyling: false
+    });
+    return;
+  }
+
+  const result = await Swal.fire({
+    title: 'Delete all notifications?',
+    text: 'This will permanently remove all your notifications.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete all',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'danger-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const { error } = await supabase
+      .from('notifications')
+      .delete()
+      .eq('recipient_student_number', myStudNo);
+
+    if (error) {
+      console.error('[NOTIF] Error deleting all notifications:', error);
+
+      await Swal.fire({
+        title: 'Delete failed',
+        text: 'Could not delete all notifications. Please try again.',
+        icon: 'error',
+        allowOutsideClick: true,
+        allowEscapeKey: true,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text',
+          confirmButton: 'danger-swal-confirm'
+        },
+        buttonsStyling: false
+      });
+      return;
+    }
+
+    currentNotifications = [];
+    document.getElementById('notificationsList').innerHTML = '';
+    refreshEmptyState();
+
+    await Swal.fire({
+      title: 'Deleted',
+      text: 'All notifications have been deleted.',
+      icon: 'success',
+      timer: 1300,
+      showConfirmButton: false,
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+      backdrop: 'rgba(0,0,0,0.45)',
+      customClass: {
+        popup: 'logout-swal-popup',
+        title: 'logout-swal-title',
+        htmlContainer: 'logout-swal-text'
+      }
+    });
+  } catch (err) {
+    console.error('[NOTIF] Unexpected error deleting all notifications:', err);
+
+    await Swal.fire({
+      title: 'Unexpected error',
+      text: 'Something went wrong while deleting notifications.',
+      icon: 'error',
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+      backdrop: 'rgba(0,0,0,0.45)',
+      customClass: {
+        popup: 'logout-swal-popup',
+        title: 'logout-swal-title',
+        htmlContainer: 'logout-swal-text',
+        confirmButton: 'danger-swal-confirm'
+      },
+      buttonsStyling: false
+    });
+  }
+}
+
+    function refreshEmptyState() {
+      const items = Array.from(document.querySelectorAll('.notification-item'))
+        .filter(i => i.style.display !== 'none');
+      const emptyText = document.getElementById('noNotificationsText');
+      emptyText.style.display = items.length ? 'none' : 'block';
+    }
+
+    function filterNotifications(type, btn) {
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      const items = document.querySelectorAll('.notification-item');
+      items.forEach(item => {
+        const itemType = item.dataset.type;
+        item.style.display = (type === 'all' || itemType === type) ? 'flex' : 'none';
+      });
+
+      refreshEmptyState();
+    }
+
+    async function initNotifications() {
+      currentNotifications = await loadNotifications();
+      currentNotifications.sort((a, b) => b.rawDate - a.rawDate);
+      renderNotifications(currentNotifications);
+
+      const markAllBtn = document.getElementById('markAllReadBtn');
+      const deleteAllBtn = document.getElementById('deleteAllBtn');
+
+      if (markAllBtn) {
+        markAllBtn.addEventListener('click', markAllAsRead);
+      }
+
+      if (deleteAllBtn) {
+        deleteAllBtn.addEventListener('click', deleteAllNotifications);
+      }
+    }
+
+    window.filterNotifications = filterNotifications;
+
+    window.addEventListener('load', initNotifications);
+  </script>
+</body>
+</html>

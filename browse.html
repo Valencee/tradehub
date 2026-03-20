@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Items - PHINMA TradeHub</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../includes/header.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../assets/browse.css">
+  <link rel="stylesheet" href="../includes/sidebar.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    // Listen for sidebar toggle and adjust container
+    window.addEventListener('load', function() {
+      const container = document.querySelector('.container');
+      const sidebar = document.getElementById('marketplaceSidebar');
+
+      function updateContainer() {
+        if (!container) return;
+        const sidebarOpen = localStorage.getItem('sidebarOpen');
+        if (sidebarOpen === 'false') {
+          document.body.classList.add('sidebar-closed');
+          document.body.classList.add('sidebar-hidden');
+          container.style.marginLeft = '0';
+          container.style.width = '100%';
+        } else {
+          document.body.classList.remove('sidebar-closed');
+          document.body.classList.remove('sidebar-hidden');
+          container.style.marginLeft = '360px';
+          container.style.width = 'calc(100% - 360px)';
+        }
+      }
+
+      updateContainer();
+      document.addEventListener('sidebarToggled', () => setTimeout(updateContainer, 50));
+      window.addEventListener('storage', updateContainer);
+
+      const toggleBtn = document.getElementById('sidebarToggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => setTimeout(updateContainer, 50));
+      }
+
+      if (sidebar) {
+        const observer = new MutationObserver(() => setTimeout(updateContainer, 50));
+        observer.observe(sidebar, { attributes: true, attributeFilter: ['style'] });
+      }
+    });
+  </script>
+
+  <style>
+    .empty-state {
+      width: 100%;
+      padding: 28px;
+      border: 1px dashed rgba(0,0,0,0.15);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.7);
+      text-align: center;
+      color: #374151;
+    }
+
+    .empty-state h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .empty-state p {
+      margin: 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    #itemsGrid {
+      justify-content: flex-start !important;
+      justify-items: start !important;
+      align-content: start !important;
+    }
+    .sidebar-label {
+  flex: 1;
+}
+
+.messages-unread-badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex: 0 0 20px;
+  min-width: 20px;
+  max-width: 20px;
+}
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="header" id="mainHeader">
+    <div class="header-left">
+      <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+        <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <div class="header-brand" style="cursor: default;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 6v6l4 2"></path>
+        </svg>
+        <span>Tradehub</span>
+      </div>
+    </div>
+
+    <div class="header-content">
+      <nav>
+        <ul class="nav-menu">
+          <li>
+            <a href="about.html" class="nav-icon-btn" title="About Us">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clip-rule="evenodd" />
+              </svg>
+            </a>
+          </li>
+          
+          <li class="user-profile-container">
+            <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                    onclick="toggleProfileDropdown()" title="Profile">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="dropdown-arrow"></div>
+              <div class="profile-dropdown-header">
+                <div class="profile-user-name" id="profileUserName">Student Name</div>
+                <div class="profile-user-email" id="profileUserEmail">student@example.com</div>
+              </div>
+
+              <div class="profile-dropdown-menu">
+                <a href="userprofile.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span>My Profile</span>
+                </a>
+                <a href="bookmarks.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+                <span>Bookmarks</span>
+                </a>
+                <a href="selling.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  <span>My Selling</span>
+                </a>
+                <div class="profile-menu-divider"></div>
+
+                <a href="javascript:void(0)" class="profile-menu-item sign-out"
+                   onclick="handleSignOut()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  <span>Sign Out</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="marketplace-sidebar" id="marketplaceSidebar"
+         style="position: fixed !important;
+                top: 72px !important;
+                left: 0 !important;
+                width: 360px !important;
+                height: calc(100vh - 72px) !important;
+                background: #242526 !important;
+                color: #e4e6eb !important;
+                overflow-y: auto !important;
+                padding: 1rem !important;
+                z-index: 999 !important;
+                transition: transform 0.3s ease !important;">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Phinma-Upang TradeHub</h2>
+      <a href="userprofile.html" class="sidebar-settings" title="My Profile"
+         style="text-decoration:none;color:inherit;">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"/>
+        </svg>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="browse.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #1877f2;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+          </svg>
+        </div>
+        <span>Browse Items</span>
+      </a>
+
+      <a href="notification.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #e67e22;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+          </svg>
+        </div>
+        <span>Notifications</span>
+      </a>
+
+      <a href="bookmarks.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #f00524;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M6 3a2 2 0 0 0-2 2v16l8-5 8 5V5a2 2 0 0 0-2-2H6z"/>
+    </svg>
+  </div>
+  <span>Bookmarks</span>
+</a>
+
+      <a href="messages.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #00b894;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/>
+    </svg>
+  </div>
+
+  <span class="sidebar-label">Messages</span>
+  <span id="messagesUnreadBadge" class="messages-unread-badge">0</span>
+</a>
+    
+      <a href="userprofile.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #8e44ad;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <span>My Profile</span>
+      </a>
+    </nav>
+
+    <a href="posting.html" class="sidebar-create-btn">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"/>
+      </svg>
+      Create New Listing
+    </a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <div class="page-header">
+      <h1>Browse Items</h1>
+      <p>Discover great deals from fellow PHINMA students and staff. Find textbooks, electronics, uniforms, and more.</p>
+    </div>
+
+    <div class="search-section">
+      <div class="search-bar">
+        <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search for items...">
+      </div>
+    </div>
+
+    <div class="filters-section">
+      <div class="filters-left">
+        <select class="filter-btn" id="categoryFilter">
+          <option value="">All Categories</option>
+          <option value="Books & Supplies">Books & Supplies</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Pre Loved Clothes">Pre Loved Clothes</option>
+          <option value="Dorm Essentials">Dorm Essentials</option>
+        </select>
+
+        <select class="filter-btn" id="conditionFilter">
+          <option value="">All Conditions</option>
+          <option value="Like New">Like New</option>
+          <option value="Excellent">Excellent</option>
+          <option value="Good">Good</option>
+          <option value="Fair">Fair</option>
+        </select>
+
+        <select class="filter-btn" id="sortFilter">
+          <option value="newest">Newest First</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+        </select>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <span class="items-count"><span id="itemCount">0</span> items found</span>
+        <div class="view-toggle">
+          <button class="view-btn active" id="gridView">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+          </button>
+          <button class="view-btn" id="listView">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                    clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="items-grid" id="itemsGrid"></div>
+  </div>
+
+  <!-- SUPABASE DATA + BOOKMARKS -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+    const supabaseKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const currentStudentNumber = sessionStorage.getItem('studentNumber') || '';
+    const messagesUnreadBadge = document.getElementById('messagesUnreadBadge');
+    window.supabaseClient = supabase;
+
+    let unreadBadgeChannel = null;
+
+    function renderSidebarUnread(total) {
+    if (!messagesUnreadBadge) return;
+
+    const unreadTotal = Number(total || 0);
+
+    if (unreadTotal > 0) {
+      messagesUnreadBadge.style.display = 'inline-flex';
+      messagesUnreadBadge.textContent = unreadTotal > 99 ? '99+' : String(unreadTotal);
+    } else {
+      messagesUnreadBadge.style.display = 'none';
+      messagesUnreadBadge.textContent = '0';
+    }
+  }
+
+  async function loadUnreadBadgeCount() {
+    if (!currentStudentNumber) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: participantRows, error: participantError } = await supabase
+      .from('chat_participants')
+      .select('thread_id')
+      .eq('student_number', currentStudentNumber)
+      .is('deleted_at', null);
+
+    if (participantError) {
+      console.error('Error loading participant threads:', participantError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const threadIds = [...new Set((participantRows || []).map(row => row.thread_id))];
+
+    if (!threadIds.length) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: unreadRows, error: unreadError } = await supabase
+      .from('chat_messages')
+      .select('id, thread_id')
+      .in('thread_id', threadIds)
+      .neq('sender_student_number', currentStudentNumber)
+      .eq('is_read', false);
+
+    if (unreadError) {
+      console.error('Error loading unread messages:', unreadError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    renderSidebarUnread((unreadRows || []).length);
+  }
+
+  function subscribeToUnreadBadge() {
+    if (!currentStudentNumber) return;
+
+    if (unreadBadgeChannel) {
+      supabase.removeChannel(unreadBadgeChannel);
+      unreadBadgeChannel = null;
+    }
+
+    unreadBadgeChannel = supabase
+      .channel(`browse-unread-badge-${currentStudentNumber}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chat_participants'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .subscribe((status) => {
+        console.log('Browse unread badge realtime:', status);
+      });
+  }
+
+  window.addEventListener('load', async () => {
+    await loadUnreadBadgeCount();
+    subscribeToUnreadBadge();
+  });
+    function getCurrentStudentNumber() {
+      return sessionStorage.getItem('studentNumber') || '';
+    }
+
+    function showBookmarkToast(message) {
+      let toast = document.getElementById('bookmarkToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'bookmarkToast';
+        toast.style.position = 'fixed';
+        toast.style.bottom = '20px';
+        toast.style.right = '20px';
+        toast.style.padding = '10px 16px';
+        toast.style.borderRadius = '999px';
+        toast.style.background = '#111827';
+        toast.style.color = '#fff';
+        toast.style.fontSize = '14px';
+        toast.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+        toast.style.zIndex = '2000';
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity .2s ease';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = message;
+      toast.style.opacity = '1';
+      setTimeout(() => { toast.style.opacity = '0'; }, 1500);
+    }
+
+    async function sendBookmarkNotification(listingId, listingTitle, sellerStudentNo) {
+      const actorStudentNo = sessionStorage.getItem('studentNumber');
+      const actorName = sessionStorage.getItem('studentName') || 'Someone';
+
+      if (!actorStudentNo || !sellerStudentNo || !listingId) {
+        console.warn('Missing data for bookmark notification', {
+          actorStudentNo, sellerStudentNo, listingId
+        });
+        return;
+      }
+
+      if (actorStudentNo === sellerStudentNo) return;
+
+      const message = `${actorName} bookmarked your listing "${listingTitle || 'your listing'}".`;
+
+      const { error } = await supabase
+        .from('notifications')
+        .insert([{
+          type: 'bookmark',
+          recipient_student_number: sellerStudentNo,
+          actor_student_number: actorStudentNo,
+          actor_name: actorName,
+          listing_id: listingId,
+          listing_title: listingTitle || null,
+          message,
+          is_read: false,
+          created_at: new Date().toISOString()
+        }]);
+
+      if (error) {
+        console.error('Error creating bookmark notification:', error);
+      }
+    }
+
+    async function getBookmarkedListingIds() {
+      const studentNumber = getCurrentStudentNumber();
+      if (!studentNumber) return new Set();
+
+      const { data, error } = await supabase
+        .from('bookmarks')
+        .select('listing_id')
+        .eq('student_number', studentNumber);
+
+      if (error) {
+        console.error('Error loading bookmarks:', error);
+        return new Set();
+      }
+
+      return new Set((data || []).map(row => String(row.listing_id)));
+    }
+
+    async function addBookmark(listingId) {
+      const studentNumber = getCurrentStudentNumber();
+      if (!studentNumber) {
+        alert('Please sign in again.');
+        return { success: false };
+      }
+
+      const { error } = await supabase
+        .from('bookmarks')
+        .insert([{
+          student_number: studentNumber,
+          listing_id: listingId,
+          created_at: new Date().toISOString()
+        }]);
+
+      if (error) {
+        if (error.code === '23505') {
+          return { success: true, duplicate: true };
+        }
+        console.error('Add bookmark error:', error);
+        return { success: false, error };
+      }
+
+      return { success: true };
+    }
+
+    async function removeBookmark(listingId) {
+      const studentNumber = getCurrentStudentNumber();
+      if (!studentNumber) {
+        alert('Please sign in again.');
+        return { success: false };
+      }
+
+      const { error } = await supabase
+        .from('bookmarks')
+        .delete()
+        .eq('student_number', studentNumber)
+        .eq('listing_id', listingId);
+
+      if (error) {
+        console.error('Remove bookmark error:', error);
+        return { success: false, error };
+      }
+
+      return { success: true };
+    }
+
+    window.toggleFavorite = async function(btn, event) {
+      if (event) event.stopPropagation();
+      if (!btn) return;
+      if (btn.dataset.loading === 'true') return;
+
+      const card = btn.closest('.item-card');
+      if (!card) return;
+
+      btn.dataset.loading = 'true';
+
+      const listingId = String(card.dataset.id || '');
+      const titleEl = card.querySelector('.item-title');
+      const sellerStudentNo = card.dataset.sellerStudentNo || '';
+      const title = titleEl ? titleEl.textContent.trim() : '';
+      const isActive = btn.classList.contains('active');
+
+      try {
+        if (!listingId) {
+          showBookmarkToast('Invalid listing');
+          return;
+        }
+
+        if (!isActive) {
+          const result = await addBookmark(listingId);
+
+          if (result.success) {
+            btn.classList.add('active');
+            showBookmarkToast('Added to bookmarks');
+
+            if (sellerStudentNo) {
+              await sendBookmarkNotification(listingId, title, sellerStudentNo);
+            }
+          } else {
+            showBookmarkToast('Failed to save bookmark');
+          }
+        } else {
+          const result = await removeBookmark(listingId);
+
+          if (result.success) {
+            btn.classList.remove('active');
+            showBookmarkToast('Removed from bookmarks');
+          } else {
+            showBookmarkToast('Failed to remove bookmark');
+          }
+        }
+      } finally {
+        btn.dataset.loading = 'false';
+      }
+    };
+
+    window.initBookmarkButtons = async function() {
+      const buttons = document.querySelectorAll('.favorite-btn');
+      const bookmarkedIds = await getBookmarkedListingIds();
+
+      buttons.forEach(btn => {
+        const card = btn.closest('.item-card');
+        if (!card) return;
+
+        const id = String(card.dataset.id || '');
+        if (bookmarkedIds.has(id)) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    };
+
+    function renderEmptyState(grid, itemCountEl) {
+      if (itemCountEl) itemCountEl.textContent = '0';
+      if (!grid) return;
+
+      grid.innerHTML = `
+        <div class="empty-state">
+          <h3>No items found</h3>
+          <p>Try changing your filters or search keyword.</p>
+        </div>
+      `;
+    }
+
+    async function loadMarketplaceListings() {
+      const grid = document.getElementById('itemsGrid');
+      const itemCountEl = document.getElementById('itemCount');
+      if (!grid) return;
+
+      grid.innerHTML = '';
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const rawCategory = urlParams.get('category');
+      let selectedCategory = '';
+
+      if (rawCategory) {
+        selectedCategory = decodeURIComponent(rawCategory.replace(/\+/g, ' '));
+        const catSelect = document.getElementById('categoryFilter');
+        if (catSelect) catSelect.value = selectedCategory;
+      }
+
+      let query = supabase
+        .from('listings')
+        .select('*')
+        .eq('approval_status', 'approved')
+        .eq('is_active', true)
+        .is('archived_at', null)
+        .order('created_at', { ascending: false });
+
+      if (selectedCategory) {
+        query = query.eq('category', selectedCategory);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error('Error loading items:', error);
+        renderEmptyState(grid, itemCountEl);
+        return;
+      }
+
+      const rows = data || [];
+      if (rows.length === 0) {
+        renderEmptyState(grid, itemCountEl);
+        return;
+      }
+
+      rows.forEach(row => {
+        const priceNumber = Number(row.price) || 0;
+        const priceFormatted = '₱' + priceNumber.toLocaleString('en-PH', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.dataset.id = row.id;
+        card.dataset.category = row.category || '';
+        card.dataset.condition = row.condition || '';
+        card.dataset.price = String(priceNumber);
+        card.dataset.createdAt = row.created_at || '';
+        card.dataset.sellerStudentNo = row.seller_student_no || '';
+
+        const imageUrl = row.cover_image_url || 'https://placehold.co/400x300?text=No+Image';
+        const safeTitle = (row.title || 'Listing image').replace(/"/g, '&quot;');
+
+        card.innerHTML = `
+          <button class="favorite-btn" onclick="toggleFavorite(this, event)">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M5 3a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v14l-5-3-5 3V3z"/>
+            </svg>
+          </button>
+          <img src="${imageUrl}" alt="${safeTitle}" class="item-image">
+          <div class="item-content">
+            <span class="item-category">${row.category || ''}</span>
+            <h3 class="item-title">${row.title || 'Untitled Item'}</h3>
+            <div class="item-price">${priceFormatted}</div>
+            <div class="item-meta">
+              <div class="item-condition">
+                <span class="condition-dot"></span>
+                ${row.condition || '—'}
+              </div>
+              <div class="item-seller">${row.seller_name || ''}</div>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          window.location.href = 'item-details.html?id=' + row.id;
+        });
+
+        grid.appendChild(card);
+      });
+
+      if (typeof window.filterItems === 'function') {
+        window.filterItems();
+      } else if (itemCountEl) {
+        itemCountEl.textContent = String(rows.length);
+      }
+
+      if (typeof window.sortItems === 'function') {
+        window.sortItems();
+      }
+
+      if (typeof window.initBookmarkButtons === 'function') {
+        await window.initBookmarkButtons();
+      }
+    }
+
+    window.sendBookmarkNotification = sendBookmarkNotification;
+    window.loadMarketplaceListings = loadMarketplaceListings;
+
+    window.addEventListener('load', loadMarketplaceListings);
+  </script>
+
+  <!-- ROUTE GUARD + HEADER/SIDEBAR + FILTER -->
+  <script>
+    (function guardRoute() {
+      const loggedInFlag = sessionStorage.getItem('user_logged_in');
+      if (loggedInFlag !== 'true') {
+        window.location.href = '../../index.html';
+      }
+    })();
+
+    function setActiveSidebarLink() {
+      const currentPage = window.location.pathname.split('/').pop().toLowerCase();
+
+      const links = document.querySelectorAll('.sidebar-nav a.sidebar-nav-item');
+      links.forEach(link => {
+        const href = (link.getAttribute('href') || '').split('?')[0].toLowerCase();
+        link.classList.remove('active');
+
+        if (href === currentPage) {
+          link.classList.add('active');
+        }
+      });
+    }
+
+    function initHeaderAndSidebar() {
+      const sidebar = document.getElementById('marketplaceSidebar');
+      const toggleBtn = document.getElementById('sidebarToggle');
+      let isOpen = true;
+
+      const nameEl = document.getElementById('profileUserName');
+      const emailEl = document.getElementById('profileUserEmail');
+
+      const storedName = sessionStorage.getItem('studentName');
+      const storedEmail = sessionStorage.getItem('studentEmail');
+
+      if (nameEl && storedName) nameEl.textContent = storedName;
+      if (emailEl && storedEmail) emailEl.textContent = storedEmail;
+
+      const savedState = localStorage.getItem('sidebarOpen');
+      if (savedState !== null) {
+        isOpen = (savedState === 'true');
+      }
+
+      function updateSidebarState() {
+        if (!sidebar || !toggleBtn) return;
+
+        if (isOpen) {
+          sidebar.style.transform = 'translateX(0)';
+          toggleBtn.classList.remove('active');
+          document.body.classList.remove('sidebar-hidden');
+        } else {
+          sidebar.style.transform = 'translateX(-100%)';
+          toggleBtn.classList.add('active');
+          document.body.classList.add('sidebar-hidden');
+        }
+
+        const event = new CustomEvent('sidebarToggled', {
+          detail: { isOpen },
+          bubbles: true
+        });
+        document.dispatchEvent(event);
+        window.dispatchEvent(event);
+      }
+
+      updateSidebarState();
+
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          isOpen = !isOpen;
+          localStorage.setItem('sidebarOpen', String(isOpen));
+          updateSidebarState();
+        });
+      }
+
+      setActiveSidebarLink();
+
+      window.toggleProfileDropdown = function () {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown) dropdown.classList.toggle('show');
+      };
+
+      document.addEventListener('click', function (event) {
+        const container = document.querySelector('.user-profile-container');
+        const dropdown = document.getElementById('profileDropdown');
+        if (container && dropdown && !container.contains(event.target)) {
+          dropdown.classList.remove('show');
+        }
+      });
+
+      const pd = document.getElementById('profileDropdown');
+      if (pd) {
+        pd.addEventListener('click', function (event) {
+          event.stopPropagation();
+        });
+      }
+
+      window.handleSignOut = function () {
+  Swal.fire({
+    title: 'Sign out?',
+    text: 'Are you sure you want to sign out of your account?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, sign out',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.clear();
+
+      Swal.fire({
+        title: 'Signed out',
+        text: 'You have been successfully signed out.',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text'
+        }
+      }).then(() => {
+        window.location.href = '../../index.html';
+      });
+    }
+  });
+};
+
+      document.addEventListener('keydown', function (event) {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'b') {
+          event.preventDefault();
+          if (toggleBtn) toggleBtn.click();
+        }
+        if (event.key === 'Escape') {
+          const dropdown = document.getElementById('profileDropdown');
+          if (dropdown && dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initHeaderAndSidebar);
+
+    document.getElementById('searchInput').addEventListener('input', filterItems);
+    document.getElementById('categoryFilter').addEventListener('change', filterItems);
+    document.getElementById('conditionFilter').addEventListener('change', filterItems);
+    document.getElementById('sortFilter').addEventListener('change', sortItems);
+
+    function filterItems() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const category = document.getElementById('categoryFilter').value;
+      const condition = document.getElementById('conditionFilter').value;
+      const cards = document.querySelectorAll('.item-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const titleEl = card.querySelector('.item-title');
+        const title = titleEl ? titleEl.textContent.toLowerCase() : '';
+        const cardCategory = card.dataset.category || '';
+        const cardCondition = card.dataset.condition || '';
+
+        const matchesSearch = title.includes(searchTerm);
+        const matchesCategory = !category || cardCategory === category;
+        const matchesCondition = !condition || cardCondition === condition;
+
+        if (matchesSearch && matchesCategory && matchesCondition) {
+          card.style.display = '';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      document.getElementById('itemCount').textContent = String(visibleCount);
+    }
+
+    function sortItems() {
+      const sortValue = document.getElementById('sortFilter').value;
+      const grid = document.getElementById('itemsGrid');
+      if (!grid) return;
+
+      const cards = Array.from(grid.querySelectorAll('.item-card'));
+
+      cards.sort((a, b) => {
+        const priceA = parseFloat(a.dataset.price || '0');
+        const priceB = parseFloat(b.dataset.price || '0');
+
+        if (sortValue === 'price-low') return priceA - priceB;
+        if (sortValue === 'price-high') return priceB - priceA;
+
+        const aTime = Date.parse(a.dataset.createdAt || '') || 0;
+        const bTime = Date.parse(b.dataset.createdAt || '') || 0;
+        return bTime - aTime;
+      });
+
+      cards.forEach(card => grid.appendChild(card));
+      filterItems();
+    }
+
+    document.getElementById('gridView').addEventListener('click', function() {
+      const itemsGrid = document.getElementById('itemsGrid');
+      itemsGrid.classList.remove('list-view');
+      this.classList.add('active');
+      document.getElementById('listView').classList.remove('active');
+      localStorage.setItem('browseView', 'grid');
+    });
+
+    document.getElementById('listView').addEventListener('click', function() {
+      const itemsGrid = document.getElementById('itemsGrid');
+      itemsGrid.classList.add('list-view');
+      this.classList.add('active');
+      document.getElementById('gridView').classList.remove('active');
+      localStorage.setItem('browseView', 'list');
+    });
+
+    window.addEventListener('load', function() {
+      const savedView = localStorage.getItem('browseView');
+      if (savedView === 'list') {
+        document.getElementById('listView').click();
+      } else {
+        document.getElementById('gridView').click();
+      }
+    });
+
+    window.filterItems = filterItems;
+    window.sortItems = sortItems;
+  </script>
+</body>
+</html>

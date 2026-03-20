@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookmarks - PHINMA TradeHub</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../includes/header.css">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../includes/sidebar.css">
+  <link rel="stylesheet" href="../assets/bookmarks.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<!-- HEADER (same as other user pages) -->
+<header class="header" id="mainHeader">
+  <div class="header-left">
+    <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+      <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+              clip-rule="evenodd" />
+      </svg>
+    </button>
+
+    <div class="header-brand" style="cursor: default;">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 6v6l4 2"></path>
+      </svg>
+      <span>Tradehub</span>
+    </div>
+  </div>
+
+  <div class="header-content">
+    <nav>
+      <ul class="nav-menu">
+        <li>
+          <a href="about.html" class="nav-icon-btn" title="About Us">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clip-rule="evenodd" />
+            </svg>
+          </a>
+        </li>
+        <li class="user-profile-container">
+          <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                  onclick="toggleProfileDropdown()" title="Profile">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <div class="profile-dropdown" id="profileDropdown">
+            <div class="dropdown-arrow"></div>
+            <div class="profile-dropdown-header">
+              <div class="profile-user-name" id="profileUserName">Student Name</div>
+              <div class="profile-user-email" id="profileUserEmail">student@example.com</div>
+            </div>
+
+            <div class="profile-dropdown-menu">
+              <a href="userprofile.html" class="profile-menu-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>My Profile</span>
+              </a>
+              
+              <a href="bookmarks.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+                <span>Bookmarks</span>
+                </a>
+
+              <a href="selling.html" class="profile-menu-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span>My Selling</span>
+              </a>
+
+
+              <div class="profile-menu-divider"></div>
+
+              <a href="javascript:void(0)" class="profile-menu-item sign-out"
+                 onclick="handleSignOut()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Sign Out</span>
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<aside class="marketplace-sidebar" id="marketplaceSidebar"
+       style="position: fixed !important;
+              top: 72px !important;
+              left: 0 !important;
+              width: 360px !important;
+              height: calc(100vh - 72px) !important;
+              background: #242526 !important;
+              color: #e4e6eb !important;
+              overflow-y: auto !important;
+              padding: 1rem !important;
+              z-index: 999 !important;
+              transition: transform 0.3s ease !important;">
+  <div class="sidebar-header">
+    <h2 class="sidebar-title">Phinma-Upang TradeHub</h2>
+    <a href="userprofile.html" class="sidebar-settings" title="My Profile"
+       style="text-decoration:none;color:inherit;">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+              clip-rule="evenodd"/>
+      </svg>
+    </a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="browse.html" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #1877f2;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path
+            d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+        </svg>
+      </div>
+      <span>Browse Items</span>
+    </a>
+
+    <a href="notification.html" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #e67e22;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path
+            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+        </svg>
+      </div>
+      <span>Notifications</span>
+    </a>
+
+    <a href="bookmarks.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #f00524;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M6 3a2 2 0 0 0-2 2v16l8-5 8 5V5a2 2 0 0 0-2-2H6z"/>
+    </svg>
+  </div>
+  <span>Bookmarks</span>
+</a>
+
+    <a href="messages.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #00b894;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/>
+    </svg>
+  </div>
+
+  <span class="sidebar-label">Messages</span>
+  <span id="messagesUnreadBadge" class="messages-unread-badge">0</span>
+</a>
+
+    <a href="userprofile.html" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #8e44ad;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <span>My Profile</span>
+    </a>
+  </nav>
+
+  <a href="posting.html" class="sidebar-create-btn">
+    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd"
+            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+            clip-rule="evenodd"/>
+    </svg>
+    Create New Listing
+  </a>
+</aside>
+
+<!-- MAIN BOOKMARKS CONTENT -->
+<div class="bookmarks-wrapper">
+  <div class="bookmarks-header">
+    <div class="bookmarks-title-group">
+      <div class="bookmarks-icon">
+        <svg width="22" height="22" fill="none" stroke="currentColor"
+             viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round">
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Bookmarks</h1>
+        <p>Items you've saved for later</p>
+      </div>
+    </div>
+    <span class="bookmarks-count-badge" id="bookmarkCount">0 saved</span>
+  </div>
+
+  <div class="filter-sort-bar">
+    <div class="category-filters">
+      <button class="cat-filter-btn active" data-filter="all"
+              onclick="filterBookmarks('all', this)">All</button>
+      <button class="cat-filter-btn" data-filter="Books & Supplies"
+              onclick="filterBookmarks('Books & Supplies', this)">📚 Books</button>
+      <button class="cat-filter-btn" data-filter="Electronics"
+              onclick="filterBookmarks('Electronics', this)">💻 Electronics</button>
+      <button class="cat-filter-btn" data-filter="Bags & Accessories"
+              onclick="filterBookmarks('Bags & Accessories', this)">👜 Bags</button>
+      <button class="cat-filter-btn" data-filter="Dorm Essentials"
+              onclick="filterBookmarks('Dorm Essentials', this)">🏠 Dorm</button>
+    </div>
+    <select class="sort-select" onchange="sortBookmarks(this.value)">
+      <option value="newest">Newest Saved</option>
+      <option value="price-low">Price: Low to High</option>
+      <option value="price-high">Price: High to Low</option>
+    </select>
+  </div>
+
+  <div class="bookmarks-grid" id="bookmarksGrid"></div>
+
+  <div class="empty-bookmarks" id="emptyState">
+    <div class="empty-bookmarks-icon">
+      <svg width="36" height="36" fill="none" stroke="currentColor"
+           viewBox="0 0 24 24" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round"
+              d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+      </svg>
+    </div>
+    <h3>No bookmarks yet</h3>
+    <p>Save items you're interested in and they'll appear here.</p>
+    <button class="browse-btn" onclick="window.location.href='browse.html'">
+      Browse Items
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+  const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+  const supabaseKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  const currentStudentNumber = sessionStorage.getItem('studentNumber') || '';
+  const messagesUnreadBadge = document.getElementById('messagesUnreadBadge');
+
+  let allBookmarks = [];
+  let currentFilter = 'all';
+  let unreadBadgeChannel = null;
+
+  function renderSidebarUnread(total) {
+    if (!messagesUnreadBadge) return;
+
+    const unreadTotal = Number(total || 0);
+
+    if (unreadTotal > 0) {
+      messagesUnreadBadge.style.display = 'inline-flex';
+      messagesUnreadBadge.textContent = unreadTotal > 99 ? '99+' : String(unreadTotal);
+    } else {
+      messagesUnreadBadge.style.display = 'none';
+      messagesUnreadBadge.textContent = '0';
+    }
+  }
+
+  async function loadUnreadBadgeCount() {
+    if (!currentStudentNumber) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: participantRows, error: participantError } = await supabase
+      .from('chat_participants')
+      .select('thread_id')
+      .eq('student_number', currentStudentNumber)
+      .is('deleted_at', null);
+
+    if (participantError) {
+      console.error('Error loading participant threads:', participantError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const threadIds = [...new Set((participantRows || []).map(row => row.thread_id))];
+
+    if (!threadIds.length) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: unreadRows, error: unreadError } = await supabase
+      .from('chat_messages')
+      .select('id, thread_id')
+      .in('thread_id', threadIds)
+      .neq('sender_student_number', currentStudentNumber)
+      .eq('is_read', false);
+
+    if (unreadError) {
+      console.error('Error loading unread messages:', unreadError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    renderSidebarUnread((unreadRows || []).length);
+  }
+
+  function subscribeToUnreadBadge() {
+    if (!currentStudentNumber) return;
+
+    if (unreadBadgeChannel) {
+      supabase.removeChannel(unreadBadgeChannel);
+      unreadBadgeChannel = null;
+    }
+
+    unreadBadgeChannel = supabase
+      .channel(`browse-unread-badge-${currentStudentNumber}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chat_participants'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .subscribe((status) => {
+        console.log('Browse unread badge realtime:', status);
+      });
+  }
+
+  window.addEventListener('load', async () => {
+    await loadUnreadBadgeCount();
+    subscribeToUnreadBadge();
+  });
+  /* ========= ROUTE GUARD ========= */
+  (function guardRoute() {
+    const loggedInFlag = sessionStorage.getItem('user_logged_in');
+    if (loggedInFlag !== 'true') {
+      window.location.href = '../../index.html';
+    }
+  })();
+
+  function getCurrentStudentNumber() {
+    return sessionStorage.getItem('studentNumber') || '';
+  }
+
+  function escapeHtml(str) {
+    return String(str ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function setActiveSidebarLink() {
+    const currentPage = window.location.pathname.split('/').pop().toLowerCase();
+
+    document.querySelectorAll('.sidebar-nav a.sidebar-nav-item').forEach(link => {
+      const href = (link.getAttribute('href') || '').split('?')[0].toLowerCase();
+      link.classList.remove('active');
+      if (href === currentPage) {
+        link.classList.add('active');
+      }
+    });
+  }
+
+  function initHeaderAndSidebar() {
+    const sidebar = document.getElementById('marketplaceSidebar');
+    const toggleBtn = document.getElementById('sidebarToggle');
+    let isOpen = true;
+
+    const nameEl = document.getElementById('profileUserName');
+    const emailEl = document.getElementById('profileUserEmail');
+
+    const storedName = sessionStorage.getItem('studentName');
+    const storedEmail = sessionStorage.getItem('studentEmail');
+
+    if (nameEl && storedName) nameEl.textContent = storedName;
+    if (emailEl && storedEmail) emailEl.textContent = storedEmail;
+
+    const savedState = localStorage.getItem('sidebarOpen');
+    if (savedState !== null) {
+      isOpen = (savedState === 'true');
+    }
+
+    function updateSidebarState() {
+      if (!sidebar || !toggleBtn) return;
+      if (isOpen) {
+        sidebar.style.transform = 'translateX(0)';
+        toggleBtn.classList.remove('active');
+        document.body.classList.remove('sidebar-hidden');
+      } else {
+        sidebar.style.transform = 'translateX(-100%)';
+        toggleBtn.classList.add('active');
+        document.body.classList.add('sidebar-hidden');
+      }
+
+      const ev = new CustomEvent('sidebarToggled', {
+        detail: { isOpen },
+        bubbles: true
+      });
+      document.dispatchEvent(ev);
+      window.dispatchEvent(ev);
+    }
+
+    updateSidebarState();
+    setActiveSidebarLink();
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        isOpen = !isOpen;
+        localStorage.setItem('sidebarOpen', String(isOpen));
+        updateSidebarState();
+      });
+    }
+
+    window.toggleProfileDropdown = function () {
+      const dropdown = document.getElementById('profileDropdown');
+      if (dropdown) dropdown.classList.toggle('show');
+    };
+
+    document.addEventListener('click', function (event) {
+      const container = document.querySelector('.user-profile-container');
+      const dropdown = document.getElementById('profileDropdown');
+      if (container && dropdown && !container.contains(event.target)) {
+        dropdown.classList.remove('show');
+      }
+    });
+
+    const pd = document.getElementById('profileDropdown');
+    if (pd) {
+      pd.addEventListener('click', function (event) {
+        event.stopPropagation();
+      });
+    }
+
+    window.handleSignOut = function () {
+  Swal.fire({
+    title: 'Sign out?',
+    text: 'Are you sure you want to sign out of your account?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, sign out',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.clear();
+
+      Swal.fire({
+        title: 'Signed out',
+        text: 'You have been successfully signed out.',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text'
+        }
+      }).then(() => {
+        window.location.href = '../../index.html';
+      });
+    }
+  });
+};
+
+    document.addEventListener('keydown', function (event) {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'b') {
+        event.preventDefault();
+        if (toggleBtn) toggleBtn.click();
+      }
+      if (event.key === 'Escape') {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown && dropdown.classList.contains('show')) {
+          dropdown.classList.remove('show');
+        }
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initHeaderAndSidebar);
+
+  window.addEventListener('load', function () {
+    const wrapper = document.querySelector('.bookmarks-wrapper');
+
+    function updateContainer() {
+      if (!wrapper) return;
+      const sidebarOpen = localStorage.getItem('sidebarOpen');
+      if (sidebarOpen === 'false') {
+        document.body.classList.add('sidebar-closed', 'sidebar-hidden');
+        wrapper.style.marginLeft = '0';
+        wrapper.style.width = '100%';
+        wrapper.style.paddingTop = '90px';
+      } else {
+        document.body.classList.remove('sidebar-closed', 'sidebar-hidden');
+        wrapper.style.marginLeft = '360px';
+        wrapper.style.width = 'calc(100% - 360px)';
+        wrapper.style.paddingTop = '90px';
+      }
+    }
+
+    updateContainer();
+    document.addEventListener('sidebarToggled', () => setTimeout(updateContainer, 50));
+
+    const toggleBtn = document.getElementById('sidebarToggle');
+    if (toggleBtn) toggleBtn.addEventListener('click', () => setTimeout(updateContainer, 50));
+
+    const sidebar = document.getElementById('marketplaceSidebar');
+    if (sidebar) {
+      new MutationObserver(() => setTimeout(updateContainer, 50))
+        .observe(sidebar, { attributes: true, attributeFilter: ['style'] });
+    }
+  });
+
+  async function loadBookmarksFromDatabase() {
+    const studentNumber = getCurrentStudentNumber();
+    if (!studentNumber) {
+      renderBookmarks([]);
+      return;
+    }
+
+    const { data: bookmarkRows, error: bookmarkError } = await supabase
+      .from('bookmarks')
+      .select('id, listing_id, created_at')
+      .eq('student_number', studentNumber)
+      .order('created_at', { ascending: false });
+
+    if (bookmarkError) {
+      console.error('Error loading bookmarks:', bookmarkError);
+      renderBookmarks([]);
+      return;
+    }
+
+    const rows = bookmarkRows || [];
+    if (rows.length === 0) {
+      renderBookmarks([]);
+      return;
+    }
+
+    const listingIds = rows.map(row => row.listing_id);
+
+    const { data: listingsData, error: listingsError } = await supabase
+      .from('listings')
+      .select('*')
+      .in('id', listingIds);
+
+    if (listingsError) {
+      console.error('Error loading bookmarked listings:', listingsError);
+      renderBookmarks([]);
+      return;
+    }
+
+    const listingsMap = new Map((listingsData || []).map(item => [String(item.id), item]));
+
+    allBookmarks = rows
+      .map(bookmark => {
+        const listing = listingsMap.get(String(bookmark.listing_id));
+        if (!listing) return null;
+
+        return {
+          bookmark_id: bookmark.id,
+          listing_id: listing.id,
+          category: listing.category || '',
+          condition: listing.condition || '',
+          title: listing.title || 'Bookmarked Item',
+          price: Number(listing.price) || 0,
+          image: listing.cover_image_url || 'https://placehold.co/400x300?text=Item',
+          seller: listing.seller_name || '',
+          date_saved: bookmark.created_at,
+          date_label: 'Saved on ' + new Date(bookmark.created_at).toLocaleDateString('en-PH', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          })
+        };
+      })
+      .filter(Boolean);
+
+    applyCurrentView();
+  }
+
+  function renderBookmarks(list) {
+    const grid = document.getElementById('bookmarksGrid');
+    grid.innerHTML = '';
+
+    list.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'bookmark-card';
+      card.dataset.id = item.listing_id;
+      card.dataset.bookmarkId = item.bookmark_id;
+      card.dataset.category = item.category || '';
+      card.dataset.price = item.price || 0;
+      card.dataset.dateSaved = item.date_saved || '';
+
+      const priceNum = Number(item.price) || 0;
+      const priceFormatted = '₱' + priceNum.toLocaleString('en-PH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      card.innerHTML = `
+        <div class="bookmark-img-wrap">
+          <img src="${escapeHtml(item.image)}"
+               alt="${escapeHtml(item.title)}">
+          <button class="bookmark-remove-btn" title="Remove bookmark">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+          </button>
+          <span class="condition-tag">${escapeHtml(item.condition || '')}</span>
+        </div>
+        <div class="bookmark-body">
+          <div class="bookmark-category">${escapeHtml(item.category || '')}</div>
+          <div class="bookmark-title" title="${escapeHtml(item.title)}">
+            ${escapeHtml(item.title)}
+          </div>
+          <div class="bookmark-price">${priceFormatted}</div>
+          <div class="bookmark-meta">
+            <div class="bookmark-seller">
+              ${item.seller ? `By <span>${escapeHtml(item.seller)}</span>` : ''}
+            </div>
+            <div class="bookmark-date">${escapeHtml(item.date_label || '')}</div>
+          </div>
+          <a href="item-details.html?id=${encodeURIComponent(item.listing_id)}" class="view-item-btn">
+            View Item
+          </a>
+        </div>
+      `;
+
+      const removeBtn = card.querySelector('.bookmark-remove-btn');
+      removeBtn.addEventListener('click', (e) => removeBookmark(e, item.listing_id));
+
+      const viewBtn = card.querySelector('.view-item-btn');
+      viewBtn.addEventListener('click', e => e.stopPropagation());
+
+      card.addEventListener('click', () => {
+        window.location.href = `item-details.html?id=${encodeURIComponent(item.listing_id)}`;
+      });
+
+      grid.appendChild(card);
+    });
+
+    updateCount();
+    checkEmpty();
+  }
+
+  async function removeBookmark(event, listingId) {
+    event.stopPropagation();
+
+    const studentNumber = getCurrentStudentNumber();
+    if (!studentNumber) return;
+
+    const card = document.querySelector(`.bookmark-card[data-id="${CSS.escape(String(listingId))}"]`);
+    if (!card) return;
+
+    const { error } = await supabase
+      .from('bookmarks')
+      .delete()
+      .eq('student_number', studentNumber)
+      .eq('listing_id', listingId);
+
+    if (error) {
+      console.error('Error removing bookmark:', error);
+      showToast('Failed to remove bookmark');
+      return;
+    }
+
+    allBookmarks = allBookmarks.filter(item => String(item.listing_id) !== String(listingId));
+
+    card.classList.add('removing');
+
+    setTimeout(() => {
+      applyCurrentView();
+      showToast('Bookmark removed');
+    }, 300);
+  }
+
+  function filterBookmarks(filter, btn) {
+    currentFilter = filter;
+
+    document.querySelectorAll('.cat-filter-btn')
+      .forEach(b => b.classList.remove('active'));
+
+    if (btn) btn.classList.add('active');
+
+    applyCurrentView();
+  }
+
+  function sortBookmarks(value) {
+    const sorted = [...getFilteredBookmarks()];
+
+    sorted.sort((a, b) => {
+      const priceA = Number(a.price) || 0;
+      const priceB = Number(b.price) || 0;
+
+      if (value === 'price-low') return priceA - priceB;
+      if (value === 'price-high') return priceB - priceA;
+
+      const timeA = Date.parse(a.date_saved || '') || 0;
+      const timeB = Date.parse(b.date_saved || '') || 0;
+      return timeB - timeA;
+    });
+
+    renderBookmarks(sorted);
+  }
+
+  function getFilteredBookmarks() {
+    if (currentFilter === 'all') return [...allBookmarks];
+    return allBookmarks.filter(item => item.category === currentFilter);
+  }
+
+  function applyCurrentView() {
+    const sortSelect = document.querySelector('.sort-select');
+    const sortValue = sortSelect ? sortSelect.value : 'newest';
+    sortBookmarks(sortValue);
+  }
+
+  function updateCount() {
+    const remaining = document.querySelectorAll('.bookmark-card').length;
+    document.getElementById('bookmarkCount').textContent = `${remaining} saved`;
+  }
+
+  function checkEmpty() {
+    const visible = Array.from(document.querySelectorAll('.bookmark-card'))
+      .filter(c => c.style.display !== 'none');
+
+    const emptyState = document.getElementById('emptyState');
+
+    if (visible.length === 0) {
+      emptyState.classList.add('visible');
+    } else {
+      emptyState.classList.remove('visible');
+    }
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+
+  window.filterBookmarks = filterBookmarks;
+  window.sortBookmarks = sortBookmarks;
+
+  window.addEventListener('load', async () => {
+    await loadBookmarksFromDatabase();
+  });
+</script>
+</body>
+</html>

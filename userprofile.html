@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - PHINMA TradeHub</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../includes/header.css" />
+  <link rel="stylesheet" href="../assets/style.css" />
+  <link rel="stylesheet" href="../includes/sidebar.css" />
+  <link rel="stylesheet" href="../assets/userprofile.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- Container width vs sidebar (same idea as browse.html) -->
+  <script>
+    window.addEventListener('load', function () {
+      const container = document.querySelector('.profile-page-container');
+      const sidebar = document.getElementById('marketplaceSidebar');
+
+      function updateContainer() {
+        if (!container) return;
+        const sidebarOpen = localStorage.getItem('sidebarOpen');
+        if (sidebarOpen === 'false') {
+          // sidebar CLOSED - full width
+          document.body.classList.add('sidebar-closed');
+          document.body.classList.add('sidebar-hidden');
+          container.style.marginLeft = '0';
+          container.style.width = '100%';
+        } else {
+          // sidebar OPEN - leave space at left
+          document.body.classList.remove('sidebar-closed');
+          document.body.classList.remove('sidebar-hidden');
+          container.style.marginLeft = '360px';
+          container.style.width = 'calc(100% - 360px)';
+        }
+      }
+
+      updateContainer();
+      document.addEventListener('sidebarToggled', () => setTimeout(updateContainer, 50));
+      window.addEventListener('storage', updateContainer);
+
+      const toggleBtn = document.getElementById('sidebarToggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => setTimeout(updateContainer, 50));
+      }
+
+      if (sidebar) {
+        const observer = new MutationObserver(() => setTimeout(updateContainer, 50));
+        observer.observe(sidebar, { attributes: true, attributeFilter: ['style'] });
+      }
+    });
+  </script>
+
+
+</head>
+<body>
+
+  <!-- HEADER (same pattern as browse.html) -->
+  <header class="header" id="mainHeader">
+    <div class="header-left">
+      <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+        <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <div class="header-brand" style="cursor: default;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 6v6l4 2"></path>
+        </svg>
+        <span>Tradehub</span>
+      </div>
+    </div>
+
+    <div class="header-content">
+      <nav>
+        <ul class="nav-menu">
+          <li>
+            <a href="about.html" class="nav-icon-btn" title="About Us">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      clip-rule="evenodd" />
+              </svg>
+            </a>
+          </li>
+          <li class="user-profile-container">
+            <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                    onclick="toggleProfileDropdown()" title="Profile">
+              <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd" />
+              </svg>
+            </button>
+
+            <div class="profile-dropdown" id="profileDropdown">
+              <div class="dropdown-arrow"></div>
+              <div class="profile-dropdown-header">
+                <div class="profile-user-name" id="profileUserName">Student Name</div>
+                <div class="profile-user-email" id="profileUserEmail">student@example.com</div>
+              </div>
+
+              <div class="profile-dropdown-menu">
+                <a href="userprofile.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span>My Profile</span>
+                </a>
+
+                <a href="bookmarks.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+               </svg>
+                <span>Bookmarks</span>
+                </a>
+
+                <a href="selling.html" class="profile-menu-item">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  <span>My Selling</span>
+                </a>
+
+          
+                <div class="profile-menu-divider"></div>
+
+                <a href="javascript:void(0)" class="profile-menu-item sign-out"
+                   onclick="handleSignOut()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  <span>Sign Out</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside class="marketplace-sidebar" id="marketplaceSidebar"
+         style="position: fixed !important;
+                top: 72px !important;
+                left: 0 !important;
+                width: 360px !important;
+                height: calc(100vh - 72px) !important;
+                background: #242526 !important;
+                color: #e4e6eb !important;
+                overflow-y: auto !important;
+                padding: 1rem !important;
+                z-index: 999 !important;
+                transition: transform 0.3s ease !important;">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Phinma-Upang TradeHub</h2>
+      <a href="userprofile.html" class="sidebar-settings" title="My Profile"
+         style="text-decoration:none;color:inherit;">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"/>
+        </svg>
+      </a>
+    </div>
+
+
+    <nav class="sidebar-nav">
+      <a href="browse.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #1877f2;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+          </svg>
+        </div>
+        <span>Browse Items</span>
+      </a>
+
+      <a href="notification.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #e67e22;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path
+              d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+          </svg>
+        </div>
+        <span>Notifications</span>
+      </a>
+
+      <a href="bookmarks.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #f00524;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M6 3a2 2 0 0 0-2 2v16l8-5 8 5V5a2 2 0 0 0-2-2H6z"/>
+    </svg>
+  </div>
+  <span>Bookmarks</span>
+</a>
+
+      <a href="messages.html" class="sidebar-nav-item">
+  <div class="sidebar-nav-icon" style="background: #00b894;">
+    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+      <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/>
+    </svg>
+  </div>
+
+  <span class="sidebar-label">Messages</span>
+  <span id="messagesUnreadBadge" class="messages-unread-badge">0</span>
+</a>
+
+      <a href="userprofile.html" class="sidebar-nav-item">
+        <div class="sidebar-nav-icon" style="background: #8e44ad;">
+          <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                  clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <span>My Profile</span>
+      </a>
+    </nav>
+
+    <a href="posting.html" class="sidebar-create-btn">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+              clip-rule="evenodd"/>
+      </svg>
+      Create New Listing
+    </a>
+  </aside>
+
+  <!-- MAIN PROFILE PAGE CONTENT -->
+  <div class="profile-page-container">
+    <div class="profile-container">
+      <!-- Header with Back Button -->
+      <div class="profile-header">
+       <button class="back-btn" onclick="window.location.href='browse.html'">
+  <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+  <span>Back to Browse</span>
+</button>
+        <h1>My Profile</h1>
+      </div>
+
+      <!-- Profile Card -->
+      <div class="profile-card">
+        <!-- Top Section: Profile Info + Edit Button -->
+        <div class="profile-top">
+          <div class="profile-info">
+            <div class="profile-avatar" id="profileAvatar">ST</div>
+            <div class="profile-details">
+              <h2 id="profileName">Student Name</h2>
+              <div class="profile-badges">
+                <span class="badge" id="courseBadge">Course / Block</span>
+                <span class="badge" id="idBadge">ID: —</span>
+                <span class="badge" id="emailBadge">Email: —</span>
+              </div>
+
+              <!-- 🔗 Social link row (hidden by default kung wala) -->
+              <div class="profile-social-row" id="profileSocialLinkRow">
+                <span>Social:</span>
+                <a href="#" id="profileSocialLink" target="_blank" rel="noopener noreferrer">
+                  <!-- link text will be filled by JS -->
+                </a>
+              </div>
+            </div>
+          </div>
+          <button class="edit-profile-btn" onclick="window.location.href='editprofile.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
+            Edit Profile
+          </button>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number" id="totalItems">0</div>
+            <div class="stat-label">Total Items</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" id="activeItems">0</div>
+            <div class="stat-label">Active</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number green" id="soldItems">0</div>
+            <div class="stat-label">Archived / Sold</div>
+          </div>
+        </div>
+
+        <!-- Listings Tabs -->
+        <div class="listings-tabs">
+          <button class="tab-button active" id="tabActive" onclick="switchTab('active', event)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            Active
+            <span class="tab-count" id="activeCountBadge">0</span>
+          </button>
+
+          <button class="tab-button" id="tabPending" onclick="switchTab('pending', event)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Pending
+            <span class="tab-count" id="pendingCountBadge">0</span>
+          </button>
+
+          <button class="tab-button" id="tabArchived" onclick="switchTab('archived', event)">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="21 8 21 21 3 21 3 8" />
+              <rect x="1" y="3" width="22" height="5" />
+              <line x1="10" y1="12" x2="14" y2="12" />
+            </svg>
+            Archived
+            <span class="tab-count" id="archivedCountBadge">0</span>
+          </button>
+        </div>
+
+        <!-- Listings Grids -->
+        <div class="listings-grid" id="activeListingsGrid">
+          <!-- Active listings will be injected here -->
+        </div>
+
+        <div class="listings-grid" id="pendingListingsGrid" style="display:none;">
+          <!-- Pending listings -->
+        </div>
+
+        <div class="listings-grid" id="archivedListingsGrid" style="display:none;">
+          <!-- Archived listings will be injected here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS: Guard, header/sidebar logic, Supabase + archive/restore/delete + sold/traded -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+    const supabasePublishableKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+    const supabase = createClient(supabaseUrl, supabasePublishableKey);
+
+    const currentStudentNumber = sessionStorage.getItem('studentNumber') || '';
+    const messagesUnreadBadge = document.getElementById('messagesUnreadBadge');
+
+    let unreadBadgeChannel = null;
+
+    function renderSidebarUnread(total) {
+    if (!messagesUnreadBadge) return;
+
+    const unreadTotal = Number(total || 0);
+
+    if (unreadTotal > 0) {
+      messagesUnreadBadge.style.display = 'inline-flex';
+      messagesUnreadBadge.textContent = unreadTotal > 99 ? '99+' : String(unreadTotal);
+    } else {
+      messagesUnreadBadge.style.display = 'none';
+      messagesUnreadBadge.textContent = '0';
+    }
+  }
+
+  async function loadUnreadBadgeCount() {
+    if (!currentStudentNumber) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: participantRows, error: participantError } = await supabase
+      .from('chat_participants')
+      .select('thread_id')
+      .eq('student_number', currentStudentNumber)
+      .is('deleted_at', null);
+
+    if (participantError) {
+      console.error('Error loading participant threads:', participantError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const threadIds = [...new Set((participantRows || []).map(row => row.thread_id))];
+
+    if (!threadIds.length) {
+      renderSidebarUnread(0);
+      return;
+    }
+
+    const { data: unreadRows, error: unreadError } = await supabase
+      .from('chat_messages')
+      .select('id, thread_id')
+      .in('thread_id', threadIds)
+      .neq('sender_student_number', currentStudentNumber)
+      .eq('is_read', false);
+
+    if (unreadError) {
+      console.error('Error loading unread messages:', unreadError);
+      renderSidebarUnread(0);
+      return;
+    }
+
+    renderSidebarUnread((unreadRows || []).length);
+  }
+
+  function subscribeToUnreadBadge() {
+    if (!currentStudentNumber) return;
+
+    if (unreadBadgeChannel) {
+      supabase.removeChannel(unreadBadgeChannel);
+      unreadBadgeChannel = null;
+    }
+
+    unreadBadgeChannel = supabase
+      .channel(`browse-unread-badge-${currentStudentNumber}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'chat_messages'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'chat_participants'
+        },
+        async () => {
+          await loadUnreadBadgeCount();
+        }
+      )
+      .subscribe((status) => {
+        console.log('Browse unread badge realtime:', status);
+      });
+  }
+
+  window.addEventListener('load', async () => {
+    await loadUnreadBadgeCount();
+    subscribeToUnreadBadge();
+  });
+
+    // -------- Route guard --------
+    (function guardRoute() {
+      const loggedInFlag = sessionStorage.getItem('user_logged_in');
+      if (loggedInFlag !== 'true') {
+        window.location.href = '../../index.html';
+      }
+    })();
+    function setActiveSidebarLink() {
+  const currentPage = window.location.pathname.split('/').pop().toLowerCase();
+
+  const links = document.querySelectorAll('.sidebar-nav a.sidebar-nav-item');
+  links.forEach(link => {
+    const href = (link.getAttribute('href') || '').split('?')[0].toLowerCase();
+
+    link.classList.remove('active');
+
+    // exact match (browse.html, notification.html, bookmarks.html, userprofile.html)
+    if (href === currentPage) {
+      link.classList.add('active');
+    }
+  });
+}
+    // -------- Header + sidebar --------
+    function initHeaderAndSidebar() {
+      const sidebar   = document.getElementById('marketplaceSidebar');
+      const toggleBtn = document.getElementById('sidebarToggle');
+      let isOpen = true;
+
+      const nameEl  = document.getElementById('profileUserName');
+      const emailEl = document.getElementById('profileUserEmail');
+
+      const storedName  = sessionStorage.getItem('studentName');
+      const storedEmail = sessionStorage.getItem('studentEmail');
+
+      if (nameEl && storedName)  nameEl.textContent  = storedName;
+      if (emailEl && storedEmail) emailEl.textContent = storedEmail;
+
+      const savedState = localStorage.getItem('sidebarOpen');
+      if (savedState !== null) {
+        isOpen = (savedState === 'true');
+      }
+
+      function updateSidebarState() {
+        if (!sidebar || !toggleBtn) return;
+        if (isOpen) {
+          sidebar.style.transform = 'translateX(0)';
+          toggleBtn.classList.remove('active');
+          document.body.classList.remove('sidebar-hidden');
+        } else {
+          sidebar.style.transform = 'translateX(-100%)';
+          toggleBtn.classList.add('active');
+          document.body.classList.add('sidebar-hidden');
+        }
+
+        const ev = new CustomEvent('sidebarToggled', {
+          detail: { isOpen },
+          bubbles: true
+        });
+        document.dispatchEvent(ev);
+        window.dispatchEvent(ev);
+      }
+
+      updateSidebarState();
+      setActiveSidebarLink();
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+          isOpen = !isOpen;
+          localStorage.setItem('sidebarOpen', String(isOpen));
+          updateSidebarState();
+        });
+      }
+
+      // dropdown
+      window.toggleProfileDropdown = function () {
+        const dropdown = document.getElementById('profileDropdown');
+        if (dropdown) dropdown.classList.toggle('show');
+      };
+
+      document.addEventListener('click', function (event) {
+        const container = document.querySelector('.user-profile-container');
+        const dropdown = document.getElementById('profileDropdown');
+        if (container && dropdown && !container.contains(event.target)) {
+          dropdown.classList.remove('show');
+        }
+      });
+
+      const pd = document.getElementById('profileDropdown');
+      if (pd) {
+        pd.addEventListener('click', function (event) {
+          event.stopPropagation();
+        });
+      }
+
+      // sign out
+     window.handleSignOut = function () {
+  Swal.fire({
+    title: 'Sign out?',
+    text: 'Are you sure you want to sign out of your account?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, sign out',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.clear();
+
+      Swal.fire({
+        title: 'Signed out',
+        text: 'You have been successfully signed out.',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text'
+        }
+      }).then(() => {
+        window.location.href = '../../index.html';
+      });
+    }
+  });
+};
+
+      // keyboard shortcuts
+      document.addEventListener('keydown', function (event) {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'b') {
+          event.preventDefault();
+          if (toggleBtn) toggleBtn.click();
+        }
+        if (event.key === 'Escape') {
+          const dropdown = document.getElementById('profileDropdown');
+          if (dropdown && dropdown.classList.contains('show')) {
+            dropdown.classList.remove('show');
+          }
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', initHeaderAndSidebar);
+
+    // -------- Fill profile card info (DB -> sessionStorage -> UI) --------
+    async function initProfileInfo() {
+      // default values from session (kung meron)
+      let name    = sessionStorage.getItem('studentName')   || 'Student Name';
+      let email   = sessionStorage.getItem('studentEmail')  || 'student@example.com';
+      let course  = sessionStorage.getItem('course_block')  || 'Course not set';
+      let studNo  = sessionStorage.getItem('studentNumber') || '—';
+      let avatar  = sessionStorage.getItem('avatarImage')   || null;
+      let social  = sessionStorage.getItem('socialLink')    || '';
+
+      const loginStudNo = sessionStorage.getItem('studentNumber');
+
+      // 🔄 Laging subukan magbasa sa Supabase para fresh (kasama na ang avatar_url at socialLink)
+      if (loginStudNo) {
+        try {
+          const { data, error } = await supabase
+            .from('students')
+            .select('studentName, email, course_block, studentNumber, avatar_url, socialLink')
+            .eq('studentNumber', loginStudNo)
+            .maybeSingle();
+
+          if (error) {
+            console.error('Error loading profile from DB:', error);
+          } else if (data) {
+            name   = data.studentName   || name;
+            email  = data.email         || email;
+            course = data.course_block  || course;
+            studNo = data.studentNumber || loginStudNo;
+            social = data.socialLink    || social;
+
+            if (data.avatar_url) {
+              avatar = data.avatar_url;
+            }
+
+            // sync to sessionStorage para gamitin ng ibang pages
+            sessionStorage.setItem('studentName', name);
+            sessionStorage.setItem('studentEmail', email);
+            sessionStorage.setItem('course_block', course);
+            sessionStorage.setItem('studentNumber', studNo);
+
+            if (avatar) {
+              sessionStorage.setItem('avatarImage', avatar);
+            } else {
+              sessionStorage.removeItem('avatarImage');
+            }
+
+            if (social) {
+              sessionStorage.setItem('socialLink', social);
+            } else {
+              sessionStorage.removeItem('socialLink');
+            }
+          }
+        } catch (err) {
+          console.error('Unexpected error loading profile from DB:', err);
+        }
+      }
+
+      // ---- Update text fields sa UI ----
+      document.getElementById('profileName').textContent  = name;
+      document.getElementById('courseBadge').textContent  = course;
+      document.getElementById('idBadge').textContent      = 'ID: ' + studNo;
+      document.getElementById('emailBadge').textContent   = 'Email: ' + email;
+
+      // also update header dropdown if present
+      const nameEl  = document.getElementById('profileUserName');
+      const emailEl = document.getElementById('profileUserEmail');
+      if (nameEl)  nameEl.textContent  = name;
+      if (emailEl) emailEl.textContent = email;
+
+      // ---- Social Link ----
+      const socialRow = document.getElementById('profileSocialLinkRow');
+      const socialEl  = document.getElementById('profileSocialLink');
+
+      if (social && socialRow && socialEl) {
+        socialRow.style.display = 'block';
+        socialEl.href = social;
+        socialEl.textContent = social;
+      } else if (socialRow) {
+        socialRow.style.display = 'none';
+      }
+
+      // ---- Avatar ----
+      const avatarEl = document.getElementById('profileAvatar');
+      const initials = name
+        .split(' ')
+        .filter(Boolean)
+        .map(part => part[0].toUpperCase())
+        .slice(0, 2)
+        .join('') || 'ST';
+
+      if (avatar) {
+        avatarEl.style.backgroundImage = `url(${avatar})`;
+        avatarEl.classList.add('has-photo');
+        avatarEl.textContent = '';
+      } else {
+        avatarEl.style.backgroundImage = '';
+        avatarEl.classList.remove('has-photo');
+        avatarEl.textContent = initials;
+      }
+    }
+
+    // -------- Helper: build card --------
+    function buildListingCard(listing, type) {
+      const card = document.createElement('div');
+      card.className = 'listing-card';
+
+      const imageUrl = listing.cover_image_url || 'https://placehold.co/400x300?text=No+Image';
+      const priceText = '₱' + (Number(listing.price ?? 0)).toLocaleString();
+
+      let statusClass = '';
+      let statusText  = '';
+
+      const saleStatus = listing.sale_status || 'available';
+
+      if (type === 'pending') {
+        statusClass = 'pending';
+        statusText = 'Pending';
+      } else if (type === 'active') {
+        statusClass = 'active';
+        statusText = 'Active';
+      } else if (type === 'archived') {
+        if (saleStatus === 'sold') {
+          statusClass = 'sold';
+          statusText = 'Sold';
+        } else if (saleStatus === 'traded') {
+          statusClass = 'traded';
+          statusText = 'Traded';
+        } else {
+          statusClass = 'archived';
+          statusText = 'Archived';
+        }
+      }
+
+      const inner = document.createElement('div');
+      inner.className = 'listing-card-inner';
+      inner.innerHTML = `
+        <img src="${imageUrl}"
+             alt="${listing.title || 'Listing image'}"
+             class="listing-image" />
+        <div class="listing-info">
+          <div class="listing-title-row">
+            <div class="listing-title">${listing.title || 'Untitled Item'}</div>
+            <div class="listing-price">${priceText}</div>
+          </div>
+          <div class="listing-meta">
+            <span class="listing-category">${listing.category || ''}</span>
+            <span class="status-chip ${statusClass}">${statusText}</span>
+          </div>
+        </div>
+      `;
+
+      inner.addEventListener('click', () => {
+        window.location.href = 'item-details.html?id=' + listing.id;
+      });
+
+      const actions = document.createElement('div');
+      actions.className = 'listing-card-actions';
+
+      if (type === 'active') {
+        // ACTIVE → Archive / Sold / Traded / Delete
+        const btnSold = document.createElement('button');
+        btnSold.className = 'listing-card-btn btn-sold';
+        btnSold.textContent = 'Mark Sold';
+        btnSold.addEventListener('click', (e) => {
+          e.stopPropagation();
+          markListingSoldUser(listing.id);
+        });
+
+        const btnTraded = document.createElement('button');
+        btnTraded.className = 'listing-card-btn btn-traded';
+        btnTraded.textContent = 'Mark Traded';
+        btnTraded.addEventListener('click', (e) => {
+          e.stopPropagation();
+          markListingTradedUser(listing.id);
+        });
+
+        const btnArchive = document.createElement('button');
+        btnArchive.className = 'listing-card-btn btn-archive';
+        btnArchive.textContent = 'Archive';
+        btnArchive.addEventListener('click', (e) => {
+          e.stopPropagation();
+          archiveListingUser(listing.id);
+        });
+
+        const btnDelete = document.createElement('button');
+        btnDelete.className = 'listing-card-btn btn-delete';
+        btnDelete.textContent = 'Delete';
+        btnDelete.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteListingUser(listing.id);
+        });
+
+        actions.appendChild(btnSold);
+        actions.appendChild(btnTraded);
+        actions.appendChild(btnArchive);
+        actions.appendChild(btnDelete);
+      } else if (type === 'pending') {
+        // PENDING → Delete lang
+        const btnDelete = document.createElement('button');
+        btnDelete.className = 'listing-card-btn btn-delete';
+        btnDelete.textContent = 'Delete';
+        btnDelete.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteListingUser(listing.id);
+        });
+
+        actions.appendChild(btnDelete);
+      } else {
+        // ARCHIVED → Restore + Delete
+        const btnRestore = document.createElement('button');
+        btnRestore.className = 'listing-card-btn btn-restore';
+        btnRestore.textContent = 'Restore';
+        btnRestore.addEventListener('click', (e) => {
+          e.stopPropagation();
+          restoreListingUser(listing.id);
+        });
+
+        const btnDelete = document.createElement('button');
+        btnDelete.className = 'listing-card-btn btn-delete';
+        btnDelete.textContent = 'Delete';
+        btnDelete.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteListingUser(listing.id);
+        });
+
+        actions.appendChild(btnRestore);
+        actions.appendChild(btnDelete);
+      }
+
+      card.appendChild(inner);
+      card.appendChild(actions);
+      return card;
+    }
+
+    // -------- Load listings for this user --------
+    async function loadUserListings() {
+      const studNo = sessionStorage.getItem('studentNumber');
+      if (!studNo) return;
+
+      const { data, error } = await supabase
+        .from('listings')
+        .select('id, title, cover_image_url, is_active, price, category, approval_status, archived_at, created_at, sale_status')
+        .eq('seller_student_no', studNo)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error loading listings:', error);
+        return;
+      }
+
+      const listings = data || [];
+
+      const activeListings   = [];
+      const pendingListings  = [];
+      const archivedListings = [];
+
+      // classification
+      for (const l of listings) {
+        if (l.approval_status === 'pending') {
+          pendingListings.push(l);
+        } else if (l.approval_status === 'rejected') {
+          archivedListings.push(l);
+        } else if (l.is_active === false || l.archived_at) {
+          archivedListings.push(l);
+        } else if (l.approval_status === 'approved' && (l.is_active === true || l.is_active === null)) {
+          activeListings.push(l);
+        } else {
+          activeListings.push(l);
+        }
+      }
+
+      const total = listings.length;
+      const activeCount = activeListings.length;
+      const pendingCount = pendingListings.length;
+      const archivedCount = archivedListings.length;
+
+      document.getElementById('totalItems').textContent = total;
+      document.getElementById('activeItems').textContent = activeCount;
+      document.getElementById('soldItems').textContent = archivedCount;
+
+      document.getElementById('activeCountBadge').textContent = activeCount;
+      document.getElementById('pendingCountBadge').textContent = pendingCount;
+      document.getElementById('archivedCountBadge').textContent = archivedCount;
+
+      const activeGrid   = document.getElementById('activeListingsGrid');
+      const pendingGrid  = document.getElementById('pendingListingsGrid');
+      const archivedGrid = document.getElementById('archivedListingsGrid');
+
+      activeGrid.innerHTML   = '';
+      pendingGrid.innerHTML  = '';
+      archivedGrid.innerHTML = '';
+
+      if (total === 0) {
+        activeGrid.innerHTML   = '<p class="empty-text">You have not posted any listings yet.</p>';
+        pendingGrid.innerHTML  = '<p class="empty-text">No pending listings.</p>';
+        archivedGrid.innerHTML = '<p class="empty-text">No archived listings.</p>';
+        return;
+      }
+
+      if (activeListings.length === 0) {
+        activeGrid.innerHTML = '<p class="empty-text">No active listings.</p>';
+      } else {
+        activeListings.forEach(l => activeGrid.appendChild(buildListingCard(l, 'active')));
+      }
+
+      if (pendingListings.length === 0) {
+        pendingGrid.innerHTML = '<p class="empty-text">No pending listings.</p>';
+      } else {
+        pendingListings.forEach(l => pendingGrid.appendChild(buildListingCard(l, 'pending')));
+      }
+
+      if (archivedListings.length === 0) {
+        archivedGrid.innerHTML = '<p class="empty-text">No archived listings.</p>';
+      } else {
+        archivedListings.forEach(l => archivedGrid.appendChild(buildListingCard(l, 'archived')));
+      }
+    }
+
+    // -------- Archive / Restore / Delete (user side) --------
+    async function archiveListingUser(listingId) {
+  const result = await Swal.fire({
+    title: 'Archive listing?',
+    text: 'This listing will be moved to Archived.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, archive',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'danger-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  });
+
+  if (!result.isConfirmed) return;
+
+  const studNo = sessionStorage.getItem('studentNumber') || '';
+
+  const { error } = await supabase
+    .from('listings')
+    .update({
+      is_active: false,
+      archived_at: null,
+      archived_by: null,
+      sale_status: 'archived'
+    })
+    .eq('id', listingId)
+    .eq('seller_student_no', studNo);
+
+  if (error) {
+    console.error('Error archiving listing:', error);
+    await Swal.fire({
+      title: 'Archive failed',
+      text: 'Error archiving listing. Please try again.',
+      icon: 'error',
+      backdrop: 'rgba(0,0,0,0.45)',
+      customClass: {
+        popup: 'logout-swal-popup',
+        title: 'logout-swal-title',
+        htmlContainer: 'logout-swal-text',
+        confirmButton: 'danger-swal-confirm'
+      },
+      buttonsStyling: false
+    });
+    return;
+  }
+
+  await Swal.fire({
+    title: 'Archived',
+    text: 'The listing has been moved to Archived.',
+    icon: 'success',
+    timer: 1200,
+    showConfirmButton: false,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text'
+    }
+  });
+
+  await loadUserListings();
+}
+
+    async function restoreListingUser(listingId) {
+  const result = await Swal.fire({
+    title: 'Restore listing?',
+    text: 'This listing will be moved back to Active.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, restore',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  });
+
+  if (!result.isConfirmed) return;
+
+  const studNo = sessionStorage.getItem('studentNumber') || '';
+
+  const { error } = await supabase
+    .from('listings')
+    .update({
+      is_active: true,
+      archived_at: null,
+      archived_by: null,
+      sale_status: 'available'
+    })
+    .eq('id', listingId)
+    .eq('seller_student_no', studNo);
+
+  if (error) {
+    console.error('Error restoring listing:', error);
+    await Swal.fire({
+      title: 'Restore failed',
+      text: 'Error restoring listing. Please try again.',
+      icon: 'error',
+      backdrop: 'rgba(0,0,0,0.45)',
+      customClass: {
+        popup: 'logout-swal-popup',
+        title: 'logout-swal-title',
+        htmlContainer: 'logout-swal-text',
+        confirmButton: 'danger-swal-confirm'
+      },
+      buttonsStyling: false
+    });
+    return;
+  }
+
+  await Swal.fire({
+    title: 'Restored',
+    text: 'The listing is active again.',
+    icon: 'success',
+    timer: 1200,
+    showConfirmButton: false,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text'
+    }
+  });
+
+  await loadUserListings();
+}
+
+    async function deleteListingUser(listingId) {
+  const result = await Swal.fire({
+    title: 'Delete listing?',
+    text: 'This will permanently delete the listing. This cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'danger-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  });
+
+  if (!result.isConfirmed) return;
+
+  const studNo = sessionStorage.getItem('studentNumber') || '';
+
+  const { error } = await supabase
+    .from('listings')
+    .delete()
+    .eq('id', listingId)
+    .eq('seller_student_no', studNo);
+
+  if (error) {
+    console.error('Error deleting listing:', error);
+    await Swal.fire({
+      title: 'Delete failed',
+      text: 'Error deleting listing. Please try again.',
+      icon: 'error',
+      backdrop: 'rgba(0,0,0,0.45)',
+      customClass: {
+        popup: 'logout-swal-popup',
+        title: 'logout-swal-title',
+        htmlContainer: 'logout-swal-text',
+        confirmButton: 'danger-swal-confirm'
+      },
+      buttonsStyling: false
+    });
+    return;
+  }
+
+  await Swal.fire({
+    title: 'Deleted',
+    text: 'The listing has been permanently deleted.',
+    icon: 'success',
+    timer: 1200,
+    showConfirmButton: false,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text'
+    }
+  });
+
+  await loadUserListings();
+}
+
+   async function markListingSoldUser(listingId) {
+  const result = await Swal.fire({
+    title: 'Mark as sold?',
+    text: 'This listing will be moved to Archived.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, mark sold',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'danger-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  });
+
+  if (!result.isConfirmed) return;
+  await markListingDealStatus(listingId, 'sold');
+}
+
+    async function markListingTradedUser(listingId) {
+  const result = await Swal.fire({
+    title: 'Mark as traded?',
+    text: 'This listing will be moved to Archived.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, mark traded',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  });
+
+  if (!result.isConfirmed) return;
+  await markListingDealStatus(listingId, 'traded');
+}
+
+  async function markListingDealStatus(listingId, status) {
+  const studNo = sessionStorage.getItem('studentNumber') || '';
+
+  const { error } = await supabase
+    .from('listings')
+    .update({
+      is_active: false,
+      archived_at: new Date().toISOString(),
+      archived_by: studNo,
+      sale_status: status
+    })
+    .eq('id', listingId)
+    .eq('seller_student_no', studNo);
+
+  if (error) {
+    console.error('Error updating listing status:', error);
+    await Swal.fire({
+      title: 'Update failed',
+      text: 'Error updating listing. Please try again.',
+      icon: 'error',
+      backdrop: 'rgba(0,0,0,0.45)',
+      customClass: {
+        popup: 'logout-swal-popup',
+        title: 'logout-swal-title',
+        htmlContainer: 'logout-swal-text',
+        confirmButton: 'danger-swal-confirm'
+      },
+      buttonsStyling: false
+    });
+    return;
+  }
+
+  await Swal.fire({
+    title: status === 'sold' ? 'Marked as sold' : 'Marked as traded',
+    text: 'The listing has been moved to Archived.',
+    icon: 'success',
+    timer: 1200,
+    showConfirmButton: false,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text'
+    }
+  });
+
+  await loadUserListings();
+}
+    
+
+    // -------- Tab switch --------
+    window.switchTab = function (tab, ev) {
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      if (ev && ev.currentTarget) {
+        ev.currentTarget.classList.add('active');
+      }
+
+      const activeGrid   = document.getElementById('activeListingsGrid');
+      const pendingGrid  = document.getElementById('pendingListingsGrid');
+      const archivedGrid = document.getElementById('archivedListingsGrid');
+
+      activeGrid.style.display   = (tab === 'active')   ? 'grid' : 'none';
+      pendingGrid.style.display  = (tab === 'pending')  ? 'grid' : 'none';
+      archivedGrid.style.display = (tab === 'archived') ? 'grid' : 'none';
+    };
+
+    // -------- Init on load --------
+    window.addEventListener('load', () => {
+      initProfileInfo();
+      loadUserListings();
+    });
+  </script>
+</body>
+</html>
