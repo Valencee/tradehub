@@ -1,0 +1,1039 @@
+<!doctype html>
+<html lang="en" data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-direction="ltr" dir="ltr" data-pc-theme="light">
+<head>
+  <title>Update Requests - PHINMA TradeHub</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="Admin Dashboard" />
+  <meta name="keywords" content="PHINMA, TradeHub, Dashboard" />
+  <meta name="author" content="Sniper 2025" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/fonts/phosphor/duotone/style.css" />
+  <link rel="stylesheet" href="../assets/fonts/tabler-icons.min.css" />
+  <link rel="stylesheet" href="../assets/fonts/feather.css" />
+  <link rel="stylesheet" href="../assets/fonts/fontawesome.css" />
+  <link rel="stylesheet" href="../assets/fonts/material.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link" />
+  <link rel="stylesheet" href="../assets/css/style2.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    .pc-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      z-index: 1025;
+      transition: transform 0.3s ease;
+    }
+
+    .pc-container {
+      margin-left: 260px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .pc-header {
+      position: fixed;
+      top: 0;
+      left: 260px;
+      right: 0;
+      height: 70px;
+      z-index: 1020;
+      transition: left 0.3s ease;
+      background: #14532d;
+    }
+
+    body.sidebar-collapsed .pc-sidebar {
+      transform: translateX(-260px);
+    }
+
+    body.sidebar-collapsed .pc-container {
+      margin-left: 0;
+    }
+
+    body.sidebar-collapsed .pc-header {
+      left: 0;
+    }
+
+    .pc-content {
+      padding-top: 80px;
+    }
+
+    @media (max-width: 1024px) {
+      .pc-sidebar {
+        transform: translateX(-260px);
+      }
+
+      body.mob-sidebar-active .pc-sidebar {
+        transform: translateX(0);
+      }
+
+      .pc-container,
+      .pc-header {
+        margin-left: 0;
+        left: 0;
+      }
+    }
+    
+    .pc-link {
+      transition: all 0.3s ease;
+    }
+    
+    .pc-link:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .pc-link.active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 10px;
+      z-index: 1000;
+      min-width: 280px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dropdown-menu.show {
+      display: block;
+    }
+    
+    .pc-head-link {
+      cursor: pointer;
+      padding: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .pc-head-link:hover {
+      opacity: 0.8;
+    }
+    
+    .min-h-header-height {
+      min-height: 70px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1050;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      padding: 24px;
+      border-radius: 12px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-warning {
+      background-color: #f59e0b;
+      color: white;
+    }
+
+    
+
+    .btn-approve {
+      background-color: #10b981;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-approve:hover {
+      background-color: #059669;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+    }
+
+    .btn-reject {
+      background-color: #ef4444;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-reject:hover {
+      background-color: #dc2626;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-view {
+      background-color: #3b82f6;
+      color: white;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-view:hover {
+      background-color: #2563eb;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    thead th {
+      background-color: #14532d;
+      color: white;
+      font-weight: 600;
+      text-align: left;
+      padding: 16px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    thead th:first-child {
+      border-top-left-radius: 8px;
+    }
+
+    thead th:last-child {
+      border-top-right-radius: 8px;
+    }
+
+    tbody tr {
+      background-color: white;
+      border-bottom: 1px solid #e5e7eb;
+      transition: background-color 0.2s;
+    }
+
+    tbody tr:hover {
+      background-color: #f9fafb;
+    }
+
+    tbody td {
+      padding: 16px;
+      font-size: 14px;
+    }
+
+    .search-box {
+      padding: 10px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+      width: 300px;
+    }
+
+    .search-box:focus {
+      outline: none;
+      border-color: #14532d;
+    }
+
+    .comparison-box {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .field-changed {
+      background: #fef3c7;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .old-value {
+      color: #dc2626;
+      text-decoration: line-through;
+    }
+
+    .new-value {
+      color: #16a34a;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="mainbody">
+  <!-- Pre-loader -->
+  <div class="loader-bg fixed inset-0 bg-white dark:bg-themedark-cardbg z-[1034]">
+    <div class="loader-track h-[5px] w-full inline-block absolute overflow-hidden top-0">
+      <div class="loader-fill w-[300px] h-[5px] bg-primary-500 absolute top-0 left-0 animate-[hitZak_0.6s_ease-in-out_infinite_alternate]"></div>
+    </div>
+  </div>
+
+  <!-- [ Sidebar Menu ] start -->
+  <nav class="pc-sidebar" style="background: url('../assets/images/sbbg2.png') center/cover no-repeat;">
+    <div class="navbar-wrapper">
+      <div class="m-header flex items-center py-4 px-6 h-header-height">
+        <a href="dashboard.html" class="b-brand flex items-center gap-3">
+          <img src="../assets/images/upang.png" alt="logo here" class="w-10 rounded-lg"/>
+          <h4 class="text-xl font-semibold text-white">PHINMA TradeHub</h4>
+        </a>
+      </div>
+
+      <div class="navbar-content h-[calc(100vh_-_74px)] py-2.5">  
+        <div class="grow ms-3 text-center"></div>
+        <ul class="pc-navbar">
+
+  <!-- NAVIGATION -->
+  <li class="pc-item pc-caption">
+    <label>Navigation</label>
+  </li>
+
+  <li class="pc-item">
+    <a href="dashboard.html" class="pc-link">
+      <span class="pc-micon"><i data-feather="layout"></i></span>
+      <span class="pc-mtext">Dashboard</span>
+    </a>
+  </li>
+
+  <!-- USER MANAGEMENT -->
+  <li class="pc-item pc-caption">
+    <label>User Management</label>
+  </li>
+
+  <li class="pc-item">
+    <a href="users.html" class="pc-link">
+      <span class="pc-micon"><i data-feather="users"></i></span>
+      <span class="pc-mtext">View Users</span>
+    </a>
+  </li>
+
+  <li class="pc-item">
+    <a href="user-approval.html" class="pc-link">
+      <span class="pc-micon"><i data-feather="user-check"></i></span>
+      <span class="pc-mtext">User Approvals</span>
+    </a>
+  </li>
+
+  <li class="pc-item">
+    <a href="update-requests.html" class="pc-link active">
+      <span class="pc-micon"><i data-feather="edit"></i></span>
+      <span class="pc-mtext">Update Requests</span>
+    </a>
+  </li>
+
+  <li class="pc-item">
+    <a href="archived-users.html" class="pc-link">
+      <span class="pc-micon"><i data-feather="archive"></i></span>
+      <span class="pc-mtext">Archived Users</span>
+    </a>
+  </li>
+
+  <li class="pc-item">
+    <a href="blacklist.html" class="pc-link">
+      <span class="pc-micon"><i data-feather="slash"></i></span>
+      <span class="pc-mtext">Blocklist</span>
+    </a>
+  </li>
+
+  <!-- LISTINGS -->
+  <li class="pc-item pc-caption">
+    <label>Listings</label>
+  </li>
+
+  <li class="pc-item">
+    <a href="listings.html" class="pc-link">
+      <span class="pc-micon"><i data-feather="file-text"></i></span>
+      <span class="pc-mtext">View Listings</span>
+    </a>
+  </li>
+
+  <li class="pc-item">
+    <a href="listing-approval.html" class="pc-link">
+      <span class="pc-micon"><i data-feather="check-square"></i></span>
+      <span class="pc-mtext">Listing Approvals</span>
+    </a>
+  </li>
+
+
+  <!-- REPORTS -->
+  <li class="pc-item pc-caption">
+    <label>Reports</label>
+  </li>
+
+  <li class="pc-item">
+    <a href="user-reports.html" class="pc-link">
+      <span class="pc-micon"><i data-feather="alert-circle"></i></span>
+      <span class="pc-mtext">User Reports</span>
+    </a>
+  </li>
+
+  <li class="pc-item">
+    <a href="listing-reports.html" class="pc-link">
+      <span class="pc-micon"><i data-feather="flag"></i></span>
+      <span class="pc-mtext">Listing Reports</span>
+    </a>
+  </li>
+
+  <!-- SETTINGS -->
+  <li class="pc-item pc-caption">
+    <label>Settings</label>
+  </li>
+
+  <li class="pc-item">
+    <a href="#" class="pc-link" onclick="handleLogout(); return false;">
+      <span class="pc-micon"><i data-feather="log-out"></i></span>
+      <span class="pc-mtext">Log-Out</span>
+    </a>
+  </li>
+
+</ul>
+</div>
+    </div>
+  </nav>
+          
+  <!-- [ Sidebar Menu ] end -->
+
+  <!-- [ Header Topbar ] start -->
+  <header class="pc-header">
+    <div class="header-wrapper flex max-sm:px-[15px] px-[25px] grow">
+      <!-- [Mobile Media Block] start -->
+      <div class="me-auto pc-mob-drp">
+        <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
+          <!-- ======= Menu collapse Icon ===== -->
+          <li class="pc-h-item pc-sidebar-collapse max-lg:hidden lg:inline-flex">
+            <a href="#" class="pc-head-link ltr:!ml-0 rtl:!mr-0" id="sidebar-hide">
+              <i data-feather="menu" class="text-white"></i>
+            </a>
+          </li>
+          <li class="pc-h-item pc-sidebar-popup lg:hidden">
+            <a href="#" class="pc-head-link ltr:!ml-0 rtl:!mr-0" id="mobile-collapse">
+              <i data-feather="menu" class="text-white"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- [Mobile Media Block end] -->
+      <div class="ms-auto">
+        <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
+          <!-- User Profile Dropdown -->
+          <li class="dropdown pc-h-item header-user-profile">
+            <a class="pc-head-link dropdown-toggle arrow-none me-0" href="#" role="button" id="userDropdownToggle"
+              aria-haspopup="false" aria-expanded="false">
+              <i data-feather="user" class="text-white"></i>
+            </a>
+            <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown p-2 overflow-hidden" id="userDropdownMenu">
+              <div class="dropdown-header flex items-center justify-between py-4 px-5 bg-[#212E13]">
+                <div class="flex mb-1 items-center">
+                  <div class="shrink-0">
+                    <img src="../assets/images/user/avatar-2.jpg" alt="user-image" class="w-10 rounded-full" />
+                  </div>
+                  <div class="grow ms-4 bg-[#fefae0] py-2 px-5 rounded-md">
+                    <h4 class="mb-1 text-black font-bold" id="headerAdminName">Admin</h4>
+                  </div>
+                </div>
+              </div>
+              <div class="dropdown-body py-4 px-5 bg-[#212E13]">
+                <div class="profile-notification-scroll position-relative border-t border-white" style="max-height: calc(100vh - 225px)">               
+                  <div class="grid my-3">
+                    <button class="btn bg-[#fefae0] flex items-center justify-center hover:bg-[#ffdb7f]" onclick="handleLogout()">
+                      <svg class="pc-icon me-2 w-[22px] h-[22px] text-black">
+                        <use xlink:href="#custom-logout-1-outline"></use>
+                      </svg>
+                      <span class="text-black">Log-Out</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <!-- [ Header ] end -->
+
+  <!-- Main Content -->
+  <div class="pc-container">
+    <div class="pc-content p-6">
+      
+      <!-- Summary Cards -->
+<div class="grid grid-cols-12 gap-6 mb-6">
+  
+  <!-- Pending Requests Card -->
+  <div class="col-span-12 sm:col-span-6 xl:col-span-4">
+    <div class="card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6">
+      <div class="flex items-center gap-4">
+        <div class="bg-white dark:bg-gray-300 p-4 rounded-full">
+          <i class="feather icon-edit text-black text-2xl"></i>
+        </div>
+        <div>
+          <h3 id="pendingRequests" class="text-3xl font-bold text-white">0</h3>
+          <p class="text-white uppercase text-sm font-semibold">Pending Requests</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Approved Today Card -->
+  <div class="col-span-12 sm:col-span-6 xl:col-span-4">
+    <div class="card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6">
+      <div class="flex items-center gap-4">
+        <div class="bg-white dark:bg-gray-300 p-4 rounded-full">
+          <i class="feather icon-check-circle text-black text-2xl"></i>
+        </div>
+        <div>
+          <h3 id="approvedToday" class="text-3xl font-bold text-white">0</h3>
+          <p class="text-white uppercase text-sm font-semibold">Approved Today</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Total Processed Card -->
+  <div class="col-span-12 sm:col-span-6 xl:col-span-4">
+    <div class="card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6">
+      <div class="flex items-center gap-4">
+        <div class="bg-white dark:bg-gray-300 p-4 rounded-full">
+          <i class="feather icon-activity text-black text-2xl"></i>
+        </div>
+        <div>
+          <h3 id="totalProcessed" class="text-3xl font-bold text-white">0</h3>
+          <p class="text-white uppercase text-sm font-semibold">Total Processed</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <!-- Update Requests Table -->
+      <div class="col-span-12">
+        <div class="card table-card bg-white rounded-xl shadow-md p-6">
+          <div class="card-header mb-6 flex justify-between items-center">
+            <h5 class="text-2xl font-bold text-gray-800">Profile Update Requests</h5>
+            <input type="text" id="searchInput" placeholder="Search requests..." class="search-box">
+          </div>
+          <div class="card-body">
+            <div id="loadingMessage" class="h-auto flex items-center justify-center bg-white py-12">
+              <p class="text-gray-600 font-semibold text-lg">Loading update requests...</p>
+            </div>
+            <div id="noRequestsMessage" class="h-auto flex items-center justify-center bg-white py-12 hidden">
+              <p class="text-gray-600 font-semibold text-lg">No pending update requests</p>
+            </div>
+            <div id="tableContainer" class="table-responsive hidden">
+              <table>
+                <thead>
+                  <tr>
+                    <th>STUDENT ID</th>
+                    <th>STUDENT NAME</th>
+                    <th>REQUEST TYPE</th>
+                    <th>SUBMITTED</th>
+                    <th>STATUS</th>
+                    <th>ACTIONS</th>                         
+                  </tr>
+                </thead>
+                <tbody id="requestsTableBody">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Request Details Modal -->
+  <div id="requestModal" class="modal">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-6 border-b pb-4">
+        <h2 class="text-2xl font-bold text-gray-800">Update Request Details</h2>
+        <button onclick="closeRequestModal()" class="text-gray-500 hover:text-gray-700 text-3xl font-bold">&times;</button>
+      </div>
+      <div id="requestModalContent" class="space-y-6">
+        <!-- Content will be populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getFirestore, collection, getDocs, getDoc, doc, deleteDoc, updateDoc, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAh1NICjSc6vXxsuYZWRDxPQ5XvdeYvvX0",
+      authDomain: "phinma-upang-tradehub.firebaseapp.com",
+      projectId: "phinma-upang-tradehub",
+      storageBucket: "phinma-upang-tradehub.firebasestorage.app",
+      messagingSenderId: "65153939300",
+      appId: "1:65153939300:web:e001e394651e8b98996c71",
+      measurementId: "G-FYR7FGCSQZ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Check if admin is logged in
+    const adminLoggedIn = sessionStorage.getItem('admin_logged_in');
+    const adminName = sessionStorage.getItem('adminName') || 'Admin';
+    
+    if (!adminLoggedIn) {
+      window.location.href = '../../index.html';
+    } else {
+      document.getElementById('headerAdminName').textContent = adminName;
+    }
+
+    // Logout function
+    window.handleLogout = function() {
+      if (confirm('Do you really want to Log-Out?')) {
+        sessionStorage.clear();
+        window.location.href = '../../index.html';
+      }
+    };
+
+    let allRequests = [];
+
+    // Load statistics
+    async function loadStatistics() {
+      try {
+        // Get pending requests count
+        const requestsSnapshot = await getDocs(collection(db, 'update_requests'));
+        const pendingCount = requestsSnapshot.docs.filter(doc => doc.data().status === 'pending').length;
+        document.getElementById('pendingRequests').textContent = pendingCount;
+
+        // Get approved today (last 24 hours)
+        const oneDayAgo = new Date();
+        oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+        
+        let approvedTodayCount = 0;
+        requestsSnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data.status === 'approved' && data.processedAt && data.processedAt.toDate() > oneDayAgo) {
+            approvedTodayCount++;
+          }
+        });
+        document.getElementById('approvedToday').textContent = approvedTodayCount;
+
+        // Get total processed (approved + rejected)
+        const processedCount = requestsSnapshot.docs.filter(doc => 
+          doc.data().status === 'approved' || doc.data().status === 'rejected'
+        ).length;
+        document.getElementById('totalProcessed').textContent = processedCount;
+
+      } catch (error) {
+        console.error('Error loading statistics:', error);
+      }
+    }
+
+    // Load update requests
+    async function loadUpdateRequests() {
+      try {
+        const requestsRef = collection(db, 'update_requests');
+        const q = query(requestsRef, where('status', '==', 'pending'));
+        const querySnapshot = await getDocs(q);
+        allRequests = [];
+        for (const docSnapshot of querySnapshot.docs) {
+          const request = docSnapshot.data();
+          
+          // Get current user data
+          let currentUserData = null;
+          if (request.studentId) {
+            const studentDoc = await getDoc(doc(db, 'students', request.studentId));
+            if (studentDoc.exists()) {
+              currentUserData = studentDoc.data();
+            }
+          }
+
+          allRequests.push({
+            id: docSnapshot.id,
+            ...request,
+            currentData: currentUserData
+          });
+        }
+
+        displayRequests(allRequests);
+      } catch (error) {
+        console.error('Error loading update requests:', error);
+        document.getElementById('loadingMessage').innerHTML = 
+          '<p class="text-red-600 font-bold">Error loading update requests</p>';
+      }
+    }
+
+    // Display requests
+    function displayRequests(requests) {
+      const tableBody = document.getElementById('requestsTableBody');
+      const loadingMessage = document.getElementById('loadingMessage');
+      const noRequestsMessage = document.getElementById('noRequestsMessage');
+      const tableContainer = document.getElementById('tableContainer');
+
+      loadingMessage.classList.add('hidden');
+
+      if (requests.length === 0) {
+        noRequestsMessage.classList.remove('hidden');
+        tableContainer.classList.add('hidden');
+      } else {
+        noRequestsMessage.classList.add('hidden');
+        tableContainer.classList.remove('hidden');
+
+        tableBody.innerHTML = '';
+
+        requests.forEach((request) => {
+          const row = document.createElement('tr');
+          
+          // Determine what fields were changed
+          let requestType = 'Profile Update';
+          if (request.requestedChanges) {
+            const changes = Object.keys(request.requestedChanges);
+            if (changes.length === 1) {
+              requestType = changes[0].replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' Update';
+            } else {
+              requestType = 'Multiple Fields';
+            }
+          }
+
+          const submittedDate = request.requestedAt ? 
+            new Date(request.requestedAt.seconds * 1000).toLocaleDateString() : 
+            'N/A';
+
+          row.innerHTML = `
+            <td>${escapeHtml(request.studentNumber || 'N/A')}</td>
+            <td>${escapeHtml(request.studentName || 'N/A')}</td>
+            <td><span class="field-changed">${requestType}</span></td>
+            <td>${submittedDate}</td>
+            <td><span class="badge badge-warning">PENDING</span></td>
+            <td>
+              <div class="flex gap-2">
+                <button onclick="viewRequest('${request.id}')" class="btn-view">
+                  View Changes
+                </button>
+                <button onclick="approveRequest('${request.id}')" class="btn-approve">
+                  Approve
+                </button>
+                <button onclick="rejectRequest('${request.id}')" class="btn-reject">
+                  Reject
+                </button>
+              </div>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // View request details
+    window.viewRequest = function(requestId) {
+      const request = allRequests.find(r => r.id === requestId);
+      
+      if (!request) {
+        alert('Request not found');
+        return;
+      }
+
+      const modalContent = document.getElementById('requestModalContent');
+      const currentData = request.currentData || {};
+      const requestedChanges = request.requestedChanges || {};
+
+      let changesHtml = '';
+
+      // Compare each field
+      const fieldLabels = {
+        studentName: 'Student Name',
+        studentNumber: 'Student Number',
+        course_block: 'Course & Block',
+        email: 'Email Address'
+      };
+
+      Object.keys(requestedChanges).forEach(field => {
+        const oldValue = currentData[field] || 'N/A';
+        const newValue = requestedChanges[field] || 'N/A';
+        
+        if (oldValue !== newValue) {
+          changesHtml += `
+            <div class="comparison-box">
+              <p class="text-sm text-gray-600 mb-2 font-semibold">${fieldLabels[field] || field}</p>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Current Value</p>
+                  <p class="old-value text-lg">${escapeHtml(oldValue)}</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-500 mb-1">Requested Value</p>
+                  <p class="new-value text-lg">${escapeHtml(newValue)}</p>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      });
+
+      modalContent.innerHTML = `
+        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+          <h3 class="text-lg font-bold text-gray-800 mb-3">Student Information</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm text-gray-600">Student Number</p>
+              <p class="font-semibold">${escapeHtml(request.studentNumber || 'N/A')}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Student Name</p>
+              <p class="font-semibold">${escapeHtml(currentData.studentName || request.studentName || 'N/A')}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Submitted On</p>
+              <p class="font-semibold">${request.requestedAt ? new Date(request.requestedAt.seconds * 1000).toLocaleString() : 'N/A'}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">User ID</p>
+              <p class="font-mono text-xs">${escapeHtml(request.uid || 'N/A')}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="text-lg font-bold text-gray-800 mb-3">Requested Changes</h3>
+          ${changesHtml || '<p class="text-gray-500">No changes detected</p>'}
+        </div>
+
+        ${request.reason ? `
+          <div class="bg-blue-50 p-4 rounded-lg mb-4">
+            <h3 class="text-lg font-bold text-gray-800 mb-2">Reason for Update</h3>
+            <p class="text-gray-700">${escapeHtml(request.reason)}</p>
+          </div>
+        ` : ''}
+
+        <div class="flex gap-3 mt-6 pt-4 border-t">
+          <button onclick="approveRequest('${requestId}')" class="btn-approve flex-1">
+            <i data-feather="check-circle" style="width: 18px; height: 18px; display: inline; margin-right: 8px;"></i>
+            Approve Changes
+          </button>
+          <button onclick="rejectRequest('${requestId}')" class="btn-reject flex-1">
+            <i data-feather="x-circle" style="width: 18px; height: 18px; display: inline; margin-right: 8px;"></i>
+            Reject Request
+          </button>
+        </div>
+      `;
+
+      document.getElementById('requestModal').classList.add('show');
+      
+      // Re-initialize feather icons in modal
+      if (typeof feather !== 'undefined') {
+        feather.replace();
+      }
+    };
+
+    window.closeRequestModal = function() {
+      document.getElementById('requestModal').classList.remove('show');
+    };
+
+    // Approve request
+    window.approveRequest = async function(requestId) {
+      if (!confirm('Are you sure you want to approve this update request?')) {
+        return;
+      }
+
+      try {
+        const requestDoc = await getDoc(doc(db, 'update_requests', requestId));
+        
+        if (!requestDoc.exists()) {
+          alert('Request not found');
+          return;
+        }
+
+        const requestData = requestDoc.data();
+
+        // Update the student record with new data
+        if (requestData.studentId && requestData.requestedChanges) {
+          const studentRef = doc(db, 'students', requestData.studentId);
+          await updateDoc(studentRef, {
+            ...requestData.requestedChanges,
+            lastUpdated: new Date()
+          });
+        }
+
+        // Update request status
+        await updateDoc(doc(db, 'update_requests', requestId), {
+          status: 'approved',
+          processedAt: new Date(),
+          processedBy: adminName
+        });
+
+        alert('Update request approved successfully!');
+        closeRequestModal();
+        location.reload();
+      } catch (error) {
+        console.error('Error approving request:', error);
+        alert('Error approving request. Please try again.');
+      }
+    };
+
+    // Reject request
+    window.rejectRequest = async function(requestId) {
+      const reason = prompt('Please provide a reason for rejection (optional):');
+      
+      if (!confirm('Are you sure you want to reject this update request?')) {
+        return;
+      }
+
+      try {
+        // Update request status
+        await updateDoc(doc(db, 'update_requests', requestId), {
+          status: 'rejected',
+          processedAt: new Date(),
+          processedBy: adminName,
+          rejectionReason: reason || 'No reason provided'
+        });
+
+        alert('Update request rejected successfully!');
+        closeRequestModal();
+        location.reload();
+      } catch (error) {
+        console.error('Error rejecting request:', error);
+        alert('Error rejecting request. Please try again.');
+      }
+    };
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      const searchTerm = e.target.value.toLowerCase();
+
+      const filteredRequests = allRequests.filter(request => 
+        (request.studentNumber && request.studentNumber.toLowerCase().includes(searchTerm)) ||
+        (request.studentName && request.studentName.toLowerCase().includes(searchTerm)) ||
+        (request.email && request.email.toLowerCase().includes(searchTerm))
+      );
+
+      displayRequests(filteredRequests);
+    });
+
+    // User dropdown toggle functionality
+    const userDropdownToggle = document.getElementById('userDropdownToggle');
+    const userDropdownMenu = document.getElementById('userDropdownMenu');
+    
+    if (userDropdownToggle && userDropdownMenu) {
+      userDropdownToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        userDropdownMenu.classList.toggle('show');
+        
+        if (typeof feather !== 'undefined') {
+          feather.replace();
+        }
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!userDropdownToggle.contains(e.target) && !userDropdownMenu.contains(e.target)) {
+          userDropdownMenu.classList.remove('show');
+        }
+      });
+    }
+
+    // Mobile sidebar toggle
+    const mobileCollapse = document.getElementById('mobile-collapse');
+    if (mobileCollapse) {
+      mobileCollapse.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.body.classList.toggle('mob-sidebar-active');
+
+        if (typeof feather !== 'undefined') {
+          feather.replace();
+        }
+      });
+    }
+
+    // Desktop sidebar collapse/expand toggle
+    const sidebarHide = document.getElementById('sidebar-hide');
+    if (sidebarHide) {
+      sidebarHide.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.body.classList.toggle('sidebar-collapsed');
+
+        if (typeof feather !== 'undefined') {
+          feather.replace();
+        }
+      });
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('requestModal');
+      if (event.target === modal) {
+        closeRequestModal();
+      }
+    };
+
+    // Load data on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.querySelector('.loader-bg').style.display = 'none';
+      }, 500);
+
+      if (typeof feather !== 'undefined') {
+        feather.replace();
+      }
+
+      loadStatistics();
+      loadUpdateRequests();
+    });
+  </script>
+
+  <!-- Required Js -->
+  <script src="../assets/js/plugins/simplebar.min.js"></script>
+  <script src="../assets/js/plugins/popper.min.js"></script>
+  <script src="../assets/js/icon/custom-icon.js"></script>
+  <script src="../assets/js/plugins/feather.min.js"></script>
+  <script src="../assets/js/component.js"></script>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/script.js"></script>
+
+  <script>
+    layout_change('false');
+    layout_theme_sidebar_change('dark');
+    change_box_container('false');
+    layout_caption_change('true');
+    layout_rtl_change('false');
+    preset_change('preset-1');
+    main_layout_change('vertical');
+  </script>
+</body>
+</html>

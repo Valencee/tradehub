@@ -1,0 +1,28 @@
+<?php
+require '../../../dist/database/db.php';
+
+if (!isset($_SESSION['admin_logged_in'])) {
+    header("Location: ../../../index.php");
+    exit();
+}
+
+if (isset($_POST['approve'])) {
+    $studentID = $_POST['approve'];
+
+    // move student directly from verification to students table
+    mysqli_query($conn, "
+        INSERT INTO students (studentNumber, password, course_block, studentName)
+        SELECT studentNumber, password, course_block ,studentName
+        FROM student_verification 
+        WHERE studentID = '$studentID'
+    ");
+
+    // delete from verification table
+    mysqli_query($conn, "DELETE FROM student_verification WHERE studentID = '$studentID'");
+    
+    header("Location: ../../admin/dashboard.php");
+    exit();
+}
+
+?>
+

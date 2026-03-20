@@ -1,0 +1,1428 @@
+<!doctype html>
+<html lang="en" data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-direction="ltr" dir="ltr" data-pc-theme="light">
+<head>
+  <title>Listing Reports - PHINMA TradeHub</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="Admin Dashboard" />
+  <meta name="keywords" content="PHINMA, TradeHub, Dashboard" />
+  <meta name="author" content="Sniper 2025" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/fonts/phosphor/duotone/style.css" />
+  <link rel="stylesheet" href="../assets/fonts/tabler-icons.min.css" />
+  <link rel="stylesheet" href="../assets/fonts/feather.css" />
+  <link rel="stylesheet" href="../assets/fonts/fontawesome.css" />
+  <link rel="stylesheet" href="../assets/fonts/material.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link" />
+  <link rel="stylesheet" href="../assets/css/style2.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <style>
+    /* ===== SIDEBAR LAYOUT FIX ===== */
+    .pc-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      z-index: 1025;
+      transition: transform 0.3s ease;
+    }
+
+    .pc-container {
+      margin-left: 260px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .pc-header {
+      position: fixed;
+      top: 0;
+      left: 260px;
+      right: 0;
+      height: 70px;
+      z-index: 1020;
+      transition: left 0.3s ease;
+      background: #14532d;
+    }
+
+    body.sidebar-collapsed .pc-sidebar {
+      transform: translateX(-260px);
+    }
+
+    body.sidebar-collapsed .pc-container {
+      margin-left: 0;
+    }
+
+    body.sidebar-collapsed .pc-header {
+      left: 0;
+    }
+
+    .pc-content {
+      padding-top: 80px;
+    }
+
+    @media (max-width: 1024px) {
+      .pc-sidebar {
+        transform: translateX(-260px);
+      }
+
+      body.mob-sidebar-active .pc-sidebar {
+        transform: translateX(0);
+      }
+
+      .pc-container,
+      .pc-header {
+        margin-left: 0;
+        left: 0;
+      }
+    }
+    
+    .pc-link {
+      transition: all 0.3s ease;
+    }
+    
+    .pc-link:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .pc-link.active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 10px;
+      z-index: 1000;
+      min-width: 280px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .dropdown-menu.show {
+      display: block;
+    }
+    
+    .pc-head-link {
+      cursor: pointer;
+      padding: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .pc-head-link:hover {
+      opacity: 0.8;
+    }
+    
+    .min-h-header-height {
+      min-height: 70px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1050;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 700px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-danger {
+      background-color: #ef4444;
+      color: white;
+    }
+
+    .badge-success {
+      background-color: #10b981;
+      color: white;
+    }
+
+    .listing-image {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .action-btn {
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .card.stats-card {
+      min-height: 130px;       
+      display: flex;
+      align-items: center;
+      padding: 24px 20px;      
+      border-radius: 16px;    
+    }
+  .modal-main-image {
+  width: 100%;
+  max-width: 520px;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 0 auto;
+  display: block;
+  border: 1px solid #e5e7eb;
+}
+
+.modal-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.modal-thumb {
+  width: 78px;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #f3f4f6;
+}
+
+.modal-thumb:hover {
+  transform: translateY(-2px);
+}
+
+.modal-thumb.active {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 2px rgba(22,163,74,0.15);
+}
+.logout-swal-popup {
+  border-radius: 20px !important;
+  padding: 1.4rem 1.2rem 1.2rem !important;
+  font-family: 'Montserrat', sans-serif !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22) !important;
+}
+
+.logout-swal-title {
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  color: #14532d !important;
+}
+
+.logout-swal-text {
+  font-size: 0.95rem !important;
+  color: #4b5563 !important;
+}
+
+.logout-swal-confirm,
+.logout-swal-cancel {
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0.75rem 1.25rem !important;
+  font-size: 0.92rem !important;
+  font-weight: 600 !important;
+  min-width: 130px;
+  transition: all 0.25s ease !important;
+}
+
+.logout-swal-confirm {
+  background: linear-gradient(135deg, #14532d, #22c55e) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.25) !important;
+}
+
+.logout-swal-confirm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(34, 197, 94, 0.32) !important;
+}
+
+.logout-swal-cancel {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+.logout-swal-cancel:hover {
+  background: #e5e7eb !important;
+}
+/* ===== CUSTOM SWEET ALERT FOR LISTING ACTIONS ===== */
+.custom-confirm-popup {
+  border-radius: 22px !important;
+  padding: 1.5rem 1.4rem 1.25rem !important;
+  font-family: 'Montserrat', sans-serif !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28) !important;
+  width: 430px !important;
+}
+
+.custom-confirm-title {
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+  color: #14532d !important;
+  margin-bottom: 6px !important;
+}
+
+.custom-confirm-text {
+  font-size: 0.95rem !important;
+  color: #4b5563 !important;
+  line-height: 1.6 !important;
+}
+
+.custom-confirm-icon {
+  border-color: rgba(220, 38, 38, 0.2) !important;
+  color: #dc2626 !important;
+}
+
+.custom-confirm-btn,
+.custom-cancel-btn {
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0.78rem 1.4rem !important;
+  font-size: 0.93rem !important;
+  font-weight: 700 !important;
+  min-width: 120px;
+  transition: all 0.25s ease !important;
+}
+
+.custom-confirm-btn {
+  background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px rgba(239, 68, 68, 0.28) !important;
+}
+
+.custom-confirm-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 14px 28px rgba(239, 68, 68, 0.35) !important;
+}
+
+.custom-cancel-btn {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+.custom-cancel-btn:hover {
+  background: #e5e7eb !important;
+}
+
+.custom-success-popup {
+  border-radius: 22px !important;
+  padding: 1.5rem 1.4rem 1.25rem !important;
+  font-family: 'Montserrat', sans-serif !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22) !important;
+}
+
+.custom-success-title {
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  color: #14532d !important;
+}
+
+.custom-success-text {
+  font-size: 0.95rem !important;
+  color: #4b5563 !important;
+}
+  </style>
+</head>
+<body class="mainbody">
+  <!-- Pre-loader -->
+  <div class="loader-bg fixed inset-0 bg-white dark:bg-themedark-cardbg z-[1034]">
+    <div class="loader-track h-[5px] w-full inline-block absolute overflow-hidden top-0">
+      <div class="loader-fill w-[300px] h-[5px] bg-primary-500 absolute top-0 left-0 animate-[hitZak_0.6s_ease-in-out_infinite_alternate]"></div>
+    </div>
+  </div>
+
+  <!-- [ Sidebar Menu ] start -->
+  <nav class="pc-sidebar" style="background: url('../assets/images/sbbg2.png') center/cover no-repeat;">
+    <div class="navbar-wrapper">
+      <div class="m-header flex items-center py-4 px-6 h-header-height">
+        <a href="dashboard.html" class="b-brand flex items-center gap-3">
+          <img src="../assets/images/upang.png" alt="logo here" class="w-10 rounded-lg"/>
+          <h4 class="text-xl font-semibold text-white">PHINMA TradeHub</h4>
+        </a>
+      </div>
+
+      <div class="navbar-content h-[calc(100vh_-_74px)] py-2.5">  
+        <div class="grow ms-3 text-center"></div>
+        <ul class="pc-navbar">
+
+          <!-- NAVIGATION -->
+          <li class="pc-item pc-caption">
+            <label>Navigation</label>
+          </li>
+
+          <li class="pc-item">
+            <a href="dashboard.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="layout"></i></span>
+              <span class="pc-mtext">Dashboard</span>
+            </a>
+          </li>
+
+          <!-- USER MANAGEMENT -->
+          <li class="pc-item pc-caption">
+            <label>User Management</label>
+          </li>
+
+          <li class="pc-item">
+            <a href="users.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="users"></i></span>
+              <span class="pc-mtext">View Users</span>
+            </a>
+          </li>
+
+          <li class="pc-item">
+            <a href="archived-users.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="archive"></i></span>
+              <span class="pc-mtext">Archived Users</span>
+            </a>
+          </li>
+
+          <li class="pc-item">
+            <a href="blacklist.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="slash"></i></span>
+              <span class="pc-mtext">Blocklist</span>
+            </a>
+          </li>
+
+          <!-- LISTINGS -->
+          <li class="pc-item pc-caption">
+            <label>Listings</label>
+          </li>
+
+          <li class="pc-item">
+            <a href="listings.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="file-text"></i></span>
+              <span class="pc-mtext">View Listings</span>
+            </a>
+          </li>
+
+          <li class="pc-item">
+            <a href="listing-approval.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="check-square"></i></span>
+              <span class="pc-mtext">Listing Approvals</span>
+            </a>
+          </li>
+
+          <!-- REPORTS -->
+          <li class="pc-item pc-caption">
+            <label>Reports</label>
+          </li>
+
+          <li class="pc-item">
+            <a href="user-reports.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="alert-circle"></i></span>
+              <span class="pc-mtext">User Reports</span>
+            </a>
+          </li>
+
+          <li class="pc-item">
+            <a href="listing-reports.html" class="pc-link active">
+              <span class="pc-micon"><i data-feather="flag"></i></span>
+              <span class="pc-mtext">Listing Reports</span>
+            </a>
+          </li>
+
+          <!-- SETTINGS -->
+          <li class="pc-item pc-caption">
+            <label>Settings</label>
+          </li>
+
+          <li class="pc-item">
+            <a href="#" class="pc-link" onclick="handleLogout(); return false;">
+              <span class="pc-micon"><i data-feather="log-out"></i></span>
+              <span class="pc-mtext">Log-Out</span>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- [ Sidebar Menu ] end -->
+
+  <!-- [ Header Topbar ] start -->
+  <header class="pc-header">
+    <div class="header-wrapper flex max-sm:px-[15px] px-[25px] grow">
+      <div class="me-auto pc-mob-drp">
+        <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
+          <li class="pc-h-item pc-sidebar-collapse max-lg:hidden lg:inline-flex">
+            <a href="#" class="pc-head-link ltr:!ml-0 rtl:!mr-0" id="sidebar-hide">
+              <i data-feather="menu" class="text-white"></i>
+            </a>
+          </li>
+          <li class="pc-h-item pc-sidebar-popup lg:hidden">
+            <a href="#" class="pc-head-link ltr:!ml-0 rtl:!mr-0" id="mobile-collapse">
+              <i data-feather="menu" class="text-white"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="ms-auto">
+        <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
+          <!-- Simple profile icon that toggles admin panel -->
+          <li class="pc-h-item">
+            <a
+              id="adminProfileToggle"
+              class="pc-head-link"
+              href="#"
+              onclick="toggleAdminPanel(event)"
+            >
+              <i data-feather="user" class="text-white"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <!-- [ Header ] end -->
+
+  <!-- ADMIN PROFILE PANEL -->
+  <div
+    id="adminProfilePanel"
+    class="fixed z-[1100] top-[80px] right-6 w-64 bg-[#212E13] text-white rounded-xl shadow-xl overflow-hidden hidden"
+  >
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-white/10">
+      <img
+        src="../assets/images/user/avatar-2.jpg"
+        alt="admin avatar"
+        class="w-10 h-10 rounded-full object-cover"
+      />
+      <div>
+        <p id="headerAdminName" class="font-semibold leading-tight">Admin</p>
+        <p class="text-xs text-white/70 mt-1">Administrator</p>
+      </div>
+    </div>
+    <div class="p-4">
+      <button
+        class="w-full btn bg-[#fefae0] flex items-center justify-center hover:bg[#ffdb7f] text-black font-semibold"
+        onclick="handleLogout()"
+      >
+        <svg class="pc-icon me-2 w-[22px] h-[22px] text-black">
+          <use xlink:href="#custom-logout-1-outline"></use>
+        </svg>
+        Log-Out
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="pc-container">
+    <div class="pc-content p-6">
+      
+      <!-- Statistics Cards -->
+      <div class="grid grid-cols-12 gap-6 mb-6">
+        
+        <div class="col-span-12 sm:col-span-6 xl:col-span-4">
+          <div class="card stats-card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex items-center gap-4">
+            <div class="bg-white p-3 rounded-full w-fit mb-4">
+              <i class="feather icon-flag text-green-900" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h3 id="totalReports" class="text-4xl font-bold text-white mb-2">0</h3>
+            <p class="text-white uppercase text-sm font-semibold tracking-wide">Total Reports</p>
+          </div>
+        </div>
+
+        <div class="col-span-12 sm:col-span-6 xl:col-span-4">
+          <div class="card stats-card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex items-center gap-4">
+            <div class="bg-white p-3 rounded-full w-fit mb-4">
+              <i class="feather icon-clock text-green-900" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h3 id="pendingReports" class="text-4xl font-bold text-white mb-2">0</h3>
+            <p class="text-white uppercase text-sm font-semibold tracking-wide">Pending</p>
+          </div>
+        </div>
+
+        <div class="col-span-12 sm:col-span-6 xl:col-span-4">
+          <div class="card stats-card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex items-center gap-4">
+            <div class="bg-white p-3 rounded-full w-fit mb-4">
+              <i class="feather icon-check-circle text-green-900" style="width: 28px; height: 28px;"></i>
+            </div>
+            <h3 id="resolvedReports" class="text-4xl font-bold text-white mb-2">0</h3>
+            <p class="text-white uppercase text-sm font-semibold tracking-wide">Resolved</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports Table -->
+      <div class="col-span-12">
+        <div class="card table-card bg-white rounded-xl shadow-md p-6">
+          <div class="card-header mb-4 flex flex-wrap items-center justify-between gap-4">
+            <h5 class="text-xl font-bold text-gray-800">Listing Reports</h5>
+            
+            <div class="flex gap-3">
+              <input type="text" id="searchInput" placeholder="Search reports..." 
+                class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+              <select id="filterStatus" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="resolved">Resolved</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <div id="loadingMessage" class="h-auto flex items-center justify-center bg-white py-8">
+              <p class="text-black font-bold italic text-lg">Loading reports...</p>
+            </div>
+            <div id="noReportsMessage" class="h-auto flex items-center justify-center bg-white py-8 hidden">
+              <p class="text-black font-bold italic text-lg">No reports found</p>
+            </div>
+            <div id="tableContainer" class="table-responsive hidden overflow-x-auto">
+              <table class="table table-hover w-full">
+                <thead class="bg-green-900 text-white">
+                  <tr class="font-bold">
+                    <th class="px-4 py-3">Image</th>
+                    <th class="px-4 py-3">Listing Title</th>
+                    <th class="px-4 py-3">Reporter</th>
+                    <th class="px-4 py-3">Reason</th>
+                    <th class="px-4 py-3">Date</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3 text-center">Actions</th>                         
+                  </tr>
+                </thead>
+                <tbody id="reportsTable">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Report Details Modal -->
+  <div id="reportModal" class="modal">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-gray-800">Report Details</h2>
+        <button onclick="closeReportModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+      </div>
+      <div id="reportModalContent" class="space-y-4">
+        <!-- Content will be populated dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase + logic -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    // ==== SUPABASE CONFIG (same as user side) ====
+    const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+    const supabaseKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    let allReports = [];
+    let currentReportId = null;
+
+    // ==== ADMIN GUARD ====
+    const adminLoggedIn = sessionStorage.getItem('admin_logged_in');
+    const adminName = sessionStorage.getItem('adminName') || 'Admin';
+
+    if (!adminLoggedIn) {
+      window.location.href = '../../index.html';
+    } else {
+      const headerName = document.getElementById('headerAdminName');
+      if (headerName) headerName.textContent = adminName;
+    }
+
+    // Logout function
+    window.handleLogout = function () {
+  Swal.fire({
+    title: 'Log out?',
+    text: 'Are you sure you want to log out of the admin dashboard?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, log out',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.clear();
+
+      Swal.fire({
+        title: 'Logged out',
+        text: 'You have been successfully logged out.',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text'
+        }
+      }).then(() => {
+        window.location.href = '../../index.html';
+      });
+    }
+  });
+};
+
+    function escapeHtml(text = '') {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // ==== LOAD STATS ====
+    async function loadStats() {
+      try {
+        const { data, error } = await supabase
+          .from('listing_reports')
+          .select('status');
+
+        if (error) {
+          console.error('Error loading stats:', error);
+          return;
+        }
+
+        const total = data.length;
+        const pending = data.filter((r) => (r.status || 'pending') === 'pending').length;
+        const resolved = data.filter((r) => (r.status || 'pending') === 'resolved').length;
+
+        document.getElementById('totalReports').textContent = total;
+        document.getElementById('pendingReports').textContent = pending;
+        document.getElementById('resolvedReports').textContent = resolved;
+      } catch (err) {
+        console.error('Unexpected error loading stats:', err);
+      }
+    }
+
+    // ==== LOAD REPORTS ====
+    async function loadReports() {
+      const loadingMessage = document.getElementById('loadingMessage');
+      const noReportsMessage = document.getElementById('noReportsMessage');
+      const tableContainer = document.getElementById('tableContainer');
+
+      // reset state
+      loadingMessage.classList.remove('hidden');
+      noReportsMessage.classList.add('hidden');
+      tableContainer.classList.add('hidden');
+
+      try {
+        const { data, error } = await supabase
+          .from('listing_reports')
+          .select('*')
+          .order('reported_at', { ascending: false });
+
+        loadingMessage.classList.add('hidden');
+
+        if (error) {
+          console.error('Error loading reports:', error);
+          noReportsMessage.classList.remove('hidden');
+          noReportsMessage.textContent = 'Error loading reports.';
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          noReportsMessage.classList.remove('hidden');
+          return;
+        }
+
+        allReports = data;
+        renderTable(allReports);
+      } catch (err) {
+        console.error('Unexpected error loading reports:', err);
+        loadingMessage.classList.add('hidden');
+        noReportsMessage.classList.remove('hidden');
+        noReportsMessage.textContent = 'Failed to load reports.';
+      }
+    }
+
+    // ==== RENDER TABLE ====
+    function renderTable(reports) {
+      const tableBody = document.getElementById('reportsTable');
+      const noReportsMessage = document.getElementById('noReportsMessage');
+      const tableContainer = document.getElementById('tableContainer');
+
+      tableBody.innerHTML = '';
+
+      if (!reports || reports.length === 0) {
+        noReportsMessage.classList.remove('hidden');
+        tableContainer.classList.add('hidden');
+        return;
+      }
+
+      noReportsMessage.classList.add('hidden');
+      tableContainer.classList.remove('hidden');
+
+      reports.forEach((report) => {
+        const reportDate = report.reported_at
+          ? new Date(report.reported_at).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })
+          : 'N/A';
+
+        const status = report.status || 'pending';
+        const statusBadge =
+          status === 'resolved'
+            ? '<span class="badge badge-success">Resolved</span>'
+            : '<span class="badge badge-danger">Pending</span>';
+
+        const reasonText = report.reason || 'No reason provided';
+        const shortReason =
+          reasonText.length > 30 ? reasonText.substring(0, 30) + '...' : reasonText;
+
+        const imageUrl = report.listing_image || '../assets/images/placeholder.jpg';
+        const listingId = report.listing_id; // use listing_id
+
+        const row = document.createElement('tr');
+        row.className = 'border-b hover:bg-gray-50';
+        row.innerHTML = `
+          <td class="px-4 py-3">
+            <img src="${escapeHtml(imageUrl)}" alt="Listing" class="listing-image"
+                 onerror="this.src='../assets/images/placeholder.jpg'">
+          </td>
+          <td class="px-4 py-3">
+            <h6 class="mb-1 font-semibold">${escapeHtml(
+              report.listing_title || 'Unknown Listing'
+            )}</h6>
+          </td>
+          <td class="px-4 py-3">
+            <h6 class="mb-1">${escapeHtml(report.reporter_name || 'Anonymous')}</h6>
+          </td>
+          <td class="px-4 py-3">
+            <span class="text-sm">${escapeHtml(shortReason)}</span>
+          </td>
+          <td class="px-4 py-3">
+            <span class="text-sm text-gray-600">${reportDate}</span>
+          </td>
+          <td class="px-4 py-3">
+            ${statusBadge}
+          </td>
+          <td class="px-4 py-3 text-center">
+            <button onclick="viewReport('${listingId}')"
+                    class="action-btn bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded mr-2 transition text-sm">
+              View
+            </button>
+            ${
+              status === 'pending'
+                ? `
+              <button onclick="resolveReport('${listingId}')"
+                      class="action-btn bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded mr-2 transition text-sm">
+                Resolve
+              </button>
+              <button onclick="removeListing('${listingId}')"
+                      class="action-btn bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded transition text-sm">
+                Remove Listing
+              </button>
+            `
+                : ''
+            }
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // ==== VIEW REPORT MODAL (by listing_id) ====
+    window.viewReport = async function (listingId) {
+  try {
+    const { data: reportRows, error: reportError } = await supabase
+      .from('listing_reports')
+      .select('*')
+      .eq('listing_id', listingId)
+      .order('reported_at', { ascending: false })
+      .limit(1);
+
+    if (reportError || !reportRows || reportRows.length === 0) {
+      console.error('Error loading report:', reportError);
+      alert('Report not found');
+      return;
+    }
+
+    const report = reportRows[0];
+    currentReportId = report.listing_id;
+
+    // ✅ get actual listing para makuha lahat ng photos
+    const { data: listing, error: listingError } = await supabase
+      .from('listings')
+      .select('*')
+      .eq('id', listingId)
+      .maybeSingle();
+
+    if (listingError) {
+      console.warn('Could not load listing details:', listingError);
+    }
+
+    const modalContent = document.getElementById('reportModalContent');
+
+    const reportDate = report.reported_at
+      ? new Date(report.reported_at).toLocaleString()
+      : 'N/A';
+
+    const status = report.status || 'pending';
+
+    let images = [];
+
+    if (listing && Array.isArray(listing.image_urls) && listing.image_urls.length) {
+      images = listing.image_urls.filter(Boolean);
+    }
+
+    if (!images.length && listing?.cover_image_url) {
+      images = [listing.cover_image_url];
+    }
+
+    if (!images.length && report.listing_image) {
+      images = [report.listing_image];
+    }
+
+    if (!images.length) {
+      images = ['../assets/images/placeholder.jpg'];
+    }
+
+    const mainImage = images[0];
+    const thumbsHtml = images.map((img, index) => `
+      <img 
+        src="${escapeHtml(img)}"
+        alt="Thumbnail ${index + 1}"
+        class="modal-thumb ${index === 0 ? 'active' : ''}"
+        data-full="${escapeHtml(img)}"
+        onerror="this.src='../assets/images/placeholder.jpg'"
+      >
+    `).join('');
+
+    modalContent.innerHTML = `
+      <div class="text-center mb-4">
+        <img
+          id="reportModalMainImage"
+          src="${escapeHtml(mainImage)}"
+          alt="Listing"
+          class="modal-main-image"
+          onerror="this.src='../assets/images/placeholder.jpg'"
+        >
+
+        ${images.length > 1 ? `
+          <div class="modal-thumbs" id="reportModalThumbs">
+            ${thumbsHtml}
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-sm text-gray-600">Listing Title</p>
+          <p class="font-semibold">${escapeHtml(
+            report.listing_title || listing?.title || 'Unknown Listing'
+          )}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Reporter</p>
+          <p class="font-semibold">${escapeHtml(report.reporter_name || 'Anonymous')}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Report Date</p>
+          <p class="font-semibold">${reportDate}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Status</p>
+          <p id="reportModalStatusText" class="font-semibold">
+            ${status === 'resolved' ? 'Resolved' : 'Pending'}
+          </p>
+        </div>
+        <div class="col-span-2">
+          <p class="text-sm text-gray-600">Listing ID</p>
+          <p class="font-semibold text-xs break-all">${escapeHtml(
+            report.listing_id || 'N/A'
+          )}</p>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <p class="text-sm text-gray-600">Reason</p>
+        <p class="mt-2 p-4 bg-gray-100 rounded">${escapeHtml(
+          report.reason || 'No reason provided'
+        )}</p>
+      </div>
+
+      ${
+        report.details
+          ? `
+        <div class="mt-4">
+          <p class="text-sm text-gray-600">Additional Details</p>
+          <p class="mt-2 p-4 bg-gray-100 rounded">${escapeHtml(report.details)}</p>
+        </div>
+      `
+          : ''
+      }
+
+      ${
+        status === 'pending'
+          ? `
+        <div id="reportModalActions" class="flex gap-3 mt-6 pt-4 border-t">
+          <button onclick="resolveReport('${report.listing_id}')"
+                  class="action-btn bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded flex-1 transition font-semibold">
+            Resolve
+          </button>
+          <button onclick="removeListing('${report.listing_id}')"
+                  class="action-btn bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded flex-1 transition font-semibold">
+            Remove Listing
+          </button>
+        </div>
+      `
+          : ''
+      }
+    `;
+
+    const mainImgEl = document.getElementById('reportModalMainImage');
+    const thumbEls = modalContent.querySelectorAll('.modal-thumb');
+
+    thumbEls.forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        const full = thumb.dataset.full || '../assets/images/placeholder.jpg';
+        if (mainImgEl) mainImgEl.src = full;
+
+        thumbEls.forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+      });
+    });
+
+    document.getElementById('reportModal').classList.add('show');
+  } catch (err) {
+    console.error('Error viewing report:', err);
+    alert('Error loading report details');
+  }
+};
+
+    window.closeReportModal = function () {
+      document.getElementById('reportModal').classList.remove('show');
+      currentReportId = null;
+    };
+    async function sendNotification({
+  recipientStudentNumber,
+  type,
+  listingId = null,
+  listingTitle = '',
+  message = '',
+  actorStudentNumber = 'admin',
+  actorName = adminName
+}) {
+  if (!recipientStudentNumber) {
+    console.warn('No recipient student number found. Notification not sent.');
+    return;
+  }
+
+  const { error } = await supabase
+    .from('notifications')
+    .insert([{
+      type,
+      recipient_student_number: String(recipientStudentNumber),
+      actor_student_number: String(actorStudentNumber),
+      actor_name: actorName,
+      listing_id: listingId,
+      listing_title: listingTitle || null,
+      message,
+      is_read: false
+    }]);
+
+  if (error) {
+    console.error('Error sending notification:', error);
+  }
+}
+
+    // ==== RESOLVE REPORT (ALL reports for that listing) ====
+   window.resolveReport = async function (listingId) {
+  const result = await Swal.fire({
+    title: 'Resolve report?',
+    text: 'This will mark all reports for this listing as resolved without deleting the listing.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    reverseButtons: false,
+    backdrop: 'rgba(0,0,0,0.55)',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-confirm-popup',
+      title: 'custom-confirm-title',
+      htmlContainer: 'custom-confirm-text',
+      icon: 'custom-confirm-icon',
+      confirmButton: 'custom-confirm-btn',
+      cancelButton: 'custom-cancel-btn'
+    }
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const resolvedAt = new Date().toISOString();
+
+    // kunin muna report info para may recipient tayo
+    const { data: reportRows, error: reportFetchError } = await supabase
+      .from('listing_reports')
+      .select('listing_id, listing_title, seller_student_no')
+      .eq('listing_id', listingId)
+      .limit(1);
+
+    if (reportFetchError) {
+      console.error('Error fetching report info:', reportFetchError);
+    }
+
+    const reportInfo = reportRows && reportRows.length ? reportRows[0] : null;
+    const sellerStudentNo = reportInfo?.seller_student_no || null;
+    const listingTitle = reportInfo?.listing_title || 'your listing';
+
+    const { error } = await supabase
+      .from('listing_reports')
+      .update({
+        status: 'resolved',
+        resolved_at: resolvedAt,
+        resolved_by: adminName,
+        action: 'resolved_no_action',
+      })
+      .eq('listing_id', listingId);
+
+    if (error) {
+      console.error('Error resolving report:', error);
+
+      await Swal.fire({
+        title: 'Failed',
+        text: 'Error resolving report. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        backdrop: 'rgba(0,0,0,0.55)'
+      });
+      return;
+    }
+
+    // SEND NOTIFICATION
+    await sendNotification({
+      recipientStudentNumber: sellerStudentNo,
+      type: 'listing_report',
+      listingId: listingId,
+      listingTitle: listingTitle,
+      message: `The report for your listing "${listingTitle}" has been reviewed by the admin. Your listing will remain active.`
+    });
+
+    await Swal.fire({
+      title: 'Resolved',
+      text: 'Report(s) marked as resolved successfully.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      backdrop: 'rgba(0,0,0,0.55)',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-success-popup',
+        title: 'custom-success-title',
+        htmlContainer: 'custom-success-text',
+        confirmButton: 'custom-confirm-btn'
+      }
+    });
+
+    await loadStats();
+    await loadReports();
+
+    const statusEl = document.getElementById('reportModalStatusText');
+    const actionsEl = document.getElementById('reportModalActions');
+
+    if (statusEl) statusEl.textContent = 'Resolved';
+    if (actionsEl) actionsEl.remove();
+
+  } catch (err) {
+    console.error('Unexpected error resolving report:', err);
+
+    await Swal.fire({
+      title: 'Failed',
+      text: 'Error resolving report. Please try again.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      backdrop: 'rgba(0,0,0,0.55)'
+    });
+  }
+};
+
+    // ==== REMOVE LISTING (HARD DELETE) ====
+   window.removeListing = async function (listingId) {
+  const result = await Swal.fire({
+    title: 'Delete listing?',
+    text: 'Are you sure you want to permanently delete this listing and its reports?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    reverseButtons: false,
+    backdrop: 'rgba(0,0,0,0.55)',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-confirm-popup',
+      title: 'custom-confirm-title',
+      htmlContainer: 'custom-confirm-text',
+      icon: 'custom-confirm-icon',
+      confirmButton: 'custom-confirm-btn',
+      cancelButton: 'custom-cancel-btn'
+    }
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    if (!listingId) {
+      await Swal.fire({
+        title: 'Missing data',
+        text: 'Missing listing_id for this report.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
+    // kunin muna info bago mag delete
+    const { data: reportRows, error: reportFetchError } = await supabase
+      .from('listing_reports')
+      .select('listing_id, listing_title, seller_student_no')
+      .eq('listing_id', listingId)
+      .limit(1);
+
+    if (reportFetchError) {
+      console.error('Error fetching report info:', reportFetchError);
+    }
+
+    let sellerStudentNo = reportRows?.[0]?.seller_student_no || null;
+    let listingTitle = reportRows?.[0]?.listing_title || 'your listing';
+
+    // fallback: kunin sa listings kung kulang ang data
+    if (!sellerStudentNo || !listingTitle) {
+      const { data: listingRow, error: listingFetchError } = await supabase
+        .from('listings')
+        .select('id, title, seller_student_no')
+        .eq('id', listingId)
+        .maybeSingle();
+
+      if (!listingFetchError && listingRow) {
+        sellerStudentNo = sellerStudentNo || listingRow.seller_student_no;
+        listingTitle = listingTitle || listingRow.title || 'your listing';
+      }
+    }
+
+    // SEND NOTIFICATION FIRST bago idelete
+    await sendNotification({
+      recipientStudentNumber: sellerStudentNo,
+      type: 'listing_report',
+      listingId: listingId,
+      listingTitle: listingTitle,
+      message: `Your listing "${listingTitle}" has been removed by the admin after review of the reports submitted against it.`
+    });
+
+    const { error: deleteReportsError } = await supabase
+      .from('listing_reports')
+      .delete()
+      .eq('listing_id', listingId);
+
+    if (deleteReportsError) {
+      console.error('Error deleting reports:', deleteReportsError);
+
+      await Swal.fire({
+        title: 'Warning',
+        text: 'Listing deleted but reports were not deleted. Please check listing_reports table.',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      });
+    }
+
+    const { error: deleteListingError } = await supabase
+      .from('listings')
+      .delete()
+      .eq('id', listingId);
+
+    if (deleteListingError) {
+      console.error('Error deleting listing:', deleteListingError);
+
+      await Swal.fire({
+        title: 'Failed',
+        text: 'Error deleting listing. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
+    await Swal.fire({
+      title: 'Deleted',
+      text: 'Listing and all its reports have been permanently deleted.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      backdrop: 'rgba(0,0,0,0.55)',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-success-popup',
+        title: 'custom-success-title',
+        htmlContainer: 'custom-success-text',
+        confirmButton: 'custom-confirm-btn'
+      }
+    });
+
+    closeReportModal();
+    await loadStats();
+    await loadReports();
+
+  } catch (err) {
+    console.error('Unexpected error removing listing:', err);
+
+    await Swal.fire({
+      title: 'Failed',
+      text: 'Error removing listing. Please try again.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
+  }
+};
+
+    // ==== SEARCH & FILTER ====
+    document.getElementById('searchInput').addEventListener('input', filterReports);
+    document.getElementById('filterStatus').addEventListener('change', filterReports);
+
+    function filterReports() {
+      const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+      const statusFilter = document.getElementById('filterStatus').value;
+
+      let filtered = allReports || [];
+
+      if (statusFilter !== 'all') {
+        filtered = filtered.filter((r) => (r.status || 'pending') === statusFilter);
+      }
+
+      if (searchTerm) {
+        filtered = filtered.filter(
+          (r) =>
+            (r.listing_title && r.listing_title.toLowerCase().includes(searchTerm)) ||
+            (r.reporter_name && r.reporter_name.toLowerCase().includes(searchTerm)) ||
+            (r.reason && r.reason.toLowerCase().includes(searchTerm))
+        );
+      }
+
+      renderTable(filtered);
+    }
+
+    // ==== SIDEBAR TOGGLES ====
+    const mobileCollapse = document.getElementById('mobile-collapse');
+    if (mobileCollapse) {
+      mobileCollapse.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.body.classList.toggle('mob-sidebar-active');
+        if (typeof feather !== 'undefined') feather.replace();
+      });
+    }
+
+    const sidebarHide = document.getElementById('sidebar-hide');
+    if (sidebarHide) {
+      sidebarHide.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.body.classList.toggle('sidebar-collapsed');
+        if (typeof feather !== 'undefined') feather.replace();
+      });
+    }
+
+    window.onclick = function (event) {
+      const modal = document.getElementById('reportModal');
+      if (event.target === modal) {
+        closeReportModal();
+      }
+    };
+
+    // ==== INIT ====
+    window.addEventListener('DOMContentLoaded', async () => {
+      setTimeout(() => {
+        const loader = document.querySelector('.loader-bg');
+        if (loader) loader.style.display = 'none';
+      }, 500);
+
+      if (typeof feather !== 'undefined') feather.replace();
+
+      await loadStats();
+      await loadReports();
+    });
+  </script>
+
+  <!-- Required Js -->
+  <script src="../assets/js/plugins/simplebar.min.js"></script>
+  <script src="../assets/js/plugins/popper.min.js"></script>
+  <script src="../assets/js/icon/custom-icon.js"></script>
+  <script src="../assets/js/plugins/feather.min.js"></script>
+  <script src="../assets/js/component.js"></script>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/script.js"></script>
+
+  <script>
+    layout_change('false');
+    layout_theme_sidebar_change('dark');
+    change_box_container('false');
+    layout_caption_change('true');
+    layout_rtl_change('false');
+    preset_change('preset-1');
+    main_layout_change('vertical');
+  </script>
+
+  <!-- TOGGLE ADMIN PANEL -->
+  <script>
+    function toggleAdminPanel(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const panel = document.getElementById('adminProfilePanel');
+      if (!panel) return;
+      panel.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function (e) {
+      const panel  = document.getElementById('adminProfilePanel');
+      const toggle = document.getElementById('adminProfileToggle');
+      if (!panel || !toggle) return;
+
+      if (!panel.contains(e.target) && !toggle.contains(e.target)) {
+        panel.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

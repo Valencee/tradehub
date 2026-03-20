@@ -1,0 +1,82 @@
+.login-page{
+  background-image: url('./dist/assets/images/bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  font-family: "Montserrat", sans-serif;
+}
+
+.login-page .header {
+  position: absolute;
+  top: 15vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
+}
+
+.register-header {
+  top: 5vh !important;
+  
+}
+
+.login-page .logo {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background-color: #ffffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.login-page .logo img {
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.login-page h6 {
+  font-size: 2.6rem;
+  font-weight: 600;
+  line-height: 1;
+  margin: 0;
+  color: #fff;
+}
+
+.login-page .bg-gray-100{
+  background-color: #f3f3f3;
+}
+.login-page .up-green{
+  width: 150px;
+  padding: 12px;
+  background-color: #194f1dff;
+  border: none;
+  border-radius: 15px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.login-page .up-green:hover {
+  background-color: #143e20ff;
+}
+
+
+@media (max-width: 500px) {
+  .login-page h6,
+  h6 {
+    font-size: 1.2rem !important;
+  }
+
+  .login-page .header{
+    background-color: #283618;
+    border: none;
+    border-radius: 15px;
+    transition: background 0.3s;
+  }
+}

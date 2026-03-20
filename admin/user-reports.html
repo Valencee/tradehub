@@ -1,0 +1,1633 @@
+<!doctype html>
+<html lang="en" data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-direction="ltr" dir="ltr" data-pc-theme="light">
+<head>
+  <title>User Reports - PHINMA TradeHub</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="Admin Dashboard" />
+  <meta name="keywords" content="PHINMA, TradeHub, Dashboard" />
+  <meta name="author" content="Sniper 2025" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/fonts/phosphor/duotone/style.css" />
+  <link rel="stylesheet" href="../assets/fonts/tabler-icons.min.css" />
+  <link rel="stylesheet" href="../assets/fonts/feather.css" />
+  <link rel="stylesheet" href="../assets/fonts/fontawesome.css" />
+  <link rel="stylesheet" href="../assets/fonts/material.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link" />
+  <link rel="stylesheet" href="../assets/css/style2.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <style>
+    .pc-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      z-index: 1025;
+      transition: transform 0.3s ease;
+    }
+    .pc-container {
+      margin-left: 260px;
+      transition: margin-left 0.3s ease;
+    }
+    .pc-header {
+      position: fixed;
+      top: 0;
+      left: 260px;
+      right: 0;
+      height: 70px;
+      z-index: 1020;
+      transition: left 0.3s ease;
+      background: #14532d;
+    }
+    body.sidebar-collapsed .pc-sidebar { transform: translateX(-260px); }
+    body.sidebar-collapsed .pc-container { margin-left: 0; }
+    body.sidebar-collapsed .pc-header { left: 0; }
+    .pc-content { padding-top: 80px; }
+
+    @media (max-width: 1024px) {
+      .pc-sidebar { transform: translateX(-260px); }
+      body.mob-sidebar-active .pc-sidebar { transform: translateX(0); }
+      .pc-container, .pc-header { margin-left: 0; left: 0; }
+    }
+
+    .pc-link { transition: all 0.3s ease; }
+    .pc-link:hover { background-color: rgba(255, 255, 255, 0.1); }
+    .pc-link.active { background-color: rgba(255, 255, 255, 0.2); }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      margin-top: 10px;
+      z-index: 1000;
+      min-width: 280px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .dropdown-menu.show { display: block; }
+    .pc-head-link { cursor: pointer; padding: 8px; display: inline-flex; align-items: center; justify-content: center; }
+    .pc-head-link:hover { opacity: 0.8; }
+    .min-h-header-height { min-height: 70px; }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1050;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 700px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-danger  { background-color: #ef4444; color: white; }
+    .badge-success { background-color: #10b981; color: white; }
+
+    .action-btn { transition: all 0.2s ease; }
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .card.stats-card {
+      min-height: 130px;       
+      display: flex;
+      align-items: center;
+      padding: 24px 20px;     
+      border-radius: 16px;     
+    }
+    .logout-swal-popup {
+  border-radius: 20px !important;
+  padding: 1.4rem 1.2rem 1.2rem !important;
+  font-family: 'Montserrat', sans-serif !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22) !important;
+}
+
+.logout-swal-title {
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  color: #14532d !important;
+}
+
+.logout-swal-text {
+  font-size: 0.95rem !important;
+  color: #4b5563 !important;
+}
+
+.logout-swal-confirm,
+.logout-swal-cancel {
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0.75rem 1.25rem !important;
+  font-size: 0.92rem !important;
+  font-weight: 600 !important;
+  min-width: 130px;
+  transition: all 0.25s ease !important;
+}
+
+.logout-swal-confirm {
+  background: linear-gradient(135deg, #14532d, #22c55e) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.25) !important;
+}
+
+.logout-swal-confirm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(34, 197, 94, 0.32) !important;
+}
+
+.logout-swal-cancel {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+.logout-swal-cancel:hover {
+  background: #e5e7eb !important;
+}
+/* ===== SWEET ALERT FOR USER REPORTS ===== */
+/* SWEET ALERT BUTTON FIX */
+.swal2-actions {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  margin-top: 1.5rem !important;
+}
+
+.custom-confirm-btn,
+.custom-danger-btn,
+.custom-cancel-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 130px !important;
+  height: 48px !important;
+  padding: 0 22px !important;
+  border: none !important;
+  border-radius: 999px !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+}
+
+.custom-confirm-btn {
+  background: linear-gradient(135deg, #14532d, #22c55e) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px rgba(34, 197, 94, 0.28) !important;
+}
+
+.custom-confirm-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 14px 28px rgba(34, 197, 94, 0.34) !important;
+}
+
+.custom-danger-btn {
+  background: linear-gradient(135deg, #b91c1c, #ef4444) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px rgba(239, 68, 68, 0.28) !important;
+}
+
+.custom-danger-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 14px 28px rgba(239, 68, 68, 0.34) !important;
+}
+
+.custom-cancel-btn {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+.custom-cancel-btn:hover {
+  background: #e5e7eb !important;
+}
+
+.custom-success-popup {
+  border-radius: 22px !important;
+  padding: 1.5rem 1.4rem 1.25rem !important;
+  font-family: 'Montserrat', sans-serif !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22) !important;
+}
+
+.custom-success-title {
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  color: #14532d !important;
+}
+
+.custom-success-text {
+  font-size: 0.95rem !important;
+  color: #4b5563 !important;
+}
+
+.custom-input-popup {
+  border-radius: 22px !important;
+  padding: 1.5rem 1.4rem 1.25rem !important;
+  font-family: 'Montserrat', sans-serif !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22) !important;
+}
+
+.custom-input {
+  border-radius: 12px !important;
+  border: 1px solid #d1d5db !important;
+  padding: 0.9rem 1rem !important;
+  font-size: 0.95rem !important;
+  box-shadow: none !important;
+}
+
+.custom-input:focus {
+  border-color: #16a34a !important;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15) !important;
+}
+  </style>
+</head>
+<body class="mainbody">
+  <!-- Pre-loader -->
+  <div class="loader-bg fixed inset-0 bg-white dark:bg-themedark-cardbg z-[1034]">
+    <div class="loader-track h-[5px] w-full inline-block absolute overflow-hidden top-0">
+      <div class="loader-fill w-[300px] h-[5px] bg-primary-500 absolute top-0 left-0 animate-[hitZak_0.6s_ease-in-out_infinite_alternate]"></div>
+    </div>
+  </div>
+
+  <!-- [ Sidebar Menu ] start -->
+  <nav class="pc-sidebar" style="background: url('../assets/images/sbbg2.png') center/cover no-repeat;">
+    <div class="navbar-wrapper">
+      <div class="m-header flex items-center py-4 px-6 h-header-height">
+        <a href="dashboard.html" class="b-brand flex items-center gap-3">
+          <img src="../assets/images/upang.png" alt="logo here" class="w-10 rounded-lg"/>
+          <h4 class="text-xl font-semibold text-white">PHINMA TradeHub</h4>
+        </a>
+      </div>
+
+      <div class="navbar-content h-[calc(100vh_-_74px)] py-2.5">  
+        <div class="grow ms-3 text-center"></div>
+        <ul class="pc-navbar">
+
+          <!-- NAVIGATION -->
+          <li class="pc-item pc-caption"><label>Navigation</label></li>
+          <li class="pc-item">
+            <a href="dashboard.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="layout"></i></span>
+              <span class="pc-mtext">Dashboard</span>
+            </a>
+          </li>
+
+          <!-- USER MANAGEMENT -->
+          <li class="pc-item pc-caption"><label>User Management</label></li>
+          <li class="pc-item">
+            <a href="users.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="users"></i></span>
+              <span class="pc-mtext">View Users</span>
+            </a>
+          </li>
+          
+          <li class="pc-item">
+            <a href="archived-users.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="archive"></i></span>
+              <span class="pc-mtext">Archived Users</span>
+            </a>
+          </li>
+          <li class="pc-item">
+            <a href="blacklist.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="slash"></i></span>
+              <span class="pc-mtext">Blocklist</span>
+            </a>
+          </li>
+
+          <!-- LISTINGS -->
+          <li class="pc-item pc-caption"><label>Listings</label></li>
+          <li class="pc-item">
+            <a href="listings.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="file-text"></i></span>
+              <span class="pc-mtext">View Listings</span>
+            </a>
+          </li>
+          <li class="pc-item">
+            <a href="listing-approval.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="check-square"></i></span>
+              <span class="pc-mtext">Listing Approvals</span>
+            </a>
+          </li>
+        
+          <!-- REPORTS -->
+          <li class="pc-item pc-caption"><label>Reports</label></li>
+          <li class="pc-item">
+            <a href="user-reports.html" class="pc-link active">
+              <span class="pc-micon"><i data-feather="alert-circle"></i></span>
+              <span class="pc-mtext">User Reports</span>
+            </a>
+          </li>
+          <li class="pc-item">
+            <a href="listing-reports.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="flag"></i></span>
+              <span class="pc-mtext">Listing Reports</span>
+            </a>
+          </li>
+
+          <!-- SETTINGS -->
+          <li class="pc-item pc-caption"><label>Settings</label></li>
+          <li class="pc-item">
+            <a href="#" class="pc-link" onclick="handleLogout(); return false;">
+              <span class="pc-micon"><i data-feather="log-out"></i></span>
+              <span class="pc-mtext">Log-Out</span>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- [ Sidebar Menu ] end -->
+
+  <!-- [ Header Topbar ] start -->
+  <header class="pc-header">
+    <div class="header-wrapper flex max-sm:px-[15px] px-[25px] grow">
+      <div class="me-auto pc-mob-drp">
+        <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
+          <li class="pc-h-item pc-sidebar-collapse max-lg:hidden lg:inline-flex">
+            <a href="#" class="pc-head-link ltr:!ml-0 rtl:!mr-0" id="sidebar-hide">
+              <i data-feather="menu" class="text-white"></i>
+            </a>
+          </li>
+          <li class="pc-h-item pc-sidebar-popup lg:hidden">
+            <a href="#" class="pc-head-link ltr:!ml-0 rtl:!mr-0" id="mobile-collapse">
+              <i data-feather="menu" class="text-white"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="ms-auto">
+        <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
+          <!-- Simple profile icon that toggles admin panel -->
+          <li class="pc-h-item">
+            <a
+              id="adminProfileToggle"
+              class="pc-head-link"
+              href="#"
+              onclick="toggleAdminPanel(event)"
+            >
+              <i data-feather="user" class="text-white"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <!-- [ Header ] end -->
+
+  <!-- ADMIN PROFILE PANEL -->
+  <div
+    id="adminProfilePanel"
+    class="fixed z-[1100] top-[80px] right-6 w-64 bg-[#212E13] text-white rounded-xl shadow-xl overflow-hidden hidden"
+  >
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-white/10">
+      <img
+        src="../assets/images/user/avatar-2.jpg"
+        alt="admin avatar"
+        class="w-10 h-10 rounded-full object-cover"
+      />
+      <div>
+        <p id="headerAdminName" class="font-semibold leading-tight">Admin</p>
+        <p class="text-xs text-white/70 mt-1">Administrator</p>
+      </div>
+    </div>
+    <div class="p-4">
+      <button
+        class="w-full btn bg-[#fefae0] flex items-center justify-center hover:bg-[#ffdb7f] text-black font-semibold"
+        onclick="handleLogout()"
+      >
+        <svg class="pc-icon me-2 w-[22px] h-[22px] text-black">
+          <use xlink:href="#custom-logout-1-outline"></use>
+        </svg>
+        Log-Out
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="pc-container">
+    <div class="pc-content p-6">
+      <!-- Statistics Cards (bigger version) -->
+      <div class="grid grid-cols-12 gap-4 mb-6">
+        <!-- TOTAL REPORTS -->
+        <div class="col-span-12 sm:col-span-6 xl:col-span-4">
+          <div class="card stats-card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex items-center gap-4">
+            <div class="bg-white p-2.5 rounded-full flex items-center justify-center">
+              <i class="feather icon-alert-circle text-green-900 text-xl"></i>
+            </div>
+            <div>
+              <span id="totalReports" class="text-3xl font-bold text-white block leading-tight">0</span>
+              <span class="text-white uppercase text-sm font-semibold tracking-wide">
+                Total Reports
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PENDING -->
+        <div class="col-span-12 sm:col-span-6 xl:col-span-4">
+          <div class="card stats-card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex items-center gap-4">
+            <div class="bg-white p-2.5 rounded-full flex items-center justify-center">
+              <i class="feather icon-clock text-green-900 text-xl"></i>
+            </div>
+            <div>
+              <span id="pendingReports" class="text-3xl font-bold text-white block leading-tight">0</span>
+              <span class="text-white uppercase text-sm font-semibold tracking-wide">
+                Pending
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESOLVED -->
+        <div class="col-span-12 sm:col-span-6 xl:col-span-4">
+          <div class="card stats-card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 flex items-center gap-4">
+            <div class="bg-white p-2.5 rounded-full flex items-center justify-center">
+              <i class="feather icon-check-circle text-green-900 text-xl"></i>
+            </div>
+            <div>
+              <span id="resolvedReports" class="text-3xl font-bold text-white block leading-tight">0</span>
+              <span class="text-white uppercase text-sm font-semibold tracking-wide">
+                Resolved
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports Table -->
+      <div class="col-span-12">
+        <div class="card table-card bg-white rounded-xl shadow-md p-6">
+          <div class="card-header mb-4 flex flex-wrap items-center justify-between gap-4">
+            <h5 class="text-xl font-bold text-gray-800">User Reports</h5>
+            
+            <div class="flex gap-3">
+              <input type="text" id="searchInput" placeholder="Search reports..." 
+                     class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+              <select id="filterStatus" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                <option value="all">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="resolved">Resolved</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <div id="loadingMessage" class="h-auto flex items-center justify-center bg-white py-8">
+              <p class="text-black font-bold italic text-lg">Loading reports...</p>
+            </div>
+            <div id="noReportsMessage" class="h-auto flex items-center justify-center bg-white py-8 hidden">
+              <p class="text-black font-bold italic text-lg">No reports found</p>
+            </div>
+            <div id="tableContainer" class="table-responsive hidden overflow-x-auto">
+              <table class="table table-hover w-full">
+                <thead class="bg-green-900 text-white">
+                  <tr class="font-bold">
+                    <th class="px-4 py-3">Reported User</th>
+                    <th class="px-4 py-3">Reporter</th>
+                    <th class="px-4 py-3">Reason</th>
+                    <th class="px-4 py-3">Date</th>
+                    <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3 text-center">Actions</th>                         
+                  </tr>
+                </thead>
+                <tbody id="reportsTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Details Modal -->
+  <div id="reportModal" class="modal">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-gray-800">Report Details</h2>
+        <button onclick="closeReportModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+      </div>
+      <div id="reportModalContent" class="space-y-4"></div>
+    </div>
+  </div>
+
+  <!-- Supabase JS Logic -->
+  <script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+  const supabaseUrl = "https://ggzywautymbydgyaeoyf.supabase.co";
+  const supabaseKey = "sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4";
+  const supabase = createClient(supabaseUrl, supabaseKey);
+
+  let allReports = [];
+  let currentReportId = null;
+  let blockedStudentNumbers = new Set();
+
+  async function loadBlockedUsersSet() {
+    const { data, error } = await supabase
+      .from("blocklist")
+      .select("studentNumber");
+
+    if (error) {
+      console.error("Error loading blocklist:", error);
+      blockedStudentNumbers = new Set();
+      return;
+    }
+
+    blockedStudentNumbers = new Set(
+      (data || [])
+        .map(row => (row.studentNumber || "").toString().trim())
+        .filter(Boolean)
+    );
+  }
+
+  const adminLoggedIn = sessionStorage.getItem("admin_logged_in");
+  const adminName = sessionStorage.getItem("adminName") || "Admin";
+
+  if (!adminLoggedIn) {
+    window.location.href = "../../index.html";
+  } else {
+    const headerName = document.getElementById("headerAdminName");
+    if (headerName) headerName.textContent = adminName;
+  }
+
+  window.handleLogout = function () {
+    Swal.fire({
+      title: 'Log out?',
+      text: 'Are you sure you want to log out of the admin dashboard?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, log out',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+      backdrop: 'rgba(0,0,0,0.45)',
+      customClass: {
+        popup: 'logout-swal-popup',
+        title: 'logout-swal-title',
+        htmlContainer: 'logout-swal-text',
+        confirmButton: 'logout-swal-confirm',
+        cancelButton: 'logout-swal-cancel'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sessionStorage.clear();
+
+        Swal.fire({
+          title: 'Logged out',
+          text: 'You have been successfully logged out.',
+          icon: 'success',
+          timer: 1200,
+          showConfirmButton: false,
+          backdrop: 'rgba(0,0,0,0.45)',
+          customClass: {
+            popup: 'logout-swal-popup',
+            title: 'logout-swal-title',
+            htmlContainer: 'logout-swal-text'
+          }
+        }).then(() => {
+          window.location.href = '../../index.html';
+        });
+      }
+    });
+  };
+
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text ?? "";
+    return div.innerHTML;
+  }
+
+  function getField(obj, ...keys) {
+    for (const k of keys) {
+      if (obj[k] !== undefined && obj[k] !== null) return obj[k];
+    }
+    return null;
+  }
+
+  function formatDate(val) {
+    if (!val) return "N/A";
+    const d = new Date(val);
+    if (isNaN(d.getTime())) return "N/A";
+    return d.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
+
+  function getUserTypeLabel(userType) {
+    const type = (userType || "").toString().toLowerCase().trim();
+    return type === "instructor" ? "Instructor Number" : "Student Number";
+  }
+
+  function getSafeImage(url) {
+    if (!url || typeof url !== "string") {
+      return "../assets/images/user/avatar-2.jpg";
+    }
+    return url;
+  }
+
+  function normalizeStatus(value) {
+    return String(value || "pending").trim().toLowerCase();
+  }
+
+  function updateLocalReportStatus(reportId, extra = {}) {
+    allReports = allReports.map(report => {
+      if (String(report.id) === String(reportId)) {
+        return {
+          ...report,
+          status: "resolved",
+          ...extra
+        };
+      }
+      return report;
+    });
+
+    filterReports();
+  }
+
+  async function loadStats() {
+    const { data, error } = await supabase.from("user_reports").select("status");
+
+    if (error) {
+      console.error("Error loading stats:", error);
+      return;
+    }
+
+    const rows = data || [];
+    const total = rows.length;
+    const pending = rows.filter(r => normalizeStatus(r.status) === "pending").length;
+    const resolved = rows.filter(r => normalizeStatus(r.status) === "resolved").length;
+
+    document.getElementById("totalReports").textContent = total;
+    document.getElementById("pendingReports").textContent = pending;
+    document.getElementById("resolvedReports").textContent = resolved;
+  }
+
+  async function loadReports() {
+    const loadingMessage = document.getElementById("loadingMessage");
+    const noReportsMessage = document.getElementById("noReportsMessage");
+    const tableContainer = document.getElementById("tableContainer");
+
+    loadingMessage.classList.remove("hidden");
+    noReportsMessage.classList.add("hidden");
+    tableContainer.classList.add("hidden");
+
+    await loadBlockedUsersSet();
+
+    const { data, error } = await supabase
+      .from("user_reports")
+      .select("*")
+      .order("reported_at", { ascending: false });
+
+    loadingMessage.classList.add("hidden");
+
+    if (error) {
+      console.error("Error loading reports:", error);
+      noReportsMessage.classList.remove("hidden");
+      noReportsMessage.innerHTML = '<p class="text-red-600 font-bold">Error loading reports</p>';
+      return;
+    }
+
+    allReports = data || [];
+
+    if (!allReports.length) {
+      noReportsMessage.classList.remove("hidden");
+      tableContainer.classList.add("hidden");
+    } else {
+      noReportsMessage.classList.add("hidden");
+      tableContainer.classList.remove("hidden");
+    }
+
+    filterReports();
+  }
+
+  function renderTable(reports) {
+    const tableBody = document.getElementById("reportsTable");
+    const noReportsMessage = document.getElementById("noReportsMessage");
+    const tableContainer = document.getElementById("tableContainer");
+
+    tableBody.innerHTML = "";
+
+    if (!reports.length) {
+      noReportsMessage.classList.remove("hidden");
+      tableContainer.classList.add("hidden");
+      return;
+    }
+
+    noReportsMessage.classList.add("hidden");
+    tableContainer.classList.remove("hidden");
+
+    reports.forEach(report => {
+      const reportedUserName = getField(report, "reported_user_name", "reportedUserName") || "Unknown User";
+      const reporterName = getField(report, "reporter_name", "reporterName") || "Anonymous";
+      const reasonFull = getField(report, "reason") || "No reason provided";
+      const shortReason = reasonFull.length > 40 ? reasonFull.slice(0, 40) + "..." : reasonFull;
+      const reportedAt = getField(report, "reported_at", "reportedAt");
+      const status = normalizeStatus(report.status);
+      const reportDate = formatDate(reportedAt);
+
+      const reportedStudentNo = String(
+        getField(report, "reported_student_no", "reportedStudentNo", "reported_student_id") || ""
+      ).trim();
+
+      const isBlocked = blockedStudentNumbers.has(reportedStudentNo);
+      const isResolved = status === "resolved";
+
+      const statusBadge = isResolved
+        ? '<span class="badge badge-success">Resolved</span>'
+        : '<span class="badge badge-danger">Pending</span>';
+
+      let actionButtons = `
+        <button onclick="viewReport('${report.id}')" class="action-btn bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded mr-2 transition text-sm">
+          View
+        </button>
+      `;
+
+      if (!isResolved) {
+        actionButtons += `
+          <button onclick="resolveReport('${report.id}')" class="action-btn bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded mr-2 transition text-sm">
+            Resolve
+          </button>
+        `;
+
+        if (!isBlocked) {
+          actionButtons += `
+            <button onclick="blockUser('${report.id}')" class="action-btn bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded transition text-sm">
+              Block User
+            </button>
+          `;
+        }
+      }
+
+      const row = document.createElement("tr");
+      row.className = "border-b hover:bg-gray-50";
+      row.innerHTML = `
+        <td class="px-4 py-3">
+          <h6 class="mb-1 font-semibold">${escapeHtml(reportedUserName)}</h6>
+        </td>
+        <td class="px-4 py-3">
+          <h6 class="mb-1">${escapeHtml(reporterName)}</h6>
+        </td>
+        <td class="px-4 py-3">
+          <span class="text-sm">${escapeHtml(shortReason)}</span>
+        </td>
+        <td class="px-4 py-3">
+          <span class="text-sm text-gray-600">${reportDate}</span>
+        </td>
+        <td class="px-4 py-3">
+          ${statusBadge}
+        </td>
+        <td class="px-4 py-3 text-center">
+          ${actionButtons}
+        </td>
+      `;
+
+      tableBody.appendChild(row);
+    });
+  }
+
+  window.viewReport = async function (reportId) {
+  const reportUuid = String(reportId).trim();
+  const localReport = allReports.find(r => String(r.id) === reportUuid);
+
+  const { data, error } = await supabase
+    .from("user_reports")
+    .select("*")
+    .eq("id", reportUuid)
+    .maybeSingle();
+
+  const report = data || localReport;
+
+  if (error && !report) {
+    await Swal.fire({
+      title: 'Not found',
+      text: 'Report not found.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-success-popup',
+        title: 'custom-success-title',
+        htmlContainer: 'custom-success-text',
+        confirmButton: 'custom-danger-btn'
+      }
+    });
+    return;
+  }
+
+  if (!report) {
+    await Swal.fire({
+      title: 'Not found',
+      text: 'Report not found.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-success-popup',
+        title: 'custom-success-title',
+        htmlContainer: 'custom-success-text',
+        confirmButton: 'custom-danger-btn'
+      }
+    });
+    return;
+  }
+
+  currentReportId = reportUuid;
+
+  const modalContent = document.getElementById("reportModalContent");
+
+  const reportedUserName = getField(report, "reported_user_name", "reportedUserName") || "Unknown User";
+  const reporterName = getField(report, "reporter_name", "reporterName") || "Anonymous";
+  const reportedUserId = getField(report, "reported_user_id", "reportedUserId") || "N/A";
+  const reportedStudent = getField(report, "reported_student_no", "reportedStudentNo", "reported_student_id") || "N/A";
+  const reporterNumber = getField(report, "reporter_student_no", "reporterStudentNo") || "N/A";
+  const status = normalizeStatus(report.status);
+  const reasonText = getField(report, "reason") || "No reason provided";
+  const additionalInfo = getField(report, "additional_info") || getField(report, "details");
+  const reportedAt = formatDate(getField(report, "reported_at", "reportedAt"));
+
+  const reportedStudentNo = String(reportedStudent || "").trim();
+  const isBlocked = blockedStudentNumbers.has(reportedStudentNo);
+  const isResolved = status === "resolved";
+
+  let reportedUserAvatar = "../assets/images/user/avatar-2.jpg";
+  let reportedUserType = "student";
+
+  if (reportedStudent && reportedStudent !== "N/A") {
+    const { data: reportedUserData, error: userError } = await supabase
+      .from("students")
+      .select("avatar_url, user_type, studentNumber, studentName")
+      .eq("studentNumber", reportedStudent)
+      .maybeSingle();
+
+    if (!userError && reportedUserData) {
+      reportedUserAvatar = getSafeImage(reportedUserData.avatar_url);
+      reportedUserType = reportedUserData.user_type || "student";
+    }
+  }
+
+  let reporterType =
+    getField(report, "reporter_user_type", "reporter_role", "user_type") || "student";
+
+  if (reporterNumber && reporterNumber !== "N/A") {
+    const { data: reporterData } = await supabase
+      .from("students")
+      .select("user_type")
+      .eq("studentNumber", reporterNumber)
+      .maybeSingle();
+
+    if (reporterData?.user_type) {
+      reporterType = reporterData.user_type;
+    }
+  }
+
+  const reporterNumberLabel = getUserTypeLabel(reporterType);
+  const reportedNumberLabel = getUserTypeLabel(reportedUserType);
+
+  let actionButtons = '';
+
+  if (!isResolved) {
+    actionButtons += `
+      <button onclick="resolveReport('${reportUuid}')" class="action-btn bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded flex-1 transition font-semibold">
+        Resolve
+      </button>
+    `;
+
+    if (!isBlocked) {
+      actionButtons += `
+        <button onclick="blockUser('${reportUuid}')" class="action-btn bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded flex-1 transition font-semibold">
+          Block User
+        </button>
+      `;
+    }
+  }
+
+  modalContent.innerHTML = `
+    <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border">
+      <img 
+        src="${escapeHtml(reportedUserAvatar)}" 
+        alt="Profile Picture"
+        class="w-20 h-20 rounded-full object-cover border-2 border-green-700"
+        onerror="this.src='../assets/images/user/avatar-2.jpg'"
+      >
+      <div>
+        <p class="text-sm text-gray-500">Reported User</p>
+        <p class="text-xl font-bold text-gray-800">${escapeHtml(reportedUserName)}</p>
+        <p class="text-sm text-gray-600 mt-1">${escapeHtml(reportedNumberLabel)}: ${escapeHtml(String(reportedStudent))}</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 mt-4">
+      <div>
+        <p class="text-sm text-gray-600">Reporter</p>
+        <p class="font-semibold">${escapeHtml(reporterName)}</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">Status</p>
+        <p class="font-semibold">${isResolved ? "Resolved" : "Pending"}</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">Report Date</p>
+        <p class="font-semibold">${reportedAt}</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-600">${escapeHtml(reporterNumberLabel)}</p>
+        <p class="font-semibold text-xs break-all">${escapeHtml(String(reporterNumber))}</p>
+      </div>
+      <div class="col-span-2">
+        <p class="text-sm text-gray-600">Reported User ID</p>
+        <p class="font-semibold text-xs break-all">${escapeHtml(String(reportedUserId))}</p>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <p class="text-sm text-gray-600">Reason</p>
+      <p class="mt-2 p-4 bg-gray-100 rounded">${escapeHtml(reasonText)}</p>
+    </div>
+
+    ${additionalInfo ? `
+      <div class="mt-4">
+        <p class="text-sm text-gray-600">Additional Information</p>
+        <p class="mt-2 p-4 bg-gray-100 rounded">${escapeHtml(additionalInfo)}</p>
+      </div>
+    ` : ""}
+
+    ${actionButtons ? `
+      <div class="flex gap-3 mt-6 pt-4 border-t">
+        ${actionButtons}
+      </div>
+    ` : ""}
+  `;
+
+  document.getElementById("reportModal").classList.add("show");
+};
+
+  window.closeReportModal = function () {
+    document.getElementById("reportModal").classList.remove("show");
+    currentReportId = null;
+  };
+
+  async function sendNotification({
+    recipientStudentNumber,
+    type,
+    message = '',
+    actorStudentNumber = 'admin',
+    actorName = adminName,
+    listingId = null,
+    listingTitle = null
+  }) {
+    if (!recipientStudentNumber) {
+      console.warn('No recipient student number found. Notification not sent.');
+      return;
+    }
+
+    const { error } = await supabase
+      .from('notifications')
+      .insert([{
+        type,
+        recipient_student_number: String(recipientStudentNumber),
+        actor_student_number: String(actorStudentNumber),
+        actor_name: actorName,
+        listing_id: listingId,
+        listing_title: listingTitle,
+        message,
+        is_read: false
+      }]);
+
+    if (error) {
+      console.error('Error sending notification:', error);
+    }
+  }
+
+  window.resolveReport = async function (reportId) {
+  const result = await Swal.fire({
+    title: 'Resolve report?',
+    text: 'This will mark this user report as resolved.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.55)',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-confirm-popup',
+      title: 'custom-confirm-title',
+      htmlContainer: 'custom-confirm-text',
+      icon: 'custom-confirm-icon',
+      confirmButton: 'custom-confirm-btn',
+      cancelButton: 'custom-cancel-btn'
+    }
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const reportUuid = String(reportId).trim();
+
+    const { data: existingReport, error: fetchError } = await supabase
+      .from('user_reports')
+      .select('*')
+      .eq('id', reportUuid)
+      .maybeSingle();
+
+    if (fetchError || !existingReport) {
+      console.error('Fetch error before resolve:', fetchError);
+      await Swal.fire({
+        title: 'Failed',
+        text: 'Report not found.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    const nowIso = new Date().toISOString();
+
+    const { data: updatedRows, error: updateError } = await supabase
+      .from('user_reports')
+      .update({
+        status: 'resolved',
+        resolved_at: nowIso,
+        resolved_by: adminName
+      })
+      .eq('id', reportUuid)
+      .select('*');
+
+    console.log('Resolve updatedRows:', updatedRows);
+    console.log('Resolve updateError:', updateError);
+
+    if (updateError) {
+      await Swal.fire({
+        title: 'Failed',
+        text: 'Database update failed: ' + updateError.message,
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    if (!updatedRows || !updatedRows.length) {
+      await Swal.fire({
+        title: 'Failed',
+        text: 'No row was updated in user_reports.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    const verifiedRow = updatedRows[0];
+
+    if (String(verifiedRow.status).trim().toLowerCase() !== 'resolved') {
+      await Swal.fire({
+        title: 'Failed',
+        text: 'Update returned but status is still not resolved.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    allReports = allReports.map(report =>
+      String(report.id) === reportUuid
+        ? {
+            ...report,
+            status: 'resolved',
+            resolved_at: nowIso,
+            resolved_by: adminName
+          }
+        : report
+    );
+
+    const reportedStudentNo = getField(
+      existingReport,
+      'reported_student_no',
+      'reportedStudentNo',
+      'reported_student_id'
+    );
+
+    await sendNotification({
+      recipientStudentNumber: reportedStudentNo,
+      type: 'profile_report',
+      message: `A report about your account has been reviewed by the admin. No further action was taken on your account.`
+    });
+
+    await loadStats();
+    filterReports();
+    closeReportModal();
+
+    await Swal.fire({
+      title: 'Resolved',
+      text: 'Report marked as resolved successfully.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-success-popup',
+        title: 'custom-success-title',
+        htmlContainer: 'custom-success-text',
+        confirmButton: 'custom-confirm-btn'
+      }
+    });
+  } catch (err) {
+    console.error('Unexpected error resolving report:', err);
+    await Swal.fire({
+      title: 'Failed',
+      text: 'Error resolving report. Please try again.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-success-popup',
+        title: 'custom-success-title',
+        htmlContainer: 'custom-success-text',
+        confirmButton: 'custom-danger-btn'
+      }
+    });
+  }
+};
+
+ window.blockUser = async function (reportId) {
+  const { value: reasonInput } = await Swal.fire({
+    title: 'Block user',
+    text: 'Please enter the reason for blocking this user.',
+    input: 'text',
+    inputPlaceholder: 'Type block reason here...',
+    showCancelButton: true,
+    confirmButtonText: 'Next',
+    cancelButtonText: 'Cancel',
+    allowOutsideClick: false,
+    allowEscapeKey: true,
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-input-popup',
+      title: 'custom-confirm-title',
+      htmlContainer: 'custom-confirm-text',
+      input: 'custom-input',
+      confirmButton: 'custom-confirm-btn',
+      cancelButton: 'custom-cancel-btn'
+    },
+    inputValidator: (value) => {
+      if (!value || !value.trim()) {
+        return 'Block reason is required';
+      }
+    }
+  });
+
+  if (!reasonInput) return;
+
+  const reason = reasonInput.trim();
+
+  const confirmBlock = await Swal.fire({
+    title: 'Confirm block?',
+    text: 'Are you sure you want to block this user?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.55)',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-confirm-popup',
+      title: 'custom-confirm-title',
+      htmlContainer: 'custom-confirm-text',
+      icon: 'custom-confirm-icon',
+      confirmButton: 'custom-danger-btn',
+      cancelButton: 'custom-cancel-btn'
+    }
+  });
+
+  if (!confirmBlock.isConfirmed) return;
+
+  try {
+    const reportUuid = String(reportId).trim();
+
+    const { data: report, error: reportError } = await supabase
+      .from('user_reports')
+      .select('*')
+      .eq('id', reportUuid)
+      .maybeSingle();
+
+    if (reportError || !report) {
+      console.error('Error fetching report:', reportError);
+      await Swal.fire({
+        title: 'Not found',
+        text: 'Report not found.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    const reportedStudentNo = getField(
+      report,
+      'reported_student_no',
+      'reportedStudentNo',
+      'reported_student_id'
+    );
+
+    if (!reportedStudentNo) {
+      await Swal.fire({
+        title: 'Missing data',
+        text: 'Cannot block user: no student number found in report.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    const cleanStudentNo = String(reportedStudentNo).trim();
+
+    const { data: existingBlocked } = await supabase
+      .from('blocklist')
+      .select('id')
+      .eq('studentNumber', cleanStudentNo)
+      .maybeSingle();
+
+    if (existingBlocked) {
+      await Swal.fire({
+        title: 'Already blocked',
+        text: 'This user is already in the blocklist.',
+        icon: 'info',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-confirm-btn'
+        }
+      });
+      return;
+    }
+
+    const { data: student, error: studentError } = await supabase
+      .from('students')
+      .select('*')
+      .eq('studentNumber', cleanStudentNo)
+      .maybeSingle();
+
+    if (studentError || !student) {
+      console.error('Student not found for blocklist:', studentError);
+      await Swal.fire({
+        title: 'Not found',
+        text: 'Student not found in students table for this report.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    const blockUserData = {
+      id: crypto.randomUUID(),
+      studentNumber: student.studentNumber || null,
+      studentName: student.studentName || null,
+      email: student.email || null,
+      course_block: student.course_block || null,
+      password: student.auth_user_id ? null : (student.password || null),
+      blockedAt: new Date().toISOString(),
+      blockedBy: adminName,
+      blockReason: reason,
+      user_type: student.user_type || 'student',
+      avatar_url: student.avatar_url || null,
+      auth_user_id: student.auth_user_id || null,
+      socialLink: student.socialLink ?? null
+    };
+
+    const { error: insertError } = await supabase
+      .from('blocklist')
+      .insert([blockUserData]);
+
+    if (insertError) {
+      console.error('Error inserting into blocklist:', insertError);
+      await Swal.fire({
+        title: 'Failed',
+        text: 'Error blocking user: ' + insertError.message,
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    const { error: deleteStudentError } = await supabase
+      .from('students')
+      .delete()
+      .eq('id', student.id);
+
+    if (deleteStudentError) {
+      console.error('Error deleting blocked student from students:', deleteStudentError);
+      await Swal.fire({
+        title: 'Partial success',
+        text: 'User was added to blocklist but could not be removed from students.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    const nowIso = new Date().toISOString();
+
+    const { data: updatedRows, error: updErr } = await supabase
+      .from('user_reports')
+      .update({
+        status: 'resolved',
+        resolved_at: nowIso,
+        resolved_by: adminName,
+        action: 'user_blocked'
+      })
+      .eq('id', reportUuid)
+      .select('*');
+
+    if (updErr) {
+      await Swal.fire({
+        title: 'Failed',
+        text: 'User was blocked, but report status did not save: ' + updErr.message,
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    if (!updatedRows || !updatedRows.length) {
+      await Swal.fire({
+        title: 'Failed',
+        text: 'User was blocked, but no row was updated in user_reports.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-success-popup',
+          title: 'custom-success-title',
+          htmlContainer: 'custom-success-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    blockedStudentNumbers.add(cleanStudentNo);
+
+    allReports = allReports.map(item =>
+      String(item.id) === reportUuid
+        ? {
+            ...item,
+            status: 'resolved',
+            resolved_at: nowIso,
+            resolved_by: adminName,
+            action: 'user_blocked'
+          }
+        : item
+    );
+
+    await sendNotification({
+      recipientStudentNumber: cleanStudentNo,
+      type: 'profile_report',
+      message: `Your account has been blocked by the admin due to a report review. Reason: ${reason}`
+    });
+
+    await loadStats();
+    filterReports();
+    closeReportModal();
+
+    await Swal.fire({
+      title: 'Blocked',
+      text: 'User blocked successfully.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-success-popup',
+        title: 'custom-success-title',
+        htmlContainer: 'custom-success-text',
+        confirmButton: 'custom-confirm-btn'
+      }
+    });
+  } catch (err) {
+    console.error('Error blocking user from report:', err);
+    await Swal.fire({
+      title: 'Failed',
+      text: 'Error blocking user. Please try again.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-success-popup',
+        title: 'custom-success-title',
+        htmlContainer: 'custom-success-text',
+        confirmButton: 'custom-danger-btn'
+      }
+    });
+  }
+};
+  document.getElementById("searchInput").addEventListener("input", filterReports);
+  document.getElementById("filterStatus").addEventListener("change", filterReports);
+
+  function filterReports() {
+    const term = document.getElementById("searchInput").value.toLowerCase().trim();
+    const statusFilter = document.getElementById("filterStatus").value;
+
+    let filtered = [...allReports];
+
+    if (statusFilter !== "all") {
+      filtered = filtered.filter(r => normalizeStatus(r.status) === statusFilter);
+    }
+
+    if (term) {
+      filtered = filtered.filter(r =>
+        (getField(r, "reported_user_name", "reportedUserName") || "").toLowerCase().includes(term) ||
+        (getField(r, "reporter_name", "reporterName") || "").toLowerCase().includes(term) ||
+        (getField(r, "reason") || "").toLowerCase().includes(term)
+      );
+    }
+
+    renderTable(filtered);
+  }
+
+  const mobileCollapse = document.getElementById("mobile-collapse");
+  if (mobileCollapse) {
+    mobileCollapse.addEventListener("click", function (e) {
+      e.preventDefault();
+      document.body.classList.toggle("mob-sidebar-active");
+      if (typeof feather !== "undefined") feather.replace();
+    });
+  }
+
+  const sidebarHide = document.getElementById("sidebar-hide");
+  if (sidebarHide) {
+    sidebarHide.addEventListener("click", function (e) {
+      e.preventDefault();
+      document.body.classList.toggle("sidebar-collapsed");
+      if (typeof feather !== "undefined") feather.replace();
+    });
+  }
+
+  window.onclick = function (event) {
+    const modal = document.getElementById("reportModal");
+    if (event.target === modal) {
+      closeReportModal();
+    }
+  };
+
+  window.addEventListener("DOMContentLoaded", async () => {
+    setTimeout(() => {
+      const loader = document.querySelector(".loader-bg");
+      if (loader) loader.style.display = "none";
+    }, 500);
+
+    if (typeof feather !== "undefined") feather.replace();
+
+    await loadStats();
+    await loadReports();
+  });
+</script>
+
+  <!-- Required Js -->
+  <script src="../assets/js/plugins/simplebar.min.js"></script>
+  <script src="../assets/js/plugins/popper.min.js"></script>
+  <script src="../assets/js/icon/custom-icon.js"></script>
+  <script src="../assets/js/plugins/feather.min.js"></script>
+  <script src="../assets/js/component.js"></script>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/script.js"></script>
+
+  <script>
+    layout_change('false');
+    layout_theme_sidebar_change('dark');
+    change_box_container('false');
+    layout_caption_change('true');
+    layout_rtl_change('false');
+    preset_change('preset-1');
+    main_layout_change('vertical');
+  </script>
+
+  <!-- TOGGLE ADMIN PANEL -->
+  <script>
+    function toggleAdminPanel(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const panel = document.getElementById('adminProfilePanel');
+      if (!panel) return;
+      panel.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function (e) {
+      const panel  = document.getElementById('adminProfilePanel');
+      const toggle = document.getElementById('adminProfileToggle');
+      if (!panel || !toggle) return;
+
+      if (!panel.contains(e.target) && !toggle.contains(e.target)) {
+        panel.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="en" data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-direction="ltr" dir="ltr" data-pc-theme="light">
+<head>
+  <title>Dashboard - PHINMA TradeHub</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="Admin Dashboard" />
+  <meta name="keywords" content="PHINMA, TradeHub, Dashboard" />
+  <meta name="author" content="Sniper 2025" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/fonts/phosphor/duotone/style.css" />
+  <link rel="stylesheet" href="../assets/fonts/tabler-icons.min.css" />
+  <link rel="stylesheet" href="../assets/fonts/feather.css" />
+  <link rel="stylesheet" href="../assets/fonts/fontawesome.css" />
+  <link rel="stylesheet" href="../assets/fonts/material.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link" />
+  <link rel="stylesheet" href="../assets/css/style2.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js for analytics -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    /* ===== SIDEBAR LAYOUT FIX ===== */
+    .pc-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      z-index: 1025;
+      transition: transform 0.3s ease;
+    }
+
+    .pc-container {
+      margin-left: 260px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .pc-header {
+      position: fixed;
+      top: 0;
+      left: 260px;
+      right: 0;
+      height: 70px;
+      z-index: 1020;
+      transition: left 0.3s ease;
+      background: #14532d;
+    }
+
+    body.sidebar-collapsed .pc-sidebar { transform: translateX(-260px); }
+    body.sidebar-collapsed .pc-container { margin-left: 0; }
+    body.sidebar-collapsed .pc-header { left: 0; }
+
+    .pc-content { padding-top: 80px; }
+
+    .pc-link { transition: all 0.3s ease; }
+    .pc-link:hover { background-color: rgba(255, 255, 255, 0.1); }
+    .pc-link.active { background-color: rgba(255, 255, 255, 0.2); }
+
+    .pc-head-link {
+      cursor: pointer;
+      padding: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pc-head-link:hover { opacity: 0.8; }
+
+    .min-h-header-height { min-height: 70px; }
+
+    @media (max-width: 1024px) {
+      .pc-sidebar { transform: translateX(-260px); }
+      body.mob-sidebar-active .pc-sidebar { transform: translateX(0); }
+      .pc-container, .pc-header { margin-left: 0; left: 0; }
+    }
+
+    /* ===== ANALYTICS STYLES ===== */
+    .analytics-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      padding: 24px;
+      transition: box-shadow 0.3s ease, transform 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .analytics-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+      transform: translateY(-2px);
+    }
+
+    .analytics-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #14532d, #4ade80);
+      border-radius: 16px 16px 0 0;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 0.8rem;
+      color: #374151;
+      border-bottom: 1px solid #f3f4f6;
+      transition: background 0.2s;
+    }
+    .legend-item:last-child { border-bottom: none; }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-label { flex: 1; font-weight: 500; }
+    .legend-pct { font-weight: 700; color: #14532d; }
+    .legend-count { color: #9ca3af; font-size: 0.75rem; }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 4px;
+      letter-spacing: -0.3px;
+    }
+
+    .section-subtitle {
+      font-size: 0.78rem;
+      color: #9ca3af;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    /* ===== TOP COURSE LEADERBOARD ===== */
+    .top-course-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .top-course-row:last-child { border-bottom: none; }
+
+    .top-course-rank {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #14532d;
+      color: white;
+      font-weight: 700;
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .top-course-rank.rank-1 { background: #b8860b; }
+    .top-course-rank.rank-2 { background: #6b7280; }
+    .top-course-rank.rank-3 { background: #92400e; }
+
+    .top-course-bar-track {
+      height: 8px;
+      background: #f3f4f6;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    .top-course-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #14532d, #22c55e);
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 0%;
+    }
+
+    /* Fade-in animation */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      animation: fadeInUp 0.5s ease forwards;
+    }
+    .fade-in-delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .fade-in-delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .fade-in-delay-3 { animation-delay: 0.3s; opacity: 0; }
+    .logout-swal-popup {
+  border-radius: 20px !important;
+  padding: 1.4rem 1.2rem 1.2rem !important;
+  font-family: 'Montserrat', sans-serif !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22) !important;
+}
+
+.logout-swal-title {
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  color: #14532d !important;
+}
+
+.logout-swal-text {
+  font-size: 0.95rem !important;
+  color: #4b5563 !important;
+}
+
+.logout-swal-confirm,
+.logout-swal-cancel {
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0.75rem 1.25rem !important;
+  font-size: 0.92rem !important;
+  font-weight: 600 !important;
+  min-width: 130px;
+  transition: all 0.25s ease !important;
+}
+
+.logout-swal-confirm {
+  background: linear-gradient(135deg, #14532d, #22c55e) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.25) !important;
+}
+
+.logout-swal-confirm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(34, 197, 94, 0.32) !important;
+}
+
+.logout-swal-cancel {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+.logout-swal-cancel:hover {
+  background: #e5e7eb !important;
+}
+  </style>
+</head>
+<body class="mainbody">
+  <!-- Pre-loader -->
+  <div class="loader-bg fixed inset-0 bg-white dark:bg-themedark-cardbg z-[1034]">
+    <div class="loader-track h-[5px] w-full inline-block absolute overflow-hidden top-0">
+      <div class="loader-fill w-[300px] h-[5px] bg-primary-500 absolute top-0 left-0 animate-[hitZak_0.6s_ease-in-out_infinite_alternate]"></div>
+    </div>
+  </div>
+
+  <!-- [ Sidebar Menu ] start -->
+  <nav class="pc-sidebar" style="background: url('../assets/images/sbbg2.png') center/cover no-repeat;">
+    <div class="navbar-wrapper">
+      <div class="m-header flex items-center py-4 px-6 h-header-height">
+        <a href="dashboard.html" class="b-brand flex items-center gap-3">
+          <img src="../assets/images/upang.png" alt="logo here" class="w-10 rounded-lg" />
+          <h4 class="text-xl font-semibold text-white">PHINMA TradeHub</h4>
+        </a>
+      </div>
+
+      <div class="navbar-content h-[calc(100vh_-_74px)] py-2.5">
+        <div class="grow ms-3 text-center"></div>
+        <ul class="pc-navbar">
+          <li class="pc-item pc-caption"><label>Navigation</label></li>
+          <li class="pc-item">
+            <a href="dashboard.html" class="pc-link active">
+              <span class="pc-micon"><i data-feather="layout"></i></span>
+              <span class="pc-mtext">Dashboard</span>
+            </a>
+          </li>
+
+          <li class="pc-item pc-caption"><label>User Management</label></li>
+          <li class="pc-item">
+            <a href="users.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="users"></i></span>
+              <span class="pc-mtext">View Users</span>
+            </a>
+          </li>
+          <li class="pc-item">
+            <a href="archived-users.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="archive"></i></span>
+              <span class="pc-mtext">Archived Users</span>
+            </a>
+          </li>
+          <li class="pc-item">
+            <a href="blacklist.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="slash"></i></span>
+              <span class="pc-mtext">Blocklist</span>
+            </a>
+          </li>
+
+          <li class="pc-item pc-caption"><label>Listings</label></li>
+          <li class="pc-item">
+            <a href="listings.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="file-text"></i></span>
+              <span class="pc-mtext">View Listings</span>
+            </a>
+          </li>
+          <li class="pc-item">
+            <a href="listing-approval.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="check-square"></i></span>
+              <span class="pc-mtext">Listing Approvals</span>
+            </a>
+          </li>
+
+          <li class="pc-item pc-caption"><label>Reports</label></li>
+          <li class="pc-item">
+            <a href="user-reports.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="alert-circle"></i></span>
+              <span class="pc-mtext">User Reports</span>
+            </a>
+          </li>
+          <li class="pc-item">
+            <a href="listing-reports.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="flag"></i></span>
+              <span class="pc-mtext">Listing Reports</span>
+            </a>
+          </li>
+
+          <li class="pc-item pc-caption"><label>Settings</label></li>
+          <li class="pc-item">
+            <a href="#" class="pc-link" onclick="handleLogout(); return false;">
+              <span class="pc-micon"><i data-feather="log-out"></i></span>
+              <span class="pc-mtext">Log-Out</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- [ Header Topbar ] start -->
+  <header class="pc-header">
+    <div class="header-wrapper flex max-sm:px-[15px] px-[25px] grow">
+      <div class="me-auto pc-mob-drp">
+        <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
+          <li class="pc-h-item pc-sidebar-collapse max-lg:hidden lg:inline-flex">
+            <a href="#" class="pc-head-link ltr:!ml-0 rtl:!mr-0" id="sidebar-hide">
+              <i data-feather="menu" class="text-white"></i>
+            </a>
+          </li>
+          <li class="pc-h-item pc-sidebar-popup lg:hidden">
+            <a href="#" class="pc-head-link ltr:!ml-0 rtl:!mr-0" id="mobile-collapse">
+              <i data-feather="menu" class="text-white"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="ms-auto">
+        <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
+          <!-- USER PROFILE TOGGLE BUTTON -->
+          <li class="pc-h-item">
+            <a
+              id="adminProfileToggle"
+              class="pc-head-link"
+              href="#"
+              onclick="toggleAdminPanel(event)"
+            >
+              <i data-feather="user" class="text-white"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="pc-container">
+    <div class="pc-content p-6">
+
+      <!-- Stat Cards Row -->
+      <div class="grid grid-cols-12 gap-6 mb-6">
+        <div class="col-span-12 sm:col-span-6 xl:col-span-4 fade-in fade-in-delay-1">
+          <div class="card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6">
+            <div class="flex items-center gap-4">
+              <div class="bg-white p-4 rounded-full">
+                <i class="feather icon-users text-black text-2xl"></i>
+              </div>
+              <div>
+                <h3 id="totalStudents" class="text-3xl font-bold text-white">0</h3>
+                <p class="text-white uppercase text-sm font-semibold">Total Students</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-12 sm:col-span-6 xl:col-span-4 fade-in fade-in-delay-2">
+          <div class="card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6">
+            <div class="flex items-center gap-4">
+              <div class="bg-white p-4 rounded-full">
+                <i class="feather icon-file-text text-black text-2xl"></i>
+              </div>
+              <div>
+                <h3 id="totalPosts" class="text-3xl font-bold text-white">0</h3>
+                <p class="text-white uppercase text-sm font-semibold">Total Posts</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-span-12 sm:col-span-6 xl:col-span-4 fade-in fade-in-delay-3">
+          <div class="card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6">
+            <div class="flex items-center gap-4">
+              <div class="bg-white p-4 rounded-full">
+                <i class="feather icon-archive text-black text-2xl"></i>
+              </div>
+              <div>
+                <h3 id="archivedPosts" class="text-3xl font-bold text-white">0</h3>
+                <p class="text-white uppercase text-sm font-semibold">Archived Posts</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ANALYTICS SECTION ===== -->
+      <div class="grid grid-cols-12 gap-6 mb-6">
+
+        <!-- Donut Chart: Course Share -->
+        <div class="col-span-12 xl:col-span-5 fade-in fade-in-delay-2">
+          <div class="analytics-card h-full">
+            <p class="section-title">Registered Users by Course</p>
+            <p class="section-subtitle">Percentage share of registered students per program</p>
+            <div class="chart-container" style="height: 260px;">
+              <canvas id="deptDonutChart"></canvas>
+            </div>
+            <div id="donutLegend" class="mt-4"></div>
+          </div>
+        </div>
+
+        <!-- Top Course Leaderboard -->
+        <div class="col-span-12 xl:col-span-7 fade-in fade-in-delay-3">
+          <div class="analytics-card h-full">
+            <p class="section-title">Top Courses</p>
+            <p class="section-subtitle">Ranked by number of registered users</p>
+            <div id="topCourseList">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ADMIN PROFILE PANEL (FIXED TOP-RIGHT) -->
+  <div
+    id="adminProfilePanel"
+    class="fixed z-[1100] top-[80px] right-6 w-64 bg-[#212E13] text-white rounded-xl shadow-xl overflow-hidden hidden"
+  >
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-white/10">
+      <img
+        src="../assets/images/user/avatar-2.jpg"
+        alt="admin avatar"
+        class="w-10 h-10 rounded-full object-cover"
+      />
+      <div>
+        <p id="headerAdminName" class="font-semibold leading-tight">Admin</p>
+        <p class="text-xs text-white/70 mt-1">Administrator</p>
+      </div>
+    </div>
+    <div class="p-4">
+      <button
+        class="w-full btn bg-[#fefae0] flex items-center justify-center hover:bg-[#ffdb7f] text-black font-semibold"
+        onclick="handleLogout()"
+      >
+        <svg class="pc-icon me-2 w-[22px] h-[22px] text-black">
+          <use xlink:href="#custom-logout-1-outline"></use>
+        </svg>
+        Log-Out
+      </button>
+    </div>
+  </div>
+
+  <!-- Supabase + Analytics Script -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    // Supabase init (same as index.html & register.html)
+    const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+    const supabasePublishableKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4'; // ← palitan ng full publishable key
+    const supabase = createClient(supabaseUrl, supabasePublishableKey);
+
+    // Simple admin session check (same logic as login)
+    const adminLoggedIn = sessionStorage.getItem('admin_logged_in');
+    const adminName  = sessionStorage.getItem('adminName')  || 'Admin';
+
+    if (!adminLoggedIn) {
+      alert('You must be logged in as admin');
+      window.location.href = '../../index.html';
+    } else {
+      const headerNameEl = document.getElementById('headerAdminName');
+      if (headerNameEl) headerNameEl.textContent = adminName;
+    }
+
+    window.handleLogout = function () {
+  Swal.fire({
+    title: 'Log out?',
+    text: 'Are you sure you want to log out of the admin dashboard?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, log out',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.clear();
+
+      Swal.fire({
+        title: 'Logged out',
+        text: 'You have been successfully logged out.',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text'
+        }
+      }).then(() => {
+        window.location.href = '../../index.html';
+      });
+    }
+  });
+};
+
+    // COLOR PALETTE
+    const PALETTE = [
+      '#14532d', '#166534', '#15803d', '#16a34a', '#22c55e',
+      '#4ade80', '#86efac', '#bbf7d0', '#1a3c21', '#2d6a4f',
+      '#52b788', '#74c69d', '#95d5b2', '#b7e4c7', '#d8f3dc'
+    ];
+
+    // ─── STATS ──────────────────────────────────────────────
+    async function getTableCount(tableName) {
+      const { count, error } = await supabase
+        .from(tableName)
+        .select('*', { count: 'exact', head: true });
+
+      if (error) {
+        console.error(`Error counting ${tableName}:`, error);
+        return 0;
+      }
+      return count || 0;
+    }
+
+    async function loadDashboardStats() {
+      try {
+        const totalStudents = await getTableCount('students');
+        const totalPosts    = await getTableCount('listings');
+        const archivedPosts = await getTableCount('archive_listings'); // siguraduhin tama table name mo
+
+        document.getElementById('totalStudents').textContent = totalStudents;
+        document.getElementById('totalPosts').textContent    = totalPosts;
+        document.getElementById('archivedPosts').textContent = archivedPosts;
+      } catch (e) {
+        console.error('Error loading stats:', e);
+        ['totalStudents','totalPosts','archivedPosts'].forEach(id => {
+          document.getElementById(id).textContent = '0';
+        });
+      }
+    }
+
+    // ─── ANALYTICS (BY COURSE) ─────────────────────────────
+    async function loadAnalytics() {
+      try {
+        const { data, error } = await supabase
+          .from('students')
+          .select('course_block');
+
+        if (error) {
+          console.error('Error loading students for analytics:', error);
+          renderDonutChart([]);
+          renderTopCourses([]);
+          return;
+        }
+
+        const counts = {};
+        (data || []).forEach(row => {
+          const course = (row.course_block || 'Unknown').trim();
+          counts[course] = (counts[course] || 0) + 1;
+        });
+
+        const courseData = Object.entries(counts).map(([name, count]) => ({
+          name,
+          count
+        }));
+
+        renderDonutChart(courseData);
+        renderTopCourses(courseData);
+      } catch (e) {
+        console.error('Analytics error:', e);
+        renderDonutChart([]);
+        renderTopCourses([]);
+      }
+    }
+
+    // ─── TOP COURSES LIST ──────────────────────────────────
+    function renderTopCourses(courseData) {
+      const listEl = document.getElementById('topCourseList');
+      listEl.innerHTML = '';
+
+      if (!courseData.length) {
+        listEl.innerHTML = '<p style="color:#9ca3af;font-size:0.85rem;">No data available yet.</p>';
+        return;
+      }
+
+      const totalUsers = courseData.reduce((s, c) => s + (c.count || 0), 0);
+      const sorted = [...courseData].sort((a, b) => (b.count || 0) - (a.count || 0));
+      const top = sorted[0]?.count || 1;
+
+      sorted.forEach((course, i) => {
+        const pct      = totalUsers ? ((course.count / totalUsers) * 100).toFixed(1) : '0.0';
+        const barWidth = ((course.count / top) * 100).toFixed(1);
+        const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
+        const color = PALETTE[i % PALETTE.length];
+
+        listEl.innerHTML += `
+          <div class="top-course-row">
+            <div class="top-course-rank ${rankClass}">${i + 1}</div>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                <span style="font-weight:600;font-size:0.85rem;color:#1a1a1a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${course.name}</span>
+                <span style="font-weight:700;font-size:0.85rem;color:#14532d;margin-left:8px;white-space:nowrap;">${pct}%</span>
+              </div>
+              <div class="top-course-bar-track">
+                <div class="top-course-bar-fill" data-width="${barWidth}" style="background:${color};"></div>
+              </div>
+            </div>
+            <div style="font-size:0.78rem;color:#9ca3af;min-width:48px;text-align:right;flex-shrink:0;">${course.count} <span style="font-size:0.7rem;">students</span></div>
+          </div>`;
+      });
+
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          listEl.querySelectorAll('.top-course-bar-fill').forEach(el => {
+            el.style.width = el.dataset.width + '%';
+          });
+        }, 200);
+      });
+    }
+
+    // ─── DONUT CHART ───────────────────────────────────────
+    function renderDonutChart(courseData) {
+      const totalUsers = courseData.reduce((s, c) => s + (c.count || 0), 0);
+      const labels     = courseData.map(c => c.name);
+      const counts     = courseData.map(c => c.count || 0);
+
+      const ctx = document.getElementById('deptDonutChart').getContext('2d');
+
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data: counts,
+            backgroundColor: PALETTE.slice(0, labels.length),
+            borderColor: '#fff',
+            borderWidth: 3,
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: '68%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => {
+                  const pct = totalUsers ? ((ctx.raw / totalUsers) * 100).toFixed(1) : '0.0';
+                  return `  ${ctx.label}: ${ctx.raw} students (${pct}%)`;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      const legendEl = document.getElementById('donutLegend');
+      legendEl.innerHTML = '';
+
+      if (!courseData.length) {
+        legendEl.innerHTML = '<p style="color:#9ca3af;font-size:0.85rem;">No data available yet.</p>';
+        return;
+      }
+
+      courseData.forEach((course, i) => {
+        const pct = totalUsers ? ((course.count / totalUsers) * 100).toFixed(1) : '0.0';
+        legendEl.innerHTML += `
+          <div class="legend-item">
+            <span class="legend-dot" style="background:${PALETTE[i % PALETTE.length]}"></span>
+            <span class="legend-label">${course.name}</span>
+            <span class="legend-count">${course.count}</span>
+            <span class="legend-pct">${pct}%</span>
+          </div>`;
+      });
+    }
+
+    // ─── SIDEBAR TOGGLES ────────────────────────
+    document.getElementById('mobile-collapse')?.addEventListener('click', e => {
+      e.preventDefault();
+      document.body.classList.toggle('mob-sidebar-active');
+      if (typeof feather !== 'undefined') feather.replace();
+    });
+
+    document.getElementById('sidebar-hide')?.addEventListener('click', e => {
+      e.preventDefault();
+      document.body.classList.toggle('sidebar-collapsed');
+      if (typeof feather !== 'undefined') feather.replace();
+    });
+
+    // ─── INIT ──────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const loader = document.querySelector('.loader-bg');
+        if (loader) loader.style.display = 'none';
+      }, 500);
+
+      if (typeof feather !== 'undefined') feather.replace();
+
+      loadDashboardStats();
+      loadAnalytics();   // analytics per course
+    });
+  </script>
+
+  <!-- Required Js -->
+  <script src="../assets/js/plugins/simplebar.min.js"></script>
+  <script src="../assets/js/plugins/popper.min.js"></script>
+  <script src="../assets/js/icon/custom-icon.js"></script>
+  <script src="../assets/js/plugins/feather.min.js"></script>
+  <script src="../assets/js/component.js"></script>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/script.js"></script>
+
+  <script>
+    layout_change('false');
+    layout_theme_sidebar_change('dark');
+    change_box_container('false');
+    layout_caption_change('true');
+    layout_rtl_change('false');
+    preset_change('preset-1');
+    main_layout_change('vertical');
+  </script>
+
+  <!-- TOGGLE ADMIN PANEL (NON-MODULE) -->
+  <script>
+    function toggleAdminPanel(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const panel = document.getElementById('adminProfilePanel');
+      if (!panel) return;
+      panel.classList.toggle('hidden');
+    }
+
+    // auto-close kapag nag-click sa labas ng toggle at panel
+    document.addEventListener('click', function (e) {
+      const panel  = document.getElementById('adminProfilePanel');
+      const toggle = document.getElementById('adminProfileToggle');
+      if (!panel || !toggle) return;
+
+      if (!panel.contains(e.target) && !toggle.contains(e.target)) {
+        panel.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

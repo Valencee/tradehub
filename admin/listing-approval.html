@@ -1,0 +1,1285 @@
+<!doctype html>
+<html lang="en" data-pc-preset="preset-1" data-pc-sidebar-caption="true" data-pc-direction="ltr" dir="ltr" data-pc-theme="light">
+<head>
+  <title>Listing Approvals - PHINMA TradeHub</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="Admin Dashboard" />
+  <meta name="keywords" content="PHINMA, TradeHub, Dashboard" />
+  <meta name="author" content="Sniper 2025" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/fonts/phosphor/duotone/style.css" />
+  <link rel="stylesheet" href="../assets/fonts/tabler-icons.min.css" />
+  <link rel="stylesheet" href="../assets/fonts/feather.css" />
+  <link rel="stylesheet" href="../assets/fonts/fontawesome.css" />
+  <link rel="stylesheet" href="../assets/fonts/material.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" id="main-style-link" />
+  <link rel="stylesheet" href="../assets/css/style2.css"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <style>
+    /* ===== SIDEBAR LAYOUT FIX ===== */
+    .pc-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      z-index: 1025;
+      transition: transform 0.3s ease;
+    }
+
+    .pc-container {
+      margin-left: 260px;
+      transition: margin-left 0.3s ease;
+    }
+
+    .pc-header {
+      position: fixed;
+      top: 0;
+      left: 260px;
+      right: 0;
+      height: 70px;
+      z-index: 1020;
+      transition: left 0.3s ease;
+      background: #14532d;
+    }
+
+    body.sidebar-collapsed .pc-sidebar {
+      transform: translateX(-260px);
+    }
+
+    body.sidebar-collapsed .pc-container {
+      margin-left: 0;
+    }
+
+    body.sidebar-collapsed .pc-header {
+      left: 0;
+    }
+
+    .pc-content {
+      padding-top: 80px;
+    }
+
+    @media (max-width: 1024px) {
+      .pc-sidebar {
+        transform: translateX(-260px);
+      }
+
+      body.mob-sidebar-active .pc-sidebar {
+        transform: translateX(0);
+      }
+
+      .pc-container,
+      .pc-header {
+        margin-left: 0;
+        left: 0;
+      }
+    }
+    
+    .pc-link {
+      transition: all 0.3s ease;
+    }
+    
+    .pc-link:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .pc-link.active {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .pc-head-link {
+      cursor: pointer;
+      padding: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .pc-head-link:hover {
+      opacity: 0.8;
+    }
+    
+    .min-h-header-height {
+      min-height: 70px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1050;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal.show {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 700px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .listing-image {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .action-btn {
+      transition: all 0.2s ease;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-info {
+      background-color: #3b82f6;
+      color: white;
+    }
+
+    .badge-success {
+      background-color: #10b981;
+      color: white;
+    }
+    .modal-main-image {
+  width: 100%;
+  max-width: 520px;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 0 auto;
+  display: block;
+  border: 1px solid #e5e7eb;
+}
+
+.modal-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.modal-thumb {
+  width: 78px;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #f3f4f6;
+}
+
+.modal-thumb:hover {
+  transform: translateY(-2px);
+}
+
+.modal-thumb.active {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 2px rgba(22,163,74,0.15);
+}
+.logout-swal-popup {
+  border-radius: 20px !important;
+  padding: 1.4rem 1.2rem 1.2rem !important;
+  font-family: 'Montserrat', sans-serif !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22) !important;
+}
+
+.logout-swal-title {
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  color: #14532d !important;
+}
+
+.logout-swal-text {
+  font-size: 0.95rem !important;
+  color: #4b5563 !important;
+}
+
+.logout-swal-confirm,
+.logout-swal-cancel {
+  border: none !important;
+  border-radius: 999px !important;
+  padding: 0.75rem 1.25rem !important;
+  font-size: 0.92rem !important;
+  font-weight: 600 !important;
+  min-width: 130px;
+  transition: all 0.25s ease !important;
+}
+
+.logout-swal-confirm {
+  background: linear-gradient(135deg, #14532d, #22c55e) !important;
+  color: #fff !important;
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.25) !important;
+}
+
+.logout-swal-confirm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(34, 197, 94, 0.32) !important;
+}
+
+.logout-swal-cancel {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+.logout-swal-cancel:hover {
+  background: #e5e7eb !important;
+}
+/* ===== SWEET ALERT SHARED FIX ===== */
+.swal2-actions {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 12px !important;
+  width: 100% !important;
+  margin-top: 1.5rem !important;
+}
+
+.custom-swal-popup {
+  border-radius: 22px !important;
+  padding: 1.5rem 1.4rem 1.25rem !important;
+  font-family: 'Montserrat', sans-serif !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25) !important;
+  width: 430px !important;
+}
+
+.custom-swal-title {
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+  color: #14532d !important;
+  margin-bottom: 6px !important;
+}
+
+.custom-swal-text {
+  font-size: 0.95rem !important;
+  color: #4b5563 !important;
+  line-height: 1.6 !important;
+}
+
+.custom-swal-icon {
+  border-color: rgba(220, 38, 38, 0.18) !important;
+}
+
+.custom-confirm-btn,
+.custom-danger-btn,
+.custom-cancel-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 130px !important;
+  height: 48px !important;
+  padding: 0 22px !important;
+  border: none !important;
+  border-radius: 999px !important;
+  font-size: 0.95rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  margin: 0 !important;
+  transition: all 0.25s ease !important;
+}
+
+.custom-confirm-btn {
+  background: linear-gradient(135deg, #14532d, #22c55e) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px rgba(34, 197, 94, 0.28) !important;
+}
+
+.custom-confirm-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 14px 28px rgba(34, 197, 94, 0.34) !important;
+}
+
+.custom-danger-btn {
+  background: linear-gradient(135deg, #b91c1c, #ef4444) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px rgba(239, 68, 68, 0.28) !important;
+}
+
+.custom-danger-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 14px 28px rgba(239, 68, 68, 0.34) !important;
+}
+
+.custom-cancel-btn {
+  background: #f3f4f6 !important;
+  color: #111827 !important;
+}
+
+.custom-cancel-btn:hover {
+  background: #e5e7eb !important;
+}
+
+.custom-input {
+  border-radius: 12px !important;
+  border: 1px solid #d1d5db !important;
+  padding: 0.9rem 1rem !important;
+  font-size: 0.95rem !important;
+  box-shadow: none !important;
+}
+
+.custom-input:focus {
+  border-color: #16a34a !important;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15) !important;
+}
+  </style>
+</head>
+<body class="mainbody">
+  <!-- Pre-loader -->
+  <div class="loader-bg fixed inset-0 bg-white dark:bg-themedark-cardbg z-[1034]">
+    <div class="loader-track h-[5px] w-full inline-block absolute overflow-hidden top-0">
+      <div class="loader-fill w-[300px] h-[5px] bg-primary-500 absolute top-0 left-0 animate-[hitZak_0.6s_ease-in-out_infinite_alternate]"></div>
+    </div>
+  </div>
+
+  <!-- [ Sidebar Menu ] start -->
+  <nav class="pc-sidebar" style="background: url('../assets/images/sbbg2.png') center/cover no-repeat;">
+    <div class="navbar-wrapper">
+      <div class="m-header flex items-center py-4 px-6 h-header-height">
+        <a href="dashboard.html" class="b-brand flex items-center gap-3">
+          <img src="../assets/images/upang.png" alt="logo here" class="w-10 rounded-lg"/>
+          <h4 class="text-xl font-semibold text-white">PHINMA TradeHub</h4>
+        </a>
+      </div>
+
+      <div class="navbar-content h-[calc(100vh_-_74px)] py-2.5">  
+        <div class="grow ms-3 text-center"></div>
+        <ul class="pc-navbar">
+
+          <!-- NAVIGATION -->
+          <li class="pc-item pc-caption">
+            <label>Navigation</label>
+          </li>
+
+          <li class="pc-item">
+            <a href="dashboard.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="layout"></i></span>
+              <span class="pc-mtext">Dashboard</span>
+            </a>
+          </li>
+
+          <!-- USER MANAGEMENT -->
+          <li class="pc-item pc-caption">
+            <label>User Management</label>
+          </li>
+
+          <li class="pc-item">
+            <a href="users.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="users"></i></span>
+              <span class="pc-mtext">View Users</span>
+            </a>
+          </li>
+
+          <li class="pc-item">
+            <a href="archived-users.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="archive"></i></span>
+              <span class="pc-mtext">Archived Users</span>
+            </a>
+          </li>
+
+          <li class="pc-item">
+            <a href="blacklist.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="slash"></i></span>
+              <span class="pc-mtext">Blocklist</span>
+            </a>
+          </li>
+
+          <!-- LISTINGS -->
+          <li class="pc-item pc-caption">
+            <label>Listings</label>
+          </li>
+
+          <li class="pc-item">
+            <a href="listings.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="file-text"></i></span>
+              <span class="pc-mtext">View Listings</span>
+            </a>
+          </li>
+
+          <li class="pc-item">
+            <a href="listing-approval.html" class="pc-link active">
+              <span class="pc-micon"><i data-feather="check-square"></i></span>
+              <span class="pc-mtext">Listing Approvals</span>
+            </a>
+          </li>
+
+          <!-- REPORTS -->
+          <li class="pc-item pc-caption">
+            <label>Reports</label>
+          </li>
+
+          <li class="pc-item">
+            <a href="user-reports.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="alert-circle"></i></span>
+              <span class="pc-mtext">User Reports</span>
+            </a>
+          </li>
+
+          <li class="pc-item">
+            <a href="listing-reports.html" class="pc-link">
+              <span class="pc-micon"><i data-feather="flag"></i></span>
+              <span class="pc-mtext">Listing Reports</span>
+            </a>
+          </li>
+
+          <!-- SETTINGS -->
+          <li class="pc-item pc-caption">
+            <label>Settings</label>
+          </li>
+
+          <li class="pc-item">
+            <a href="#" class="pc-link" onclick="handleLogout(); return false;">
+              <span class="pc-micon"><i data-feather="log-out"></i></span>
+              <span class="pc-mtext">Log-Out</span>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- [ Sidebar Menu ] end -->
+
+  <!-- [ Header Topbar ] start -->
+  <header class="pc-header">
+    <div class="header-wrapper flex max-sm:px-[15px] px-[25px] grow">
+      <div class="me-auto pc-mob-drp">
+        <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
+          <li class="pc-h-item pc-sidebar-collapse max-lg:hidden lg:inline-flex">
+            <a href="#" class="pc-head-link ltr:!ml-0 rtl:!mr-0" id="sidebar-hide">
+              <i data-feather="menu" class="text-white"></i>
+            </a>
+          </li>
+          <li class="pc-h-item pc-sidebar-popup lg:hidden">
+            <a href="#" class="pc-head-link ltr:!ml-0 rtl:!mr-0" id="mobile-collapse">
+              <i data-feather="menu" class="text-white"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+      
+      <div class="ms-auto">
+        <ul class="inline-flex *:min-h-header-height *:inline-flex *:items-center">
+          <!-- Simple profile icon that toggles small admin panel -->
+          <li class="pc-h-item">
+            <a
+              id="adminProfileToggle"
+              class="pc-head-link"
+              href="#"
+              onclick="toggleAdminPanel(event)"
+            >
+              <i data-feather="user" class="text-white"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <!-- [ Header ] end -->
+
+  <!-- ADMIN PROFILE PANEL -->
+  <div
+    id="adminProfilePanel"
+    class="fixed z-[1100] top-[80px] right-6 w-64 bg-[#212E13] text-white rounded-xl shadow-xl overflow-hidden hidden"
+  >
+    <div class="flex items-center gap-3 px-4 py-3 border-b border-white/10">
+      <img
+        src="../assets/images/user/avatar-2.jpg"
+        alt="admin avatar"
+        class="w-10 h-10 rounded-full object-cover"
+      />
+      <div>
+        <p id="headerAdminName" class="font-semibold leading-tight">Admin</p>
+        <p class="text-xs text-white/70 mt-1">Administrator</p>
+      </div>
+    </div>
+    <div class="p-4">
+      <button
+        class="w-full btn bg-[#fefae0] flex items-center justify-center hover:bg-[#ffdb7f] text-black font-semibold"
+        onclick="handleLogout()"
+      >
+        <svg class="pc-icon me-2 w-[22px] h-[22px] text-black">
+          <use xlink:href="#custom-logout-1-outline"></use>
+        </svg>
+        Log-Out
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="pc-container">
+    <div class="pc-content p-6">
+
+      <!-- Statistics Card -->
+      <div class="grid grid-cols-12 gap-6 mb-6">
+        <div class="col-span-12 sm:col-span-6 xl:col-span-4">
+          <div class="card bg-green-900 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300 p-6">
+            <div class="flex items-center gap-4">
+              <div class="bg-white dark:bg-gray-300 p-4 rounded-full">
+                <i class="feather icon-clock text-black text-2xl"></i>
+              </div>
+              <div>
+                <h3 id="pendingCount" class="text-3xl font-bold text-white">0</h3>
+                <p class="text-white uppercase text-sm font-semibold">Pending Approvals</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pending Listings Table -->
+      <div class="col-span-12">
+        <div class="card table-card bg-white rounded-xl shadow-md p-6">
+          <div class="card-header mb-4">
+            <h5 class="text-xl font-bold text-gray-800">Pending Listings</h5>
+          </div>
+          <div class="card-body">
+            <div id="loadingMessage" class="h-auto flex items-center justify-center bg-white py-8">
+              <p class="text-black font-bold italic text-lg">Loading pending listings...</p>
+            </div>
+            <div id="noListingsMessage" class="h-auto flex items-center justify-center bg-white py-8 hidden">
+              <p class="text-black font-bold italic text-lg">No pending listings</p>
+            </div>
+            <div id="tableContainer" class="table-responsive hidden overflow-x-auto">
+              <table class="table table-hover w-full">
+                <thead class="bg-green-900 text-white">
+                  <tr class="font-bold">
+                    <th class="px-4 py-3">Image</th>
+                    <th class="px-4 py-3">Title</th>
+                    <th class="px-4 py-3">Category</th>
+                    <th class="px-4 py-3">Price</th>
+                    <th class="px-4 py-3">Seller</th>
+                    <th class="px-4 py-3">Submitted</th>
+                    <th class="px-4 py-3">Actions</th>                         
+                  </tr>
+                </thead>
+                <tbody id="pendingListingsTable">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Modal -->
+  <div id="reviewModal" class="modal">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-2xl font-bold text-gray-800">Review Listing</h2>
+        <button onclick="closeReviewModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+      </div>
+      <div id="reviewModalContent" class="space-y-4">
+        <!-- Content will be populated dynamically -->
+      </div>
+      <div class="mt-6 flex justify-end gap-3">
+        <button onclick="rejectListing()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded transition font-semibold">
+          Reject
+        </button>
+        <button onclick="approveListing()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded transition font-semibold">
+          Approve
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========= SUPABASE VERSION (NO FIREBASE) ========= -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    const supabaseUrl = 'https://ggzywautymbydgyaeoyf.supabase.co';
+    const supabaseKey = 'sb_publishable_RRqftVnS5kBVcTKGAtQdag_JtM0LCn4';
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    let currentReviewId = null;
+    let currentListing = null;
+
+    // ===== ADMIN AUTH CHECK =====
+    const adminLoggedIn = sessionStorage.getItem('admin_logged_in');
+    const adminName = sessionStorage.getItem('adminName') || 'Admin';
+    
+    if (!adminLoggedIn) {
+      window.location.href = '../../index.html';
+    } else {
+      const headerName = document.getElementById('headerAdminName');
+      if (headerName) headerName.textContent = adminName;
+    }
+
+    // ===== LOGOUT =====
+    window.handleLogout = function () {
+  Swal.fire({
+    title: 'Log out?',
+    text: 'Are you sure you want to log out of the admin dashboard?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, log out',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.45)',
+    customClass: {
+      popup: 'logout-swal-popup',
+      title: 'logout-swal-title',
+      htmlContainer: 'logout-swal-text',
+      confirmButton: 'logout-swal-confirm',
+      cancelButton: 'logout-swal-cancel'
+    },
+    buttonsStyling: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sessionStorage.clear();
+
+      Swal.fire({
+        title: 'Logged out',
+        text: 'You have been successfully logged out.',
+        icon: 'success',
+        timer: 1200,
+        showConfirmButton: false,
+        backdrop: 'rgba(0,0,0,0.45)',
+        customClass: {
+          popup: 'logout-swal-popup',
+          title: 'logout-swal-title',
+          htmlContainer: 'logout-swal-text'
+        }
+      }).then(() => {
+        window.location.href = '../../index.html';
+      });
+    }
+  });
+};
+
+    // ===== SMALL HELPER =====
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text == null ? '' : String(text);
+      return div.innerHTML;
+    }
+
+    function formatPrice(price) {
+      const num = Number(price) || 0;
+      return '₱' + num.toLocaleString('en-PH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    async function sendListingStatusNotification(status) {
+  if (!currentListing) return;
+
+  const sellerStudentNo = currentListing.seller_student_no;
+  if (!sellerStudentNo) return;
+
+  let message = '';
+  if (status === 'approved') {
+    message = `Your listing "${currentListing.title}" has been approved by admin. It is now visible in the marketplace.`;
+  } else if (status === 'rejected') {
+    message = `Your listing "${currentListing.title}" was rejected by admin.`;
+  } else {
+    message = `Your listing "${currentListing.title}" status was updated.`;
+  }
+
+  const payload = {
+    type: 'listing_status',
+    recipient_student_number: String(sellerStudentNo),     // ✅ correct column
+    actor_student_number: 'admin',                         // ✅ correct column (text ok)
+    actor_name: sessionStorage.getItem('adminName') || 'Admin',
+    listing_id: currentListing.id,
+    listing_title: currentListing.title || null,
+    message,
+    is_read: false,
+    created_at: new Date().toISOString()
+  };
+
+  // ✅ insert as ARRAY (same style as working bookmark insert)
+  const { error } = await supabase
+    .from('notifications')
+    .insert([payload]);
+
+  if (error) console.error('Notification insert error:', error);
+}
+    // ✅✅✅ END ADDED ✅✅✅
+
+    // ===== LOAD PENDING LISTINGS (Supabase) =====
+    async function loadPendingListings() {
+      const loadingMessage = document.getElementById('loadingMessage');
+      const noListingsMessage = document.getElementById('noListingsMessage');
+      const tableContainer = document.getElementById('tableContainer');
+      const tableBody = document.getElementById('pendingListingsTable');
+      const pendingCountEl = document.getElementById('pendingCount');
+
+      try {
+        const { data, error } = await supabase
+          .from('listings')
+          .select('*')
+          .eq('approval_status', 'pending')        // PENDING LANG
+          .order('created_at', { ascending: false });
+
+        if (error) {
+          console.error('Error loading pending listings:', error);
+          if (loadingMessage) {
+            loadingMessage.innerHTML = '<p class="text-red-600 font-bold">Error loading pending listings</p>';
+          }
+          return;
+        }
+
+        const rows = data || [];
+
+        if (loadingMessage) loadingMessage.classList.add('hidden');
+        if (pendingCountEl) pendingCountEl.textContent = rows.length;
+
+        if (!rows.length) {
+          if (noListingsMessage) noListingsMessage.classList.remove('hidden');
+          if (tableContainer) tableContainer.classList.add('hidden');
+          return;
+        }
+
+        if (noListingsMessage) noListingsMessage.classList.add('hidden');
+        if (tableContainer) tableContainer.classList.remove('hidden');
+        if (tableBody) tableBody.innerHTML = '';
+
+        rows.forEach((listing) => {
+          const submittedDate = listing.created_at
+            ? new Date(listing.created_at).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              })
+            : 'N/A';
+
+          const imageUrl = listing.cover_image_url || '../assets/images/placeholder.jpg';
+          const priceText = formatPrice(listing.price);
+
+          const row = document.createElement('tr');
+          row.className = 'border-b hover:bg-gray-50';
+          row.innerHTML = `
+            <td class="px-4 py-3">
+              <img src="${escapeHtml(imageUrl)}" alt="Listing" class="listing-image" onerror="this.src='../assets/images/placeholder.jpg'">
+            </td>
+            <td class="px-4 py-3">
+              <h6 class="mb-1 font-semibold">${escapeHtml(listing.title || 'Untitled')}</h6>
+            </td>
+            <td class="px-4 py-3">
+              <span class="badge badge-info">${escapeHtml(listing.category || 'N/A')}</span>
+            </td>
+            <td class="px-4 py-3">
+              <h6 class="mb-1 font-semibold">${priceText}</h6>
+            </td>
+            <td class="px-4 py-3">
+              <h6 class="mb-1">${escapeHtml(listing.seller_name || 'Unknown')}</h6>
+            </td>
+            <td class="px-4 py-3">
+              <span class="text-sm text-gray-600">${submittedDate}</span>
+            </td>
+            <td class="px-4 py-3">
+              <button onclick="reviewListing('${listing.id}')" class="action-btn bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
+                Review
+              </button>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Error loading pending listings:', error);
+        if (loadingMessage) {
+          loadingMessage.innerHTML = '<p class="text-red-600 font-bold">Error loading pending listings</p>';
+        }
+      }
+    }
+
+    // ===== REVIEW LISTING =====
+    window.reviewListing = async function(listingId) {
+  try {
+    const { data, error } = await supabase
+      .from('listings')
+      .select('*')
+      .eq('id', listingId)
+      .single();
+
+   if (error) {
+  console.error('Error fetching listing:', error);
+  await Swal.fire({
+    title: 'Failed',
+    text: 'Error loading listing details.',
+    icon: 'error',
+    confirmButtonText: 'OK',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-swal-popup',
+      title: 'custom-swal-title',
+      htmlContainer: 'custom-swal-text',
+      confirmButton: 'custom-danger-btn'
+    }
+  });
+  return;
+}
+
+if (!data) {
+  await Swal.fire({
+    title: 'Not found',
+    text: 'Listing not found.',
+    icon: 'error',
+    confirmButtonText: 'OK',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-swal-popup',
+      title: 'custom-swal-title',
+      htmlContainer: 'custom-swal-text',
+      confirmButton: 'custom-danger-btn'
+    }
+  });
+  return;
+}
+
+    currentReviewId = listingId;
+    currentListing = data;
+
+    const listing = data;
+    const modalContent = document.getElementById('reviewModalContent');
+    const submittedDate = listing.created_at
+      ? new Date(listing.created_at).toLocaleString()
+      : 'N/A';
+
+    let images = [];
+
+    if (Array.isArray(listing.image_urls) && listing.image_urls.length) {
+      images = listing.image_urls.filter(Boolean);
+    }
+
+    if (!images.length && listing.cover_image_url) {
+      images = [listing.cover_image_url];
+    }
+
+    if (!images.length) {
+      images = ['../assets/images/placeholder.jpg'];
+    }
+
+    const priceText = formatPrice(listing.price);
+    const mainImage = images[0];
+
+    const thumbsHtml = images.map((img, index) => `
+      <img 
+        src="${escapeHtml(img)}"
+        alt="Thumbnail ${index + 1}"
+        class="modal-thumb ${index === 0 ? 'active' : ''}"
+        data-full="${escapeHtml(img)}"
+        onerror="this.src='../assets/images/placeholder.jpg'"
+      >
+    `).join('');
+
+    modalContent.innerHTML = `
+      <div class="text-center mb-4">
+        <img
+          id="reviewModalMainImage"
+          src="${escapeHtml(mainImage)}"
+          alt="Listing"
+          class="modal-main-image"
+          onerror="this.src='../assets/images/placeholder.jpg'"
+        >
+
+        ${images.length > 1 ? `
+          <div class="modal-thumbs" id="reviewModalThumbs">
+            ${thumbsHtml}
+          </div>
+        ` : ''}
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-sm text-gray-600">Title</p>
+          <p class="font-semibold">${escapeHtml(listing.title || 'Untitled')}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Category</p>
+          <p class="font-semibold">${escapeHtml(listing.category || 'N/A')}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Price</p>
+          <p class="font-semibold">${priceText}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Condition</p>
+          <p class="font-semibold">${escapeHtml(listing.condition || 'N/A')}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Seller</p>
+          <p class="font-semibold">${escapeHtml(listing.seller_name || 'Unknown')}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Seller Email</p>
+          <p class="font-semibold">${escapeHtml(listing.seller_email || 'N/A')}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Submitted Date</p>
+          <p class="font-semibold">${submittedDate}</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-600">Meetup Location</p>
+          <p class="font-semibold">${escapeHtml(listing.location || 'N/A')}</p>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <p class="text-sm text-gray-600">Description</p>
+        <p class="mt-2 p-4 bg-gray-100 rounded">
+          ${escapeHtml(listing.description || 'No description provided')}
+        </p>
+      </div>
+    `;
+
+    const mainImgEl = document.getElementById('reviewModalMainImage');
+    const thumbEls = modalContent.querySelectorAll('.modal-thumb');
+
+    thumbEls.forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        const full = thumb.dataset.full || '../assets/images/placeholder.jpg';
+        if (mainImgEl) mainImgEl.src = full;
+
+        thumbEls.forEach(t => t.classList.remove('active'));
+        thumb.classList.add('active');
+      });
+    });
+
+    document.getElementById('reviewModal').classList.add('show');
+  } catch (error) {
+  console.error('Error reviewing listing:', error);
+  await Swal.fire({
+    title: 'Failed',
+    text: 'Error loading listing details.',
+    icon: 'error',
+    confirmButtonText: 'OK',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-swal-popup',
+      title: 'custom-swal-title',
+      htmlContainer: 'custom-swal-text',
+      confirmButton: 'custom-danger-btn'
+    }
+  });
+}
+};
+    window.closeReviewModal = function() {
+      document.getElementById('reviewModal').classList.remove('show');
+      currentReviewId = null;
+      currentListing = null;
+    };
+
+    // ===== APPROVE LISTING =====
+    window.approveListing = async function() {
+  if (!currentReviewId) {
+    await Swal.fire({
+      title: 'No listing selected',
+      text: 'No listing selected for approval.',
+      icon: 'warning',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-danger-btn'
+      }
+    });
+    return;
+  }
+
+  const result = await Swal.fire({
+    title: 'Approve listing?',
+    text: 'Are you sure you want to approve this listing?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    focusCancel: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.55)',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-swal-popup',
+      title: 'custom-swal-title',
+      htmlContainer: 'custom-swal-text',
+      icon: 'custom-swal-icon',
+      confirmButton: 'custom-confirm-btn',
+      cancelButton: 'custom-cancel-btn'
+    }
+  });
+
+  if (!result.isConfirmed) return;
+
+  const adminName = sessionStorage.getItem('adminName') || 'Admin';
+
+  const { error } = await supabase
+    .from('listings')
+    .update({
+      approval_status: 'approved',
+      is_active: true,
+      approved_at: new Date().toISOString(),
+      approved_by: adminName,
+      archived_at: null,
+      archived_by: null
+    })
+    .eq('id', currentReviewId);
+
+  if (error) {
+    console.error('Error approving listing:', error);
+    await Swal.fire({
+      title: 'Failed',
+      text: 'Error approving listing.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-danger-btn'
+      }
+    });
+    return;
+  }
+
+  await sendListingStatusNotification('approved');
+
+  await Swal.fire({
+    title: 'Approved',
+    text: 'Listing approved successfully.',
+    icon: 'success',
+    confirmButtonText: 'OK',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-swal-popup',
+      title: 'custom-swal-title',
+      htmlContainer: 'custom-swal-text',
+      confirmButton: 'custom-confirm-btn'
+    }
+  });
+
+  closeReviewModal();
+  location.reload();
+};
+
+   window.rejectListing = async function() {
+  if (!currentReviewId || !currentListing) {
+    await Swal.fire({
+      title: 'No listing selected',
+      text: 'No listing selected for rejection.',
+      icon: 'warning',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-danger-btn'
+      }
+    });
+    return;
+  }
+
+  const result = await Swal.fire({
+    title: 'Reject listing?',
+    text: `Are you sure you want to reject "${currentListing.title}"? This will permanently remove the listing.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'OK',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true,
+    focusCancel: true,
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+    backdrop: 'rgba(0,0,0,0.55)',
+    buttonsStyling: false,
+    customClass: {
+      popup: 'custom-swal-popup',
+      title: 'custom-swal-title',
+      htmlContainer: 'custom-swal-text',
+      icon: 'custom-swal-icon',
+      confirmButton: 'custom-danger-btn',
+      cancelButton: 'custom-cancel-btn'
+    }
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    await sendListingStatusNotification('rejected');
+
+    const { error } = await supabase
+      .from('listings')
+      .delete()
+      .eq('id', currentReviewId);
+
+    if (error) {
+      console.error('Error rejecting listing:', error);
+      await Swal.fire({
+        title: 'Failed',
+        text: 'Error rejecting listing. Please try again.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+        buttonsStyling: false,
+        customClass: {
+          popup: 'custom-swal-popup',
+          title: 'custom-swal-title',
+          htmlContainer: 'custom-swal-text',
+          confirmButton: 'custom-danger-btn'
+        }
+      });
+      return;
+    }
+
+    await Swal.fire({
+      title: 'Rejected',
+      text: 'Listing rejected and removed successfully.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-confirm-btn'
+      }
+    });
+
+    closeReviewModal();
+    location.reload();
+  } catch (error) {
+    console.error('Error rejecting listing:', error);
+    await Swal.fire({
+      title: 'Failed',
+      text: 'Error rejecting listing. Please try again.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+      buttonsStyling: false,
+      customClass: {
+        popup: 'custom-swal-popup',
+        title: 'custom-swal-title',
+        htmlContainer: 'custom-swal-text',
+        confirmButton: 'custom-danger-btn'
+      }
+    });
+  }
+};
+
+    // ===== SIDEBAR TOGGLES =====
+    const mobileCollapse = document.getElementById('mobile-collapse');
+    if (mobileCollapse) {
+      mobileCollapse.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.body.classList.toggle('mob-sidebar-active');
+
+        if (typeof feather !== 'undefined') {
+          feather.replace();
+        }
+      });
+    }
+
+    const sidebarHide = document.getElementById('sidebar-hide');
+    if (sidebarHide) {
+      sidebarHide.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.body.classList.toggle('sidebar-collapsed');
+
+        if (typeof feather !== 'undefined') {
+          feather.replace();
+        }
+      });
+    }
+
+    // Close review modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('reviewModal');
+      if (event.target === modal) {
+        closeReviewModal();
+      }
+    };
+
+    // ===== INITIAL LOAD =====
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const loader = document.querySelector('.loader-bg');
+        if (loader) loader.style.display = 'none';
+      }, 500);
+
+      if (typeof feather !== 'undefined') {
+        feather.replace();
+      }
+
+      loadPendingListings();
+    });
+  </script>
+
+  <!-- Required Js -->
+  <script src="../assets/js/plugins/simplebar.min.js"></script>
+  <script src="../assets/js/plugins/popper.min.js"></script>
+  <script src="../assets/js/icon/custom-icon.js"></script>
+  <script src="../assets/js/plugins/feather.min.js"></script>
+  <script src="../assets/js/component.js"></script>
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/script.js"></script>
+
+  <script>
+    layout_change('false');
+    layout_theme_sidebar_change('dark');
+    change_box_container('false');
+    layout_caption_change('true');
+    layout_rtl_change('false');
+    preset_change('preset-1');
+    main_layout_change('vertical');
+  </script>
+
+  <!-- TOGGLE ADMIN PANEL (same logic as other admin pages) -->
+  <script>
+    function toggleAdminPanel(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const panel = document.getElementById('adminProfilePanel');
+      if (!panel) return;
+      panel.classList.toggle('hidden');
+    }
+
+    document.addEventListener('click', function (e) {
+      const panel  = document.getElementById('adminProfilePanel');
+      const toggle = document.getElementById('adminProfileToggle');
+      if (!panel || !toggle) return;
+
+      if (!panel.contains(e.target) && !toggle.contains(e.target)) {
+        panel.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
