@@ -1,0 +1,264 @@
+<!-- Sidebar -->
+<aside class="marketplace-sidebar" id="marketplaceSidebar"
+       style="position: fixed !important;
+              top: 72px !important;
+              left: 0 !important;
+              width: 360px !important;
+              height: calc(100vh - 72px) !important;
+              background: #242526 !important;
+              color: #e4e6eb !important;
+              overflow-y: auto !important;
+              padding: 1rem !important;
+              z-index: 999 !important;
+              transition: transform 0.3s ease !important;">
+
+  <div class="sidebar-header">
+    <h2 class="sidebar-title">Phinma-Upang TradeHub</h2>
+
+    <!-- Profile Button (replaces Settings) -->
+    <!-- nasa dist/user/ ka na, kaya relative lang -->
+    <a href="userprofile.php" class="sidebar-settings" title="My Profile"
+       style="text-decoration:none;color:inherit;">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+              clip-rule="evenodd"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="sidebar-search">
+    <svg class="sidebar-search-icon" width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd"
+            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+            clip-rule="evenodd"/>
+    </svg>
+    <input type="text" placeholder="Search Marketplace" class="sidebar-search-input">
+  </div>
+
+  <nav class="sidebar-nav">
+    <!-- Browse Items -->
+    <a href="browse.php" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #1877f2;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path
+            d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+        </svg>
+      </div>
+      <span>Browse Items</span>
+    </a>
+
+    <!-- Notifications -->
+    <a href="notification.php" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #e67e22;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path
+            d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+        </svg>
+      </div>
+      <span>Notifications</span>
+    </a>
+
+    <!-- Inbox -->
+    <a href="inbox.php" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #65676b;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path
+            d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+          <path
+            d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+        </svg>
+      </div>
+      <span>Inbox</span>
+    </a>
+
+    <!-- Profile -->
+    <a href="userprofile.php" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #8e44ad;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <span>My Profile</span>
+    </a>
+  </nav>
+
+  <!-- Create New Listing Button -->
+  <a href="posting.php" class="sidebar-create-btn">
+    <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+      <path fill-rule="evenodd"
+            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+            clip-rule="evenodd"/>
+    </svg>
+    Create New Listing
+  </a>
+
+  <!-- Categories -->
+  <div class="sidebar-section">
+    <h3 class="sidebar-section-title">Categories</h3>
+
+    <a href="browse.php?category=Books+%26+Supplies" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #2980b9;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path
+            d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
+        </svg>
+      </div>
+      <span>Books &amp; Supplies</span>
+    </a>
+
+    <a href="browse.php?category=Electronics" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #16a085;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z"
+                clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <span>Electronics</span>
+    </a>
+
+    <a href="browse.php?category=Pre+Loved+Clothes" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #c0392b;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 2a1 1 0 00-.894.553L7.382 6H5a1 1 0 000 2h.382l1 10H13.618l1-10H15a1 1 0 000-2h-2.382L10.894 2.553A1 1 0 0010 2z"
+                clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <span>Pre-Loved Clothes</span>
+    </a>
+
+    <a href="browse.php?category=Dorm+Essentials" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #d35400;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path
+            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+        </svg>
+      </div>
+      <span>Dorm Essentials</span>
+    </a>
+
+    <a href="browse.php?category=Food+%26+Drinks" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #27ae60;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z"
+                clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <span>Food &amp; Drinks</span>
+    </a>
+
+    <a href="browse.php?category=Sports+%26+Hobbies" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #e74c3c;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <span>Sports &amp; Hobbies</span>
+    </a>
+
+    <a href="browse.php?category=School+Services" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #8e44ad;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path
+            d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+        </svg>
+      </div>
+      <span>School Services</span>
+    </a>
+
+    <a href="browse.php?category=Furniture" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #7f8c8d;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path
+            d="M7 3a1 1 0 000 2h6a1 1 0 000-2H7zM4 7a1 1 0 011-1h10a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1V7zM2 11a2 2 0 012-2 1 1 0 010 2 2 2 0 00-2 2v1a1 1 0 01-2 0v-1a4 4 0 014-4h12a4 4 0 014 4v1a1 1 0 01-2 0v-1a2 2 0 00-2-2H4z"/>
+        </svg>
+      </div>
+      <span>Furniture</span>
+    </a>
+
+    <a href="browse.php?category=Art+%26+Crafts" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #f39c12;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z"
+                clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <span>Art &amp; Crafts</span>
+    </a>
+
+    <a href="browse.php?category=Accessories" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #2c3e50;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+                d="M5 2a1 1 0 011 1v1h8V3a1 1 0 112 0v1h1a2 2 0 012 2v10a2 2 0 01-2 2H3a2 2 0 01-2-2V6a2 2 0 012-2h1V3a1 1 0 011-1zm0 5a1 1 0 000 2h10a1 1 0 100-2H5z"
+                clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <span>Accessories</span>
+    </a>
+
+    <a href="browse.php?category=Vehicles" class="sidebar-nav-item">
+      <div class="sidebar-nav-icon" style="background: #1a252f;">
+        <svg width="20" height="20" fill="white" viewBox="0 0 20 20">
+          <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/>
+          <path
+            d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/>
+        </svg>
+      </div>
+      <span>Vehicles</span>
+    </a>
+  </div>
+</aside>
+
+<!-- Sidebar Toggle Script (pure JS) -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sidebar   = document.getElementById('marketplaceSidebar');
+  const toggleBtn = document.getElementById('sidebarToggle');
+  let isOpen = true;
+
+  const savedState = localStorage.getItem('sidebarOpen');
+  if (savedState !== null) {
+    isOpen = savedState === 'true';
+    if (!isOpen) {
+      sidebar.style.transform = 'translateX(-100%)';
+    }
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function() {
+      isOpen = !isOpen;
+      sidebar.style.transform = isOpen ? 'translateX(0)' : 'translateX(-100%)';
+      localStorage.setItem('sidebarOpen', String(isOpen));
+      document.dispatchEvent(new CustomEvent('sidebarToggled', { detail: { isOpen } }));
+    });
+
+    toggleBtn.addEventListener('mouseenter', function() {
+      this.style.background = '#3a3b3c';
+    });
+    toggleBtn.addEventListener('mouseleave', function() {
+      this.style.background = '#242526';
+    });
+  }
+});
+</script>
+
+<style>
+.marketplace-sidebar.closed {
+  transform: translateX(-100%);
+}
+
+@media (max-width: 768px) {
+  .marketplace-sidebar {
+    transform: translateX(-100%);
+  }
+}
+</style>

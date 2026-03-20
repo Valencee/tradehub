@@ -1,274 +1,58 @@
-/* ============================================
-   INDEX PAGE STYLES
-   index.css
-   ============================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
-
-body {
-    margin-left: 0 !important;
-    padding-top: 72px !important;
-    background: #f0f4f1 !important;
-    font-family: 'DM Sans', sans-serif !important;
-}
-
 * {
     box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "segoe ui", roboto, oxygen, ubuntu, cantarell, "fira sans", "droid sans", "helvetica neue", Arial, sans-serif;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
-
-/* ── Wrapper ───────────────────────────────── */
-.th-wrap {
+body {
+    background-color: #FFFFFF;
+    margin: 0;
+}
+.navtop {
+    background-color: #3b4656;
+    height: 60px;
     width: 100%;
-    transition: margin-left 0.3s ease, width 0.3s ease;
+    border: 0;
 }
-
-.th-container {
-    max-width: 900px;
+.navtop div {
+    display: flex;
     margin: 0 auto;
-    padding: 56px 24px 80px;
+    width: 800px;
+    height: 100%;
 }
-
-/* ── Hero ──────────────────────────────────── */
-.th-hero {
-    text-align: center;
-    margin-bottom: 52px;
-    animation: fadeUp 0.6s ease both;
-}
-
-.th-badge {
+.navtop div h1, .navtop div a {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: #dcfce7;
-    color: #166534;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    padding: 5px 14px;
-    border-radius: 100px;
-    margin-bottom: 18px;
 }
-
-.th-badge-dot {
-    width: 6px;
-    height: 6px;
-    background: #16a34a;
-    border-radius: 50%;
-    animation: pulse 2s infinite;
+.navtop div h1 {
+    flex: 1;
+    font-size: 24px;
+    padding: 0;
+    margin: 0;
+    color: #ebedee;
+    font-weight: normal;
 }
-
-.th-title h1 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 2.75rem;
-    font-weight: 700;
-    color: #14532d !important;
-    background: none !important;
-    background-color: transparent !important;
-    -webkit-text-fill-color: #14532d !important;
-    padding: 0 !important;
-    margin: 0 0 12px !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    line-height: 1.2;
-}
-
-.th-subtitle {
-    font-size: 1rem !important;
-    color: #4b7a5a !important;
-    font-weight: 400;
-    margin-bottom: 0 !important;
-    max-width: 400px;
-    margin-left: auto !important;
-    margin-right: auto !important;
-}
-
-/* ── Action Cards ──────────────────────────── */
-.th-cards {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 56px;
-    animation: fadeUp 0.6s 0.1s ease both;
-}
-
-.th-card {
-    background: #ffffff !important;
-    border: 1.5px solid #d1fae5 !important;
-    border-radius: 18px !important;
-    padding: 32px 28px !important;
-    width: 196px;
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-    text-decoration: none !important;
-    box-shadow: 0 2px 8px rgba(20, 83, 45, 0.07) !important;
-    color: #111827 !important;
-    transition: all 0.22s ease;
-    min-width: unset !important;
-    position: relative;
-    overflow: hidden;
-}
-
-.th-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-    opacity: 0;
-    transition: opacity 0.22s ease;
-}
-
-.th-card:hover::before {
-    opacity: 1;
-}
-
-.th-card:hover {
-    border-color: #22c55e !important;
-    transform: translateY(-5px) !important;
-    box-shadow: 0 14px 32px rgba(20, 83, 45, 0.14) !important;
-}
-
-.th-card-icon {
-    width: 64px;
-    height: 64px;
-    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-}
-
-.th-card-icon svg {
-    width: 30px;
-    height: 30px;
-    stroke: #15803d;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.th-card-label {
-    font-size: 0.9rem !important;
-    font-weight: 600;
-    color: #111827 !important;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-}
-
-/* ── Section Header ────────────────────────── */
-.th-section-header {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    animation: fadeUp 0.6s 0.2s ease both;
-}
-
-.th-section-title {
-    font-size: 1.15rem !important;
-    font-weight: 700;
-    color: #111827 !important;
-    margin: 0 !important;
-}
-
-.th-section-link {
-    font-size: 0.82rem;
-    color: #16a34a !important;
-    font-weight: 600;
+.navtop div a {
+    padding: 0 20px;
     text-decoration: none;
-    letter-spacing: 0.01em;
+    color: #c4c8cc;
+    font-weight: bold;
 }
-
-.th-section-link:hover {
-    text-decoration: underline;
+.navtop div a i {
+    padding: 2px 8px 0 0;
 }
-
-/* ── Categories ────────────────────────────── */
-.th-cats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    animation: fadeUp 0.6s 0.25s ease both;
+.navtop div a:hover {
+    color: #ebedee;
 }
-
-.th-cat {
-    background: #ffffff !important;
-    border: 1.5px solid #e5e7eb !important;
-    border-radius: 14px !important;
-    padding: 16px 14px !important;
-    text-decoration: none !important;
-    display: flex !important;
-    align-items: center;
-    gap: 12px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
-    transition: all 0.2s ease;
-    min-width: unset !important;
+.content {
+    width: 800px;
+    margin: 0 auto;
 }
-
-.th-cat:hover {
-    border-color: #22c55e !important;
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(20, 83, 45, 0.1) !important;
-}
-
-.th-cat-icon {
-    width: 42px;
-    height: 42px;
-    background: linear-gradient(135deg, #dcfce7, #d1fae5);
-    border-radius: 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.th-cat-icon svg {
-    width: 20px;
-    height: 20px;
-    stroke: #15803d;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.th-cat-name {
-    font-size: 0.83rem;
-    font-weight: 600;
-    color: #111827 !important;
-    margin-bottom: 2px;
-}
-
-.th-cat-desc {
-    font-size: 0.72rem;
-    color: #9ca3af !important;
-}
-
-/* ── Animations ────────────────────────────── */
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.4; }
-}
-
-/* ── Responsive ────────────────────────────── */
-@media (max-width: 700px) {
-    .th-cats { grid-template-columns: repeat(2, 1fr); }
-    .th-title h1 { font-size: 2rem; }
-}
-
-@media (max-width: 420px) {
-    .th-cats { grid-template-columns: 1fr; }
-    .th-cards { flex-direction: column; align-items: center; }
+.content h2 {
+    margin: 0;
+    padding: 25px 0;
+    font-size: 22px;
+    border-bottom: 1px solid #ebebeb;
+    color: #666666;
 }

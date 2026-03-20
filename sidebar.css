@@ -1,0 +1,243 @@
+/* ===== SIDEBAR STYLES ONLY ===== */
+
+/* CRITICAL FIX: Push body content when sidebar is visible */
+body {
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+}
+
+@media (min-width: 769px) {
+    body {
+        margin-left: 360px;
+    }
+}
+
+.marketplace-sidebar {
+    width: 360px;
+    background: #242526;
+    color: #e4e6eb;
+    height: calc(100vh - 72px);
+    position: fixed;
+    left: 0;
+    top: 72px;
+    overflow-y: auto;
+    padding: 1rem;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    z-index: 999;
+}
+
+.marketplace-sidebar .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.5rem 1rem;
+}
+
+.marketplace-sidebar .sidebar-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #e4e6eb;
+    margin: 0;
+}
+
+.marketplace-sidebar .sidebar-settings {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #3a3b3c;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #b0b3b8;
+    transition: background 0.2s;
+}
+
+.marketplace-sidebar .sidebar-settings:hover {
+    background: #4e4f50;
+}
+
+.marketplace-sidebar .sidebar-search {
+    position: relative;
+    margin-bottom: 0.5rem;
+}
+
+.marketplace-sidebar .sidebar-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b0b3b8;
+}
+
+.marketplace-sidebar .sidebar-search-input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    background: #3a3b3c;
+    border: none;
+    border-radius: 20px;
+    color: #e4e6eb;
+    font-size: 0.9375rem;
+}
+
+.marketplace-sidebar .sidebar-search-input::placeholder {
+    color: #b0b3b8;
+}
+
+.marketplace-sidebar .sidebar-search-input:focus {
+    outline: none;
+    background: #4e4f50;
+}
+
+.marketplace-sidebar .sidebar-nav {
+    margin-bottom: 1rem;
+}
+
+.marketplace-sidebar .sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 8px;
+    color: #e4e6eb;
+    text-decoration: none;
+    transition: background 0.2s;
+    margin-bottom: 2px;
+    position: relative;
+}
+
+.marketplace-sidebar .sidebar-nav-item:hover {
+    background: #3a3b3c;
+}
+
+.marketplace-sidebar .sidebar-nav-item.active {
+    background: #3a3b3c;
+}
+
+.marketplace-sidebar .sidebar-nav-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.marketplace-sidebar .sidebar-nav-item span {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    flex: 1;
+}
+
+.marketplace-sidebar .sidebar-nav-expandable {
+    padding-right: 8px;
+}
+
+.marketplace-sidebar .sidebar-nav-arrow {
+    color: #b0b3b8;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.marketplace-sidebar .sidebar-create-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px;
+    background: #2374e1;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+    margin-bottom: 1rem;
+}
+
+.marketplace-sidebar .sidebar-create-btn:hover {
+    background: #1a66cc;
+}
+
+.marketplace-sidebar .sidebar-section {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #3a3b3c;
+}
+
+.marketplace-sidebar .sidebar-section-title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: #e4e6eb;
+    margin: 0 0 0.75rem 0.5rem;
+}
+
+.marketplace-sidebar .sidebar-location {
+    display: block;
+    padding: 8px;
+    color: #2374e1;
+    text-decoration: none;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.marketplace-sidebar .sidebar-location:hover {
+    background: #3a3b3c;
+}
+
+/* Sidebar Scrollbar */
+.marketplace-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.marketplace-sidebar::-webkit-scrollbar-track {
+    background: #242526;
+}
+
+.marketplace-sidebar::-webkit-scrollbar-thumb {
+    background: #4e4f50;
+    border-radius: 4px;
+}
+
+.marketplace-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #5a5b5c;
+}
+
+/* Sidebar Responsive */
+@media (max-width: 1024px) {
+    .marketplace-sidebar {
+        width: 280px;
+    }
+    
+    body {
+        margin-left: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .marketplace-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+    }
+    
+    .marketplace-sidebar.open {
+        transform: translateX(0);
+    }
+    
+    /* Remove body margin on mobile */
+    body {
+        margin-left: 0 !important;
+    }
+}
+
+/* When sidebar is toggled closed */
+body.sidebar-hidden {
+    margin-left: 0 !important;
+}

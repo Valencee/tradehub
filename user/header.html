@@ -1,0 +1,219 @@
+<!-- Header Navigation -->
+<header class="header" id="mainHeader">
+  <!-- Left Section: Logo & Toggle -->
+  <div class="header-left">
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle-btn" id="sidebarToggle" title="Toggle Sidebar">
+      <svg class="toggle-icon" width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd"
+              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+              clip-rule="evenodd" />
+      </svg>
+    </button>
+
+    <!-- Logo/Brand -->
+    <!-- from dist/user/* back to root index.html -->
+    <a href="../../index.html" class="header-brand">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 6v6l4 2" />
+      </svg>
+      <span>Tradehub</span>
+    </a>
+  </div>
+
+  <!-- Right Section: Navigation -->
+  <div class="header-content">
+    <nav>
+      <ul class="nav-menu">
+        <li>
+          <!-- same folder: dist/user/about.php -->
+          <a href="about.php" class="nav-icon-btn" title="About Us">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                    clip-rule="evenodd" />
+            </svg>
+          </a>
+        </li>
+
+        <li class="user-profile-container">
+          <button class="nav-icon-btn user-profile-btn" id="userProfileBtn"
+                  onclick="toggleProfileDropdown()" title="Profile">
+            <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <!-- Profile Dropdown -->
+          <div class="profile-dropdown" id="profileDropdown">
+            <div class="dropdown-arrow"></div>
+
+            <div class="profile-dropdown-header">
+              <!-- Default values, papalitan via JS gamit sessionStorage -->
+              <div class="profile-user-name">Student Name</div>
+              <div class="profile-user-email">student@example.com</div>
+            </div>
+
+            <div class="profile-dropdown-menu">
+              <a href="userprofile.php" class="profile-menu-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>My Profile</span>
+              </a>
+
+              <a href="selling.php" class="profile-menu-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span>My Selling</span>
+              </a>
+
+              <a href="settings.php" class="profile-menu-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M12 1v6m0 6v6"></path>
+                  <path d="M17.2 7.8l-4.2 4.2m-6 6l-4.2 4.2"></path>
+                  <path d="M6.8 7.8l4.2 4.2m6 6l4.2 4.2"></path>
+                </svg>
+                <span>Settings</span>
+              </a>
+
+              <div class="profile-menu-divider"></div>
+
+              <a href="javascript:void(0)" class="profile-menu-item sign-out"
+                 onclick="handleSignOut()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16 17 21 12 16 7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                <span>Sign Out</span>
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+// Sidebar toggle + saved state
+document.addEventListener('DOMContentLoaded', function() {
+  const toggleBtn = document.getElementById('sidebarToggle');
+  const sidebar  = document.getElementById('marketplaceSidebar');
+  let isOpen = true;
+
+  const savedState = localStorage.getItem('sidebarOpen');
+  if (savedState !== null) {
+    isOpen = savedState === 'true';
+    updateSidebarState();
+  } else {
+    document.body.classList.remove('sidebar-hidden');
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function() {
+      isOpen = !isOpen;
+      updateSidebarState();
+      localStorage.setItem('sidebarOpen', String(isOpen));
+    });
+  }
+
+  function updateSidebarState() {
+    if (!sidebar || !toggleBtn) return;
+
+    if (isOpen) {
+      sidebar.style.transform = 'translateX(0)';
+      toggleBtn.classList.remove('active');
+      document.body.classList.remove('sidebar-hidden');
+    } else {
+      sidebar.style.transform = 'translateX(-100%)';
+      toggleBtn.classList.add('active');
+      document.body.classList.add('sidebar-hidden');
+    }
+
+    const event = new CustomEvent('sidebarToggled', {
+      detail: { isOpen: isOpen },
+      bubbles: true
+    });
+    document.dispatchEvent(event);
+    window.dispatchEvent(event);
+  }
+
+  // 🔥 Load logged-in student info into dropdown
+  const nameEl  = document.querySelector('.profile-user-name');
+  const emailEl = document.querySelector('.profile-user-email');
+
+  const studentName  = sessionStorage.getItem('studentName');
+  const studentEmail = sessionStorage.getItem('studentEmail');
+
+  if (studentName && nameEl)  nameEl.textContent  = studentName;
+  if (studentEmail && emailEl) emailEl.textContent = studentEmail;
+});
+
+// Profile dropdown show/hide
+function toggleProfileDropdown() {
+  const dropdown = document.getElementById('profileDropdown');
+  if (dropdown) dropdown.classList.toggle('show');
+}
+
+document.addEventListener('click', function(event) {
+  const container = document.querySelector('.user-profile-container');
+  const dropdown = document.getElementById('profileDropdown');
+  if (container && dropdown && !container.contains(event.target)) {
+    dropdown.classList.remove('show');
+  }
+});
+
+document.getElementById('profileDropdown')?.addEventListener('click', function(event) {
+  event.stopPropagation();
+});
+
+// 🔐 Sign out: clear session + go back to main login page
+function handleSignOut() {
+  if (confirm('Are you sure you want to sign out?')) {
+    // clear any login flags/data from sessionStorage
+    sessionStorage.removeItem('user_logged_in');
+    sessionStorage.removeItem('studentName');
+    sessionStorage.removeItem('studentEmail');
+    sessionStorage.removeItem('course_block');
+    sessionStorage.removeItem('studentNumber');
+    sessionStorage.removeItem('studentID');
+
+    // redirect to root index.html (login)
+    window.location.href = '../../index.html';
+  }
+}
+
+// Keyboard shortcuts: Ctrl/Cmd + B to toggle sidebar, Esc to close dropdown
+document.addEventListener('keydown', function(event) {
+  if ((event.ctrlKey || event.metaKey) && event.key === 'b') {
+    event.preventDefault();
+    const btn = document.getElementById('sidebarToggle');
+    if (btn) btn.click();
+  }
+
+  if (event.key === 'Escape') {
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown && dropdown.classList.contains('show')) {
+      dropdown.classList.remove('show');
+    }
+  }
+});
+</script>
